@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".BookingFragment">
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/bottom_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"></FrameLayout>
+
+    <ImageView
+    android:id="@+id/top_image"
+    android:layout_width="0dp"
+    android:layout_height="189dp"
+    android:src="@drawable/design2"
+    android:scaleType="centerCrop"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/circle_image"
+        android:layout_width="95dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="95dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="297dp"
+        android:layout_marginEnd="35dp"
+        android:background="@drawable/circleimage"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sample"
+        app:layout_constraintBottom_toBottomOf="@+id/top_image"
+        app:layout_constraintEnd_toEndOf="@+id/top_image"
+        app:layout_constraintStart_toStartOf="@+id/top_image"
+        app:layout_constraintTop_toTopOf="@+id/top_image" />
+
+    <TextView
+        android:id="@+id/greeting_text"
+        android:layout_width="167dp"
+        android:layout_height="39dp"
+        android:text="Hi, Loopy!"
+        android:textColor="@android:color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginEnd="200dp"
+        app:layout_constraintBottom_toBottomOf="@+id/top_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/service_prompt"
+        android:layout_width="222dp"
+        android:layout_height="20dp"
+        android:text="What services do you want today?"
+        android:textSize="12sp"
+        android:layout_marginEnd="140dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/greeting_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/promo_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:text="Promos"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_image" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontal_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:fillViewport="false"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/promo_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/image_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <FrameLayout
+                android:layout_width="293dp"
+                android:layout_height="114dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/radius"
+                android:clipToOutline="true"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/image_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/promo" />
+
+                <TextView
+                    android:id="@+id/text_on_image_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="left"
+                    android:padding="8dp"
+                    android:text="Loyalty Program"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/text_below_loyalty"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/transparent"
+                    android:padding="2dp"
+                    android:gravity="start"
+                    android:text="After 4 visits, enjoy 50% OFF for all services as our thank-you for being a loyal client!"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    android:textStyle="normal" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="293dp"
+                android:layout_height="114dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/radius"
+                android:clipToOutline="true"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/image_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/promo2" />
+
+                <TextView
+                    android:id="@+id/text_on_image_2"
+                    android:layout_width="152dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="start"
+                    android:paddingStart="10dp"
+                    android:text="Birthday Promo"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/text_below_discount"
+                    android:layout_width="160dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:padding="2dp"
+                    android:gravity="start"
+                    android:text="Enjoy 30% OFF on all services as our birthday gift to you."
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp" />
+            </FrameLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/services_text"
+        android:layout_width="67dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:text="Services"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
+
+    <LinearLayout
+        android:id="@+id/services_image_container"
+        android:layout_width="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/services_text">
+
+        <!-- First Row of Images -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="185dp"
+                android:layout_margin="14dp"
+                android:layout_weight="1"
+                android:background="@drawable/radius"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/first"/>
+
+                <ImageView
+                    android:layout_width="145dp"
+                    android:layout_height="85dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="115dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/design" />
+
+                <TextView
+                    android:layout_width="42dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="120dp"
+                    android:layout_marginTop="153dp"
+                    android:background="@android:color/transparent"
+                    android:text="Regular"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <!-- Second Image with Overlay -->
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="185dp"
+                android:layout_margin="14dp"
+                android:layout_weight="1"
+                android:background="@drawable/radius"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/second" />
+
+                <ImageView
+                    android:layout_width="145dp"
+                    android:layout_height="85dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="112dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/design" />
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="112dp"
+                    android:layout_marginTop="152dp"
+                    android:background="@android:color/transparent"
+                    android:text="Gel Polish"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Second Row of Images -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Third Image with Overlay -->
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="185dp"
+                android:layout_margin="14dp"
+                android:layout_weight="1"
+                android:background="@drawable/radius"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/third" />
+
+                <ImageView
+                    android:layout_width="145dp"
+                    android:layout_height="85dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="112dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/design" />
+
+                <TextView
+                    android:layout_width="55dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="115dp"
+                    android:layout_marginTop="148dp"
+                    android:background="@android:color/transparent"
+                    android:text="Soft Gel Extension"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <!-- Fourth Image with Overlay -->
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="185dp"
+                android:layout_margin="14dp"
+                android:layout_weight="1"
+                android:background="@drawable/radius"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/fourth" />
+
+                <ImageView
+                    android:layout_width="145dp"
+                    android:layout_height="85dp"
+                    android:layout_marginStart="45dp"
+                    android:layout_marginTop="115dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/design" />
+
+                <TextView
+                    android:layout_width="45dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="118dp"
+                    android:layout_marginTop="152dp"
+                    android:background="@android:color/transparent"
+                    android:text="Removal"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Home Button + Text -->
+        <LinearLayout
+            android:id="@+id/home_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_home"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Home"
+                android:scaleType="fitCenter"
+                android:src="@drawable/home_without_fill"/>
+
+            <TextView
+                android:id="@+id/home_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- Pricelist Button + Text -->
+        <LinearLayout
+            android:id="@+id/pricelist_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintStart_toEndOf="@id/home_layout"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_pricelist"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Pricelist"
+                android:scaleType="fitCenter"
+                android:src="@drawable/pricelist_without_fill"/>
+
+            <TextView
+                android:id="@+id/pricelist_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pricelist"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- Booking Button + Text -->
+        <LinearLayout
+            android:id="@+id/booking_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintStart_toEndOf="@id/pricelist_layout"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_booking"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Booking"
+                android:scaleType="fitCenter"
+                android:src="@drawable/booking_without_fill"/>
+
+            <TextView
+                android:id="@+id/booking_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Booking"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- Profile Button + Text -->
+        <LinearLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintStart_toEndOf="@id/booking_layout"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_profile"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Profile"
+                android:scaleType="fitCenter"
+                android:src="@drawable/profile_without_fill"/>
+
+            <TextView
+                android:id="@+id/profile_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                android:gravity="center"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
