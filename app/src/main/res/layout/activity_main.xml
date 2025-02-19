@@ -10,134 +10,151 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Home Button + Text -->
     <LinearLayout
-        android:id="@+id/home_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:id="@+id/bottom_navigation_container"
+        android:layout_width="420dp"
+        android:layout_height="59dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/btn_home"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Home"
-            android:scaleType="fitCenter"
-            android:src="@drawable/home_without_fill"/>
-
-        <TextView
-            android:id="@+id/home_txt"
-            android:layout_width="wrap_content"
+        <!-- Home Button + Text -->
+        <LinearLayout
+            android:id="@+id/home_layout"
+            android:layout_width="90dp"
+            android:layout_marginStart="28dp"
             android:layout_height="wrap_content"
-            android:text="Home"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
-    </LinearLayout>
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.25">
 
-    <!-- Pricelist Button + Text -->
-    <LinearLayout
-        android:id="@+id/pricelist_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toEndOf="@id/home_layout"
-        app:layout_constraintBottom_toBottomOf="parent">
+            <ImageButton
+                android:id="@+id/btn_home"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Home"
+                android:scaleType="fitCenter"
+                android:src="@drawable/home_without_fill" />
 
-        <ImageButton
-            android:id="@+id/btn_pricelist"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Pricelist"
-            android:scaleType="fitCenter"
-            android:src="@drawable/pricelist_without_fill"/>
+            <TextView
+                android:id="@+id/home_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Home"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/pricelist_txt"
-            android:layout_width="wrap_content"
+        <!-- Pricelist Button + Text -->
+        <LinearLayout
+            android:id="@+id/pricelist_layout"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="Pricelist"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
-    </LinearLayout>
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/home_layout"
+            app:layout_constraintWidth_percent="0.25">
 
-    <!-- Booking Button + Text -->
-    <LinearLayout
-        android:id="@+id/booking_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toEndOf="@id/pricelist_layout"
-        app:layout_constraintBottom_toBottomOf="parent">
+            <ImageButton
+                android:id="@+id/btn_pricelist"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Pricelist"
+                android:scaleType="fitCenter"
+                android:src="@drawable/pricelist_without_fill" />
 
-        <ImageButton
-            android:id="@+id/btn_booking"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Booking"
-            android:scaleType="fitCenter"
-            android:src="@drawable/booking_without_fill"/>
+            <TextView
+                android:id="@+id/pricelist_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Pricelist"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/booking_txt"
-            android:layout_width="wrap_content"
+        <!-- Booking Button + Text -->
+        <LinearLayout
+            android:id="@+id/booking_layout"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="Booking"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
-    </LinearLayout>
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/pricelist_layout"
+            app:layout_constraintWidth_percent="0.25">
 
-    <!-- Profile Button + Text -->
-    <LinearLayout
-        android:id="@+id/profile_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toEndOf="@id/booking_layout"
-        app:layout_constraintBottom_toBottomOf="parent">
+            <ImageButton
+                android:id="@+id/btn_booking"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Booking"
+                android:scaleType="fitCenter"
+                android:src="@drawable/booking_without_fill" />
 
-        <ImageButton
-            android:id="@+id/btn_profile"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Profile"
-            android:scaleType="fitCenter"
-            android:src="@drawable/profile_without_fill"/>
+            <TextView
+                android:id="@+id/booking_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Booking"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/profile_txt"
-            android:layout_width="wrap_content"
+        <!-- Profile Button + Text -->
+        <LinearLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="Profile"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/booking_layout"
+            app:layout_constraintWidth_percent="0.25">
+
+            <ImageButton
+                android:id="@+id/btn_profile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Profile"
+                android:scaleType="fitCenter"
+                android:src="@drawable/profile_without_fill" />
+
+            <TextView
+                android:id="@+id/profile_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Profile"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

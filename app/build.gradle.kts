@@ -47,10 +47,13 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     // Material Date Picker dependencies
-    implementation("com.google.android.material:material:1.9.0") // For Material DatePicker
+    implementation("com.google.android.material:material:1.9.0")
 
     // For fragment handling (if needed)
     implementation("androidx.fragment:fragment-ktx:1.5.5")
+
+    //For image swiping
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
 
     // Optional: For better date handling
     implementation("org.threeten:threetenbp:1.5.1")

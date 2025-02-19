@@ -2,324 +2,644 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PricelistFragment">
 
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/fragment_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:fillViewport="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"></FrameLayout>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="412dp"
-        android:layout_height="94dp"
-        android:background="@drawable/rectanglebg"
-        android:text="Pricelist"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textColor="@color/btn"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/regular_text"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@drawable/bottom_boarder"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:text="Regular"
-        android:layout_marginBottom="550dp"
-        android:textColor="@color/btn"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_container"
-        app:layout_constraintTop_toTopOf="@+id/fragment_container" />
-
-    <TextView
-        android:id="@+id/price_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="550dp"
-        android:paddingEnd="20dp"
-        android:text="₱150"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/gel_polish_text"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@color/transparent"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:text="Gel Polish"
-        android:layout_marginBottom="500dp"
-        android:textColor="@color/btn"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_container"
-        app:layout_constraintTop_toBottomOf="@+id/regular_text" />
-
-    <TextView
-        android:id="@+id/gel_polish_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="400dp"
-        android:paddingEnd="20dp"
-        android:text="₱300"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/price_text"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <TextView
-        android:id="@+id/soft_gel_text"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@drawable/bottom_boarder"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:text="Soft Gel Extension"
-        android:layout_marginBottom="350dp"
-        android:textColor="@color/btn"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_container"
-        app:layout_constraintTop_toBottomOf="@+id/gel_polish_text" />
-
-    <TextView
-        android:id="@+id/soft_gel_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="300dp"
-        android:paddingEnd="20dp"
-        android:textAllCaps="false"
-        android:text="Starts at ₱499"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gel_polish_price"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <TextView
-        android:id="@+id/removal_text"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@color/transparent"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:text="Removal"
-        android:layout_marginBottom="200dp"
-        android:textColor="@color/btn"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_container"
-        app:layout_constraintTop_toBottomOf="@+id/soft_gel_text" />
-
-    <TextView
-        android:id="@+id/removal_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="150dp"
-        android:paddingEnd="20dp"
-        android:text="₱100"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/soft_gel_price"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <!-- Add-ons Service -->
-    <TextView
-        android:id="@+id/add_ons_text"
-        android:layout_width="match_parent"
-        android:layout_height="135dp"
-        android:background="@drawable/bottom_boarder"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:text="Add-ons"
-        android:layout_marginBottom="70dp"
-        android:textColor="@color/btn"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_container"
-        app:layout_constraintTop_toBottomOf="@+id/removal_text" />
-
-    <TextView
-        android:id="@+id/add_ons_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="0dp"
-        android:paddingEnd="20dp"
-        android:text="Price Vary"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/removal_price"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-
-    <LinearLayout
-        android:id="@+id/home_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageButton
-            android:id="@+id/btn_home"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Home"
-            android:scaleType="fitCenter"
-            android:src="@drawable/home_without_fill"/>
-
-        <TextView
-            android:id="@+id/home_txt"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Home"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <!-- Pricelist Button + Text -->
-    <LinearLayout
-        android:id="@+id/pricelist_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toEndOf="@id/home_layout"
-        app:layout_constraintBottom_toBottomOf="parent">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="87dp"
+                android:background="@drawable/rectanglebg"
+                android:paddingLeft="20dp"
+                android:paddingTop="45dp"
+                android:text="Services"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/btn_pricelist"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Pricelist"
-            android:scaleType="fitCenter"
-            android:src="@drawable/pricelist_without_fill"/>
+            <!-- Regular Plain -->
+            <LinearLayout
+                android:id="@+id/regular_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:padding="16dp">
 
-        <TextView
-            android:id="@+id/pricelist_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pricelist"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/regularplain" />
 
-    <!-- Booking Button + Text -->
-    <LinearLayout
-        android:id="@+id/booking_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toEndOf="@id/pricelist_layout"
-        app:layout_constraintBottom_toBottomOf="parent">
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="start"
+                    android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/btn_booking"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Booking"
-            android:scaleType="fitCenter"
-            android:src="@drawable/booking_without_fill"/>
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Regular Plain"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/booking_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Booking"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/price_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="₱200"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
 
-    <!-- Profile Button + Text -->
-    <LinearLayout
-        android:id="@+id/profile_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintWidth_percent="0.25"
-        app:layout_constraintStart_toEndOf="@id/booking_layout"
-        app:layout_constraintBottom_toBottomOf="parent">
+            <!-- Gel Polish -->
+            <LinearLayout
+                android:id="@+id/gel_polish_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
 
-        <ImageButton
-            android:id="@+id/btn_profile"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Profile"
-            android:scaleType="fitCenter"
-            android:src="@drawable/profile_without_fill"/>
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/gel_polish" />
 
-        <TextView
-            android:id="@+id/profile_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Profile"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:gravity="center"/>
-    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
 
+                <TextView
+                    android:id="@+id/gel_polish_text"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Gel Polish"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/price_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="₱300"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <!-- Short Soft Gel Extension -->
+            <LinearLayout
+                android:id="@+id/short_soft_gel_extension_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/shortsoftgelextension" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                <TextView
+                    android:id="@+id/short_soft_gel_extension"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="Short Soft Gel Extension"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/price_text3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="₱500"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Medium Soft Gel Extension -->
+            <LinearLayout
+                android:id="@+id/medium_soft_gel_extension_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/medium_soft_gel_extension" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                <TextView
+                    android:id="@+id/medium_soft_gel_extension"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Medium Soft Gel Extension"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/price_text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="₱700"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Long Soft Gel Extension -->
+            <LinearLayout
+                android:id="@+id/long_soft_gel_extension_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/long_soft_gel_extension" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                <TextView
+                    android:id="@+id/long_soft_gel_extension"
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Long Soft Gel Extension"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/price_text5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="₱900"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/removal_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/removal" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                <TextView
+                    android:id="@+id/removaltext"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Removal"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/price_text6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="₱150"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="400dp"
+                android:layout_height="70dp"
+                android:background="@drawable/rectanglebg"
+                android:paddingLeft="10dp"
+                android:paddingTop="35dp"
+                android:text="Add ons"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/charms_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/charm" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Charms"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/price_text7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/_20_per_piece"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/design_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/ddesign" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                    <TextView
+                        android:id="@+id/design_text"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center_vertical"
+                        android:text="3D Design"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/price_text9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/_30_per_nail"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <!-- Short Soft Gel Extension -->
+            <LinearLayout
+                android:id="@+id/chrome_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/chrome" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                    <TextView
+                        android:id="@+id/chrome"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Chrome"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/price_text10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="₱40"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Medium Soft Gel Extension -->
+            <LinearLayout
+                android:id="@+id/ombre_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView11"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/ombre" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                    <TextView
+                        android:id="@+id/ombre"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:text="Ombre"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/price_text11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="₱50"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Long Soft Gel Extension -->
+            <LinearLayout
+                android:id="@+id/cat_eye_magnetic_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+
+                <ImageView
+                    android:id="@+id/imageView12"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/cat_eye_magnetic"/>
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                    <TextView
+                        android:id="@+id/cat_eye_magnetic"
+                        android:layout_width="230dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:text="Cat Eye Magnetic"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/price_text12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="₱80"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/french_tip_layout"
+                android:layout_width="380dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/bottom_boarder"
+                android:orientation="horizontal"
+                android:layout_marginBottom="60dp"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="104dp"
+                    android:layout_height="106dp"
+                    android:src="@drawable/french_tip" />
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:gravity="start">
+
+                    <TextView
+                        android:id="@+id/french_tip"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:text="French Tip"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/price_text13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="₱100"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

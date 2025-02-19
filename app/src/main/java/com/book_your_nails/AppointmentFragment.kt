@@ -1,13 +1,12 @@
 package com.book_your_nails
 
+import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Button
+import android.widget.DatePicker
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,44 +15,50 @@ class AppointmentFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_appointment, container, false)
-
         val textViewSD = view.findViewById<TextView>(R.id.textViewSD) // Date display
 
-        // Show MaterialDatePicker when AppointmentFragment is opened
-        showMaterialDatePicker(textViewSD)
+        // Show the custom DatePicker dialog when the fragment opens
+        showCustomDatePickerDialog(textViewSD)
 
         return view
     }
 
-    private fun showMaterialDatePicker(textView: TextView) {
-        // Build constraints for allowed date ranges (optional)
-        val constraintsBuilder = CalendarConstraints.Builder()
+    private fun showCustomDatePickerDialog(textView: TextView) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_date_picker, null)
 
-        // Build MaterialDatePicker
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("") // Remove "Select a Date"
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // Default to today's date
-            .setCalendarConstraints(constraintsBuilder.build())
-            .setTheme(R.style.CustomMaterialDatePickerTheme) // Custom theme (optional)
-            .build()
+        val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
+        val continueButton = dialogView.findViewById<Button>(R.id.continueBtn)
 
-        // Show the picker
-        datePicker.show(parentFragmentManager, "MATERIAL_DATE_PICKER")
+        // 🔹 Find and remove the header (works on most Android versions)
+        val headerId = resources.getIdentifier("date_picker_header", "id", "android")
+        val headerView = datePicker.findViewById<View>(headerId)
+        headerView?.visibility = View.GONE  // Hide it
 
-        // Adjust size AFTER the dialog is shown
-        datePicker.dialog?.setOnShowListener {
-            val window = datePicker.dialog?.window
-            window?.setLayout(900, 500) // Adjust width and height (in pixels)
-        }
+        // Create and configure the dialog
+        val dialog = android.app.AlertDialog.Builder(requireContext(), R.style.CustomMaterialDatePickerTheme) // Apply the custom theme here
+            .setView(dialogView)
+            .create()
 
-        // Handle the selected date
-        datePicker.addOnPositiveButtonClickListener { selection ->
-            val selectedDate = Date(selection)
+        dialog.setCancelable(true) // Allow cancellation of the dialog
+
+        continueButton.setOnClickListener {
+            val selectedDate = getSelectedDate(datePicker)
             val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val formattedDate = formatter.format(selectedDate)
-            textView.text = formattedDate // Show selected date in TextView
+            textView.text = formatter.format(selectedDate)
+            dialog.dismiss() // Dismiss the dialog after selecting the date
         }
+
+        dialog.show()
+    }
+
+    private fun getSelectedDate(datePicker: DatePicker): Date {
+        val year = datePicker.year
+        val month = datePicker.month
+        val day = datePicker.dayOfMonth
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+        return calendar.time
     }
 }
