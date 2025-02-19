@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.Activities.LoginActivity
@@ -28,10 +30,7 @@ class ProfileFragment : Fragment() {
         // Logout Button
         val logoutButton = view.findViewById<TextView>(R.id.btn_logout)
         logoutButton.setOnClickListener {
-            sessionManagement.clearSession()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
+            showLogoutConfirmationDialog()
         }
 
         // Policies Button
@@ -39,15 +38,18 @@ class ProfileFragment : Fragment() {
         policiesButton.setOnClickListener {
             replaceFragment(OurPoliciesFragment())
         }
+
+        // Change Password Button
         val changepassButton = view.findViewById<ImageView>(R.id.btnChangePassword)
         changepassButton.setOnClickListener {
             replaceFragment(ChangePasswordFragment())
         }
+
+        // Account Button
         val accountButton = view.findViewById<ImageView>(R.id.btnAccount)
         accountButton.setOnClickListener {
             replaceFragment(AccountFragment())
         }
-
 
         // About Us Button
         val aboutUsButton = view.findViewById<ImageView>(R.id.btnAboutUs)
@@ -71,5 +73,36 @@ class ProfileFragment : Fragment() {
         fragmentTransaction.replace(R.id.fragment_container, fragment)
         fragmentTransaction.addToBackStack(null) // Optional: Add to back stack for navigation
         fragmentTransaction.commit()
+    }
+
+    // Show a confirmation dialog for logout
+    private fun showLogoutConfirmationDialog() {
+        // Inflate the custom layout
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout_confirmation, null)
+
+        // Build the dialog
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView) // Set the custom layout
+            .setCancelable(true) // Allow the user to dismiss the dialog by tapping outside
+            .create()
+
+        // Set up button click listeners
+        val btnNo = dialogView.findViewById<Button>(R.id.btn_no)
+        val btnYes = dialogView.findViewById<Button>(R.id.btn_yes)
+
+        btnNo.setOnClickListener {
+            alertDialog.dismiss() // Dismiss the dialog
+        }
+
+        btnYes.setOnClickListener {
+            // Perform logout
+            sessionManagement.clearSession()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
+
+        // Show the dialog
+        alertDialog.show()
     }
 }
