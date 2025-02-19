@@ -11,4 +11,9 @@
     <color name="btn">#FF9E9E</color>
     <color name="transparent">#00000000</color>
 
+    <!-- Changes from fixed-pricelist branch -->
+    <color name="white">#FFFFFF</color> <!-- Redefinition of white -->
+    <color name="grey">#C4C4C4</color> <!-- Redefinition of grey -->
+    <color name="star">#F8E431</color> <!-- New color -->
+
 </resources>

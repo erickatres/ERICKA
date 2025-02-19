@@ -1,7 +1,12 @@
 package com.example.bookyournails
 
+import GelPolishFragment
+import SoftGelExtensionFragment
+import RegularFragment
+import RemovalFragment
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -37,6 +42,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        fun replaceFragment(fragment: Fragment) {
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+            // Hide bottom navigation when `RegularPlainFragment` is active
+            val bottomNav = findViewById<View>(R.id.main)
+            bottomNav.visibility = if (fragment is RegularFragment || fragment is GelPolishFragment || fragment is SoftGelExtensionFragment || fragment is RemovalFragment) View.GONE else View.VISIBLE
+        }
+
+
         initViews()
 
         // Set Click Listeners
@@ -56,6 +73,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     private fun initViews() {
         homeLayout = findViewById(R.id.home_layout)
@@ -99,8 +118,7 @@ class MainActivity : AppCompatActivity() {
         val tag = fragment::class.java.simpleName
 
         if (tag == HomeFragment::class.java.simpleName) {
-            // If we are clicking on the Home tab, we will navigate to HomeFragment
-            // Remove all other fragments
+            // If we are clicking on the Home tab, navigate to HomeFragment
             val transaction = supportFragmentManager.beginTransaction()
             supportFragmentManager.fragments.forEach { transaction.remove(it) }
             transaction.replace(R.id.fragment_container, HomeFragment(), tag)
@@ -109,7 +127,6 @@ class MainActivity : AppCompatActivity() {
             setActiveTab(icon, text, layout)
             currentFragmentTag = tag
         } else {
-            // If the selected fragment is not Home, handle it normally
             if (currentFragmentTag != tag) {
                 showFragment(fragment)
                 resetTabs()
@@ -117,22 +134,40 @@ class MainActivity : AppCompatActivity() {
                 currentFragmentTag = tag
             }
         }
+
+        // Hide bottom navigation for specific fragments
+        toggleBottomNavVisibility(fragment)
     }
 
     private fun showFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         val tag = fragment::class.java.simpleName
 
-        // Hide all fragments first
         supportFragmentManager.fragments.forEach { transaction.hide(it) }
 
-        // Show or add the new fragment
         supportFragmentManager.findFragmentByTag(tag)?.let {
             transaction.show(it)
         } ?: transaction.add(R.id.fragment_container, fragment, tag)
 
         transaction.commit()
+
+        // Hide bottom navigation for specific fragments
+        toggleBottomNavVisibility(fragment)
     }
+
+    private fun toggleBottomNavVisibility(fragment: Fragment) {
+        val bottomNav = findViewById<View>(R.id.fragment_container)
+
+        // Check if the current fragment is one that should hide the bottom navigation
+        val shouldHideBottomNav = fragment is RegularFragment ||
+                fragment is GelPolishFragment ||
+                fragment is SoftGelExtensionFragment ||
+                fragment is RemovalFragment
+
+        bottomNav.visibility = if (shouldHideBottomNav) View.GONE else View.VISIBLE
+    }
+
+
 
     private fun resetTabs() {
         listOf(homeIcon, pricelistIcon, bookingIcon, profileIcon).forEach {
