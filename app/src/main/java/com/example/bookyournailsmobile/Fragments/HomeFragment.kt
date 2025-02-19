@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.R
 import android.content.Context
 import com.example.bookyournailsmobile.Domain.User
@@ -46,6 +48,30 @@ class HomeFragment : Fragment() {
         user?.let {
             firstNameTextView.text = it.firstname
         }
+
+        // Service Regular Button
+        val serviceRegularButton = view.findViewById<ImageView>(R.id.Service_regular)
+        serviceRegularButton.setOnClickListener {
+            replaceFragment(RegularFragment())
+        }
+
+        // Service Soft Gel Extension Button
+        val serviceSoftGelExtensionButton = view.findViewById<ImageView>(R.id.Service_soft_gel_extension)
+        serviceSoftGelExtensionButton.setOnClickListener {
+            replaceFragment(SoftGelExtensionFragment())
+        }
+
+        // Service Removal Button
+        val serviceRemovalButton = view.findViewById<ImageView>(R.id.Service_removal)
+        serviceRemovalButton.setOnClickListener {
+            replaceFragment(RemovalFragment())
+        }
+
+        // Service Gel Polish Button
+        val serviceGelPolishButton = view.findViewById<ImageView>(R.id.Service_gelpolish)
+        serviceGelPolishButton.setOnClickListener {
+            replaceFragment(GelPolishFragment())
+        }
     }
 
     private fun makeFullScreen() {
@@ -57,7 +83,15 @@ class HomeFragment : Fragment() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
             // Hide the system UI (status bar and navigation bar)
-
         }
+    }
+
+    // Helper function to replace fragments
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = parentFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragmentTransaction.addToBackStack(null) // Optional: Add to back stack for navigation
+        fragmentTransaction.commit()
     }
 }
