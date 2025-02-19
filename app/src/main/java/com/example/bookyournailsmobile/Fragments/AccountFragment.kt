@@ -3,6 +3,7 @@ package com.example.bookyournailsmobile.Fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.Html
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -97,6 +98,16 @@ class AccountFragment : Fragment() {
             lastnameEditText.isFocusable = false
         }
 
+        // Handle "Enter" key press in usernameEditText
+        usernameEditText.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                // Prevent default behavior (e.g., adding a newline or shifting the layout)
+                true
+            } else {
+                false
+            }
+        }
+
         // Hide bottom navigation
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.GONE
@@ -108,6 +119,7 @@ class AccountFragment : Fragment() {
 
         return view
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         // Show bottom navigation when leaving this fragment
@@ -115,4 +127,3 @@ class AccountFragment : Fragment() {
         bottomNav?.visibility = View.VISIBLE
     }
 }
-
