@@ -43,7 +43,6 @@ class HomeFragment : Fragment() {
     private lateinit var promoImage2: ImageView
     private lateinit var text_on_image_1: TextView
     private lateinit var text_on_text_below_loyalty_1: TextView
-    private lateinit var servicesText: TextView
     private lateinit var progressBarRegular: ProgressBar
     private lateinit var progressBarGelPolish: ProgressBar
     private lateinit var progressBarSoftGelExtension: ProgressBar
@@ -75,8 +74,6 @@ class HomeFragment : Fragment() {
         promoImage1 = view.findViewById(R.id.image_1)
         promoImage2 = view.findViewById(R.id.image_2)
 
-        // Initialize TextViews
-        servicesText = view.findViewById(R.id.services_text)
 
 
         // Initially hide the Service and Promo ImageViews and TextViews
@@ -88,7 +85,6 @@ class HomeFragment : Fragment() {
         serviceGelPolish.visibility = View.INVISIBLE
         promoImage1.visibility = View.INVISIBLE
         promoImage2.visibility = View.INVISIBLE
-        servicesText.visibility = View.INVISIBLE
         text_on_image_1.visibility = View.INVISIBLE
         text_on_text_below_loyalty_1.visibility = View.INVISIBLE
 
@@ -115,7 +111,6 @@ class HomeFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             setupButtonListeners(view)
             showPromoImages()
-            showServicesText()
             showPromoText()
 
             // Show progress bars for 3 seconds
@@ -184,10 +179,6 @@ class HomeFragment : Fragment() {
         promoImage2.visibility = View.VISIBLE
     }
 
-    private fun showServicesText() {
-        // Make Services TextView visible after the delay
-        servicesText.visibility = View.VISIBLE
-    }
 
     private fun showPromoText() {
         // Make Promo TextView visible after the delay
