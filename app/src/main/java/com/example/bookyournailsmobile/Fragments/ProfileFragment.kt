@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.Activities.LoginActivity
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
-
 
 class ProfileFragment : Fragment() {
 
@@ -25,6 +25,7 @@ class ProfileFragment : Fragment() {
 
         sessionManagement = SessionManagement(requireContext())
 
+        // Logout Button
         val logoutButton = view.findViewById<TextView>(R.id.btn_logout)
         logoutButton.setOnClickListener {
             sessionManagement.clearSession()
@@ -33,6 +34,42 @@ class ProfileFragment : Fragment() {
             activity?.finish()
         }
 
+        // Policies Button
+        val policiesButton = view.findViewById<ImageView>(R.id.btnOurPolicies)
+        policiesButton.setOnClickListener {
+            replaceFragment(OurPoliciesFragment())
+        }
+        val changepassButton = view.findViewById<ImageView>(R.id.btnChangePassword)
+        changepassButton.setOnClickListener {
+            replaceFragment(ChangePasswordFragment())
+        }
+        val accountButton = view.findViewById<ImageView>(R.id.btnAccount)
+        accountButton.setOnClickListener {
+            replaceFragment(AccountFragment())
+        }
+
+
+        // About Us Button
+        val aboutUsButton = view.findViewById<ImageView>(R.id.btnAboutUs)
+        aboutUsButton.setOnClickListener {
+            replaceFragment(AboutUsFragment())
+        }
+
+        // FAQs Button
+        val faqsButton = view.findViewById<ImageView>(R.id.btnFAQS)
+        faqsButton.setOnClickListener {
+            replaceFragment(FaqsFragment())
+        }
+
         return view
+    }
+
+    // Helper function to replace fragments
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = parentFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragmentTransaction.addToBackStack(null) // Optional: Add to back stack for navigation
+        fragmentTransaction.commit()
     }
 }
