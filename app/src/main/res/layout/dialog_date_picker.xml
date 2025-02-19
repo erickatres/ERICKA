@@ -1,44 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/dialogbg">
+    android:layout_height="550dp">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Date"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:paddingBottom="8dp" />
 
-    <!-- Month Spinner -->
-    <Spinner
-        android:id="@+id/month_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+<DatePicker
+    android:id="@+id/datePicker"
+    android:layout_width="match_parent"
+    android:layout_height="590dp"
+    android:calendarViewShown="false"
+    android:theme="@style/CustomCalendarStyle"/>
 
-    <!-- Day Spinner -->
-    <Spinner
-        android:id="@+id/day_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+<Button
+    android:id="@+id/continueBtn"
+    android:layout_width="300dp"
+    android:layout_height="68dp"
+    android:layout_marginBottom="70dp"
+    android:layout_gravity="center|bottom"
+    android:backgroundTint="@color/btn"
+    android:text="Continue"/>
 
-    <!-- Year Spinner -->
-    <Spinner
-        android:id="@+id/year_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
-</LinearLayout>
+</FrameLayout>

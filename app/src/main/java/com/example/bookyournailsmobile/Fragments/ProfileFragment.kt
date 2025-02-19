@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Activities.LoginActivity
 import com.example.bookyournailsmobile.R
@@ -24,7 +25,7 @@ class ProfileFragment : Fragment() {
 
         sessionManagement = SessionManagement(requireContext())
 
-        val logoutButton = view.findViewById<Button>(R.id.btn_logout)
+        val logoutButton = view.findViewById<TextView>(R.id.btn_logout)
         logoutButton.setOnClickListener {
             sessionManagement.clearSession()
             val intent = Intent(activity, LoginActivity::class.java)
