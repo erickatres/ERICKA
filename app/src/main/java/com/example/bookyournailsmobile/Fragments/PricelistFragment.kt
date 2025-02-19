@@ -10,11 +10,11 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.R
 
 // Import the fragments from the correct package
-import com.example.bookyournailsmobile.Fragments.RegularFragment
-import com.example.bookyournailsmobile.Fragments.GelPolishFragment
-import com.example.bookyournailsmobile.Fragments.SoftGelExtensionFragment
-import com.example.bookyournailsmobile.Fragments.RemovalFragment
-import com.example.bookyournailsmobile.Fragments.AddOnsFragment
+//import com.example.bookyournailsmobile.Fragments.RegularFragment
+//import com.example.bookyournailsmobile.Fragments.GelPolishFragment
+//import com.example.bookyournailsmobile.Fragments.SoftGelExtensionFragment
+//import com.example.bookyournailsmobile.Fragments.RemovalFragment
+//import com.example.bookyournailsmobile.Fragments.AddOnsFragment
 
 class PricelistFragment : Fragment() {
 

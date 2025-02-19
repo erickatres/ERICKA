@@ -265,6 +265,7 @@
                     android:src="@drawable/first"/>
 
                 <ImageView
+                    android:id="@+id/service_Regular"
                     android:layout_width="145dp"
                     android:layout_height="85dp"
                     android:layout_marginStart="50dp"
@@ -304,6 +305,7 @@
                     android:src="@drawable/second" />
 
                 <ImageView
+                    android:id="@+id/service_gelpolish"
                     android:layout_width="145dp"
                     android:layout_height="85dp"
                     android:layout_marginStart="50dp"
@@ -352,6 +354,7 @@
                     android:src="@drawable/third" />
 
                 <ImageView
+                    android:id="@+id/service_softgelextension"
                     android:layout_width="145dp"
                     android:layout_height="85dp"
                     android:layout_marginStart="50dp"
@@ -384,13 +387,13 @@
                 android:clipToOutline="true">
 
                 <ImageView
+                    android:id="@+id/Service_removal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/fourth" />
 
                 <ImageView
-                    android:id="@+id/Service_removal"
                     android:layout_width="145dp"
                     android:layout_height="85dp"
                     android:layout_marginStart="45dp"

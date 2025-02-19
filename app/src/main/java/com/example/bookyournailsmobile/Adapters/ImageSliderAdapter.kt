@@ -1,4 +1,4 @@
-package com.example.bookyournailsmobile.Fragments
+package com.example.bookyournailsmobile.Adapters
 
 import android.view.LayoutInflater
 import android.view.View
