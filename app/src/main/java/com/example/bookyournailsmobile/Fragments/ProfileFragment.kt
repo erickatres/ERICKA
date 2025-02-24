@@ -19,6 +19,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var sessionManagement: SessionManagement
 
+    private lateinit var TVUser: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,6 +28,12 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         sessionManagement = SessionManagement(requireContext())
+        TVUser = view.findViewById(R.id.TVUser)
+
+        val user = requireContext().getUserFromPreferences()
+        user?.let {
+            TVUser.text = it.firstname
+        }
 
         // Logout Button
         val logoutButton = view.findViewById<TextView>(R.id.btn_logout)

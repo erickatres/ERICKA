@@ -26,8 +26,9 @@ fun Context.saveUserToPreferences(user: User) {
     editor.putString("user_data", userJson)
     editor.apply()
 }
-
 class LoginActivity : AppCompatActivity() {
+    private lateinit var sessionManagement: SessionManagement
+
     private fun setErrorBorder(view: TextInputLayout, hasError: Boolean) {
         if (hasError) {
             view.boxStrokeColor = resources.getColor(android.R.color.holo_red_dark)
@@ -36,13 +37,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var sessionManagement: SessionManagement
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         makeFullScreen()
-
         setContentView(R.layout.activity_login)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { view, insets ->
@@ -51,13 +49,13 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+
         sessionManagement = SessionManagement(this)
 
         val emailInputLayout = findViewById<TextInputLayout>(R.id.tl_email_login)
         val passwordInputLayout = findViewById<TextInputLayout>(R.id.tl_password)
         val loginButton = findViewById<Button>(R.id.btn_login)
         val signupBtn = findViewById<TextView>(R.id.tv_signup)
-
 
         signupBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
@@ -93,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
                     val field = arrayOf("email", "password")
                     val data = arrayOf(email, password)
                     val putData = PutData(
-                        "http://192.168.68.113/BookYourNails/public/login_test.php",
+                        "http://192.168.68.106/BookYourNails/public/login_test.php",
                         "POST",
                         field,
                         data
@@ -103,8 +101,8 @@ class LoginActivity : AppCompatActivity() {
                             val result = putData.result
                             Log.d("LoginActivity", "API Response: $result") // Log the raw response
 
-                            if (result == "null") { Toast.makeText(applicationContext, "WRONG EMAIL OR PASSWORD", Toast.LENGTH_SHORT
-                                ).show()
+                            if (result == "null") {
+                                Toast.makeText(applicationContext, "WRONG EMAIL OR PASSWORD", Toast.LENGTH_SHORT).show()
                             } else {
                                 try {
                                     val gson = Gson()
@@ -148,6 +146,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onStart() {
         super.onStart()
         checkSession()

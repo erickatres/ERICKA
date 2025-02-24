@@ -30,7 +30,6 @@
             android:layout_width="300dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
-            android:background="@drawable/textfield_border"
             android:hint="Email"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -48,7 +47,6 @@
             android:layout_height="70dp"
             android:layout_gravity="center"
             android:hint="Password"
-            android:background="@drawable/textfield_border"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
