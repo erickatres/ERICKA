@@ -3,12 +3,14 @@ package com.example.bookyournailsmobile.Activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bookyournailsmobile.Domain.User
@@ -26,6 +28,7 @@ fun Context.saveUserToPreferences(user: User) {
     editor.putString("user_data", userJson)
     editor.apply()
 }
+
 class LoginActivity : AppCompatActivity() {
     private lateinit var sessionManagement: SessionManagement
 
@@ -36,7 +39,6 @@ class LoginActivity : AppCompatActivity() {
             view.boxStrokeColor = resources.getColor(android.R.color.holo_blue_dark) // Default color
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +51,29 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-
         sessionManagement = SessionManagement(this)
 
         val emailInputLayout = findViewById<TextInputLayout>(R.id.tl_email_login)
         val passwordInputLayout = findViewById<TextInputLayout>(R.id.tl_password)
         val loginButton = findViewById<Button>(R.id.btn_login)
         val signupBtn = findViewById<TextView>(R.id.tv_signup)
+
+        // Initialize password toggle functionality
+        val etPassword = passwordInputLayout.editText
+        passwordInputLayout.setEndIconOnClickListener {
+            val isPasswordVisible = etPassword?.transformationMethod == null
+            if (isPasswordVisible) {
+                // Hide password
+                etPassword?.transformationMethod = PasswordTransformationMethod.getInstance()
+                passwordInputLayout.endIconDrawable = ContextCompat.getDrawable(this, R.drawable.eye_password)
+            } else {
+                // Show password
+                etPassword?.transformationMethod = null
+                passwordInputLayout.endIconDrawable = ContextCompat.getDrawable(this, R.drawable.eye_password)
+            }
+            // Move cursor to the end of the text
+            etPassword?.setSelection(etPassword.text?.length ?: 0)
+        }
 
         signupBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
