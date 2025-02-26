@@ -5,8 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,18 +31,8 @@ fun Context.saveUserToPreferences(user: User) {
     val userJson = gson.toJson(user)
     editor.putString("user_data", userJson)
     editor.apply()
-}
-
-class LoginActivity : AppCompatActivity() {
+}class LoginActivity : AppCompatActivity() {
     private lateinit var sessionManagement: SessionManagement
-
-    private fun setErrorBorder(view: TextInputLayout, hasError: Boolean) {
-        if (hasError) {
-            view.boxStrokeColor = resources.getColor(android.R.color.holo_red_dark)
-        } else {
-            view.boxStrokeColor = resources.getColor(android.R.color.holo_blue_dark) // Default color
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,23 +52,6 @@ class LoginActivity : AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.btn_login)
         val signupBtn = findViewById<TextView>(R.id.tv_signup)
 
-        // Initialize password toggle functionality
-        val etPassword = passwordInputLayout.editText
-        passwordInputLayout.setEndIconOnClickListener {
-            val isPasswordVisible = etPassword?.transformationMethod == null
-            if (isPasswordVisible) {
-                // Hide password
-                etPassword?.transformationMethod = PasswordTransformationMethod.getInstance()
-                passwordInputLayout.endIconDrawable = ContextCompat.getDrawable(this, R.drawable.eye_password)
-            } else {
-                // Show password
-                etPassword?.transformationMethod = null
-                passwordInputLayout.endIconDrawable = ContextCompat.getDrawable(this, R.drawable.eye_password)
-            }
-            // Move cursor to the end of the text
-            etPassword?.setSelection(etPassword.text?.length ?: 0)
-        }
-
         signupBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
@@ -85,24 +62,19 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordInputLayout.editText?.text.toString().trim()
 
             var hasError = false
+            var errorMessage = ""
 
             if (email.isEmpty()) {
-                setErrorBorder(emailInputLayout, true)
-                Toast.makeText(applicationContext, "Email is required", Toast.LENGTH_SHORT).show()
+                errorMessage = "Email is required"
                 hasError = true
-            } else {
-                setErrorBorder(emailInputLayout, false)
+            } else if (password.isEmpty()) {
+                errorMessage = "Password is required"
+                hasError = true
             }
 
-            if (password.isEmpty()) {
-                setErrorBorder(passwordInputLayout, true)
-                Toast.makeText(applicationContext, "Password is required", Toast.LENGTH_SHORT).show()
-                hasError = true
+            if (hasError) {
+                showValidationPopup(errorMessage)
             } else {
-                setErrorBorder(passwordInputLayout, false)
-            }
-
-            if (!hasError) {
                 // Proceed with login logic
                 val handler = android.os.Handler()
                 handler.post {
@@ -120,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
                             Log.d("LoginActivity", "API Response: $result") // Log the raw response
 
                             if (result == "null") {
-                                Toast.makeText(applicationContext, "WRONG EMAIL OR PASSWORD", Toast.LENGTH_SHORT).show()
+                                showValidationPopup("Wrong email or password")
                             } else {
                                 try {
                                     val gson = Gson()
@@ -131,11 +103,7 @@ class LoginActivity : AppCompatActivity() {
                                     if (userID != null) {
                                         sessionManagement.saveSession(userID)
                                     } else {
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Invalid user ID",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        showValidationPopup("Invalid user ID")
                                         return@post
                                     }
 
@@ -151,11 +119,7 @@ class LoginActivity : AppCompatActivity() {
                                     finish()
                                 } catch (e: Exception) {
                                     Log.e("LoginActivity", "Error parsing user data", e)
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Error logging in. Please try again.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showValidationPopup("Error logging in. Please try again.")
                                 }
                             }
                         }
@@ -163,6 +127,29 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showValidationPopup(message: String) {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.login_failed_popup, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        // Set up the popup message
+
+        // Set up the OK button to dismiss the popup
+        val btnPopupOk = popupView.findViewById<Button>(R.id.btn_back_login)
+        btnPopupOk.setOnClickListener {
+            popupWindow.dismiss()
+        }
+
+        // Show the popup window
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
     }
 
     override fun onStart() {

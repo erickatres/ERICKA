@@ -84,8 +84,8 @@
             android:paddingLeft="17dp"
             android:paddingRight="17dp"
             app:boxStrokeColor="@color/grey2"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/eye_password"
+            app:endIconMode="password_toggle"
+            app:endIconCheckable="true"
             app:endIconTint="@color/grey2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -109,6 +109,7 @@
             android:layout_marginLeft="254dp"
             android:text="Forgot password?"
             android:textColor="@color/main"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tl_password" />

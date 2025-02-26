@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tl_firstname" type="id" />
+    <item name="tl_lastname" type="id" />
+    <item name="tl_email" type="id" />
+    <item name="tl_mobilenumber" type="id" />
+    <item name="constraintLayout" type="id" />
+    <item name="tl_confirm_password" type="id" />
+    <item name="button_signup" type="id" />
+    <item name="tv_loginback" type="id" />
+    <item name="imageView15" type="id" />
+    <item name="imageView14" type="id" />
+</resources>
