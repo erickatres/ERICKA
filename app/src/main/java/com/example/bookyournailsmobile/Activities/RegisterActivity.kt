@@ -7,7 +7,10 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -54,6 +57,14 @@ class RegisterActivity : AppCompatActivity() {
             validateConfirmPassword(it, tilPassword.editText?.text.toString(), tilConfirmPassword)
         })
 
+        // Set focus change listeners to validate fields when they lose focus
+        tilFirstname.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFirstname(tilFirstname.editText?.text.toString(), tilFirstname) }
+        tilLastname.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateLastname(tilLastname.editText?.text.toString(), tilLastname) }
+        tilEmail.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateEmail(tilEmail.editText?.text.toString(), tilEmail) }
+        tilMobileNumber.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateMobileNumber(tilMobileNumber.editText?.text.toString(), tilMobileNumber) }
+        tilPassword.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validatePassword(tilPassword.editText?.text.toString(), tilPassword) }
+        tilConfirmPassword.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateConfirmPassword(tilConfirmPassword.editText?.text.toString(), tilPassword.editText?.text.toString(), tilConfirmPassword) }
+
         // Set click listener to remove error when password field is clicked
         tilPassword.editText?.setOnClickListener {
             if (tilPassword.error != null) {
@@ -70,21 +81,14 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPassword = tilConfirmPassword.editText?.text.toString().trim()
 
             // Validate all inputs
-            if (validateInputs(
-                    firstname,
-                    lastname,
-                    email,
-                    phone,
-                    password,
-                    confirmPassword,
-                    tilFirstname,
-                    tilLastname,
-                    tilEmail,
-                    tilMobileNumber,
-                    tilPassword,
-                    tilConfirmPassword
-                )
-            ) {
+            val isFirstnameValid = validateFirstname(firstname, tilFirstname)
+            val isLastnameValid = validateLastname(lastname, tilLastname)
+            val isEmailValid = validateEmail(email, tilEmail)
+            val isMobileNumberValid = validateMobileNumber(phone, tilMobileNumber)
+            val isPasswordValid = validatePassword(password, tilPassword)
+            val isConfirmPasswordValid = validateConfirmPassword(confirmPassword, password, tilConfirmPassword)
+
+            if (isFirstnameValid && isLastnameValid && isEmailValid && isMobileNumberValid && isPasswordValid && isConfirmPasswordValid) {
                 // Proceed with registration logic
                 Toast.makeText(applicationContext, "✅ All inputs are valid!", Toast.LENGTH_SHORT).show()
 
@@ -106,26 +110,59 @@ class RegisterActivity : AppCompatActivity() {
                         }
                     }
                 }
+            } else {
+                // Show error messages for all invalid fields
+                if (firstname.isEmpty()) tilFirstname.error = "First name is required"
+                if (lastname.isEmpty()) tilLastname.error = "Last name is required"
+                if (email.isEmpty()) tilEmail.error = "Email is required"
+                if (phone.isEmpty()) tilMobileNumber.error = "Mobile number is required"
+                if (password.isEmpty()) tilPassword.error = "Password is required"
+                if (confirmPassword.isEmpty()) tilConfirmPassword.error = "Confirm password is required"
             }
         }
     }
 
     // Function to show success popup dialog
     private fun showSuccessPopup() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Account Created Successfully!")
-        builder.setMessage("Your account has been created successfully. You can now log in.")
-        builder.setPositiveButton("Back to Login") { dialog, _ ->
-            // Navigate back to LoginActivity
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish() // Close the current activity
-            dialog.dismiss()
-        }
-        builder.setCancelable(false) // Prevent dismissing the dialog by tapping outside
-        val dialog = builder.create()
-        dialog.show()
-    }
+        // Inflate the custom layout
+        val inflater = layoutInflater
+        val popupView = inflater.inflate(R.layout.success_popup_registration, null)
 
+        // Build the AlertDialog
+        val builder = AlertDialog.Builder(this).apply {
+            setView(popupView) // Set the custom layout
+            setCancelable(false) // Prevent dismissing the dialog by tapping outside
+        }
+
+        // Create the dialog
+        val dialog = builder.create()
+
+        // Set the fade-in animation when the dialog is shown
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
+        // Show the dialog
+        dialog.show()
+
+        // Set click listener for the button
+        val btnOk = popupView.findViewById<Button>(R.id.btn_back_to_login)
+        btnOk.setOnClickListener {
+            // Apply fade-out animation before dismissing the dialog
+            val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
+            popupView.startAnimation(fadeOut)
+
+            // Dismiss the dialog after the animation ends
+            fadeOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+                override fun onAnimationRepeat(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    dialog.dismiss()
+                    // Navigate back to LoginActivity
+                    startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                    finish() // Close the current activity
+                }
+            })
+        }
+    }
     // TextWatcher for real-time validation
     private fun createTextWatcher(validator: (String) -> Boolean): TextWatcher {
         return object : TextWatcher {
@@ -200,20 +237,24 @@ class RegisterActivity : AppCompatActivity() {
     // Strong password validation without error icon manipulation
     private fun validatePassword(password: String, tilPassword: TextInputLayout): Boolean {
         return when {
+            password.isEmpty() -> {
+                tilPassword.error = "Password is required"
+                false
+            }
             password.length < 6 -> {
-                tilPassword.error = "Password must be at least 6 characters"
+                tilPassword.error = "Must be at least 6 characters"
                 false
             }
             !password.matches(".*[A-Z].*".toRegex()) -> {
-                tilPassword.error = "Password must contain an uppercase letter"
+                tilPassword.error = "Must contain an uppercase letter"
                 false
             }
             !password.matches(".*\\d.*".toRegex()) -> {
-                tilPassword.error = "Password must contain a number"
+                tilPassword.error = "Must contain a number"
                 false
             }
             !password.matches(".*[!@#\$%^&*].*".toRegex()) -> {
-                tilPassword.error = "Password must contain a special character (!@#\$%^&*)"
+                tilPassword.error = "Must contain a special character"
                 false
             }
             else -> {
@@ -234,58 +275,6 @@ class RegisterActivity : AppCompatActivity() {
         } else {
             tilConfirmPassword.error = null
             true
-        }
-    }
-
-    // Validate all fields before submitting
-    private fun validateInputs(
-        firstname: String,
-        lastname: String,
-        email: String,
-        mobileNumber: String,
-        password: String,
-        confirmPassword: String,
-        tilFirstname: TextInputLayout,
-        tilLastname: TextInputLayout,
-        tilEmail: TextInputLayout,
-        tilMobileNumber: TextInputLayout,
-        tilPassword: TextInputLayout,
-        tilConfirmPassword: TextInputLayout
-    ): Boolean {
-        // Check if any of the fields are empty
-        if (firstname.isEmpty() || lastname.isEmpty() || email.isEmpty() || mobileNumber.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(applicationContext, "All fields are required", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        val validFirstname = validateFirstname(firstname, tilFirstname)
-        val validLastname = validateLastname(lastname, tilLastname)
-        val validEmail = validateEmail(email, tilEmail)
-        val validMobileNumber = validateMobileNumber(mobileNumber, tilMobileNumber)
-        val validPassword = validatePassword(password, tilPassword)
-        val validConfirmPassword = validateConfirmPassword(confirmPassword, password, tilConfirmPassword)
-
-        // Check if all validations passed
-        if (!validFirstname || !validLastname || !validEmail || !validMobileNumber || !validPassword || !validConfirmPassword) {
-            Toast.makeText(applicationContext, "Invalid input", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        return true
-    }
-
-    // Function to show toast messages
-    private fun showMessage(message: String, isError: Boolean) {
-        if (isError) {
-            if (!shownErrors.contains(message)) {
-                Toast.makeText(applicationContext, "❌ $message", Toast.LENGTH_SHORT).show()
-                shownErrors.add(message)
-            }
-        } else {
-            if (!shownSuccesses.contains(message)) {
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                shownSuccesses.add(message)
-            }
         }
     }
 

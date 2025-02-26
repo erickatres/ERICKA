@@ -83,6 +83,7 @@ class ProfileFragment : Fragment() {
         fragmentTransaction.commit()
     }
 
+    // Show a confirmation dialog for logout
     private fun showLogoutConfirmationDialog() {
         // Inflate the custom layout
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout_confirmation, null)
@@ -93,43 +94,20 @@ class ProfileFragment : Fragment() {
             .setCancelable(true) // Allow the user to dismiss the dialog by tapping outside
             .create()
 
-        // Apply fade-in animation when the dialog is shown
-        val fadeIn = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
-        dialogView.startAnimation(fadeIn)
-
         // Set up button click listeners
         val btnNo = dialogView.findViewById<Button>(R.id.btn_no)
         val btnYes = dialogView.findViewById<Button>(R.id.btn_yes)
 
         btnNo.setOnClickListener {
-            // Apply fade-out animation before dismissing the dialog
-            val fadeOut = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
-            dialogView.startAnimation(fadeOut)
-            fadeOut.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
-                override fun onAnimationStart(animation: android.view.animation.Animation?) {}
-                override fun onAnimationEnd(animation: android.view.animation.Animation?) {
-                    alertDialog.dismiss()
-                }
-                override fun onAnimationRepeat(animation: android.view.animation.Animation?) {}
-            })
+            alertDialog.dismiss() // Dismiss the dialog
         }
 
         btnYes.setOnClickListener {
-            // Apply fade-out animation before dismissing the dialog and performing logout
-            val fadeOut = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
-            dialogView.startAnimation(fadeOut)
-            fadeOut.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
-                override fun onAnimationStart(animation: android.view.animation.Animation?) {}
-                override fun onAnimationEnd(animation: android.view.animation.Animation?) {
-                    alertDialog.dismiss()
-                    // Perform logout
-                    sessionManagement.clearSession()
-                    val intent = Intent(activity, LoginActivity::class.java)
-                    startActivity(intent)
-                    activity?.finish()
-                }
-                override fun onAnimationRepeat(animation: android.view.animation.Animation?) {}
-            })
+            // Perform logout
+            sessionManagement.clearSession()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
         }
 
         // Show the dialog

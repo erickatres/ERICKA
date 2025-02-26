@@ -131,10 +131,9 @@ fun Context.saveUserToPreferences(user: User) {
 
     private fun showValidationPopup(message: String) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.login_failed_popup,
-            null)
+        val popupView = inflater.inflate(R.layout.login_failed_popup, null)
 
-
+        // Set up the popup window
         val popupWindow = PopupWindow(
             popupView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -142,7 +141,8 @@ fun Context.saveUserToPreferences(user: User) {
             true
         )
 
-        // Set up the popup message
+
+
 
         // Set up the OK button to dismiss the popup
         val btnPopupOk = popupView.findViewById<Button>(R.id.btn_back_login)

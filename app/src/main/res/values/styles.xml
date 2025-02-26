@@ -34,4 +34,9 @@
         <item name="android:background">@drawable/rectanglebg</item> <!-- Custom background for selected day -->
     </style>
 
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
 </resources>
