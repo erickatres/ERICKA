@@ -131,7 +131,9 @@ fun Context.saveUserToPreferences(user: User) {
 
     private fun showValidationPopup(message: String) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.login_failed_popup, null)
+        val popupView = inflater.inflate(R.layout.login_failed_popup,
+            null)
+
 
         val popupWindow = PopupWindow(
             popupView,
@@ -145,11 +147,24 @@ fun Context.saveUserToPreferences(user: User) {
         // Set up the OK button to dismiss the popup
         val btnPopupOk = popupView.findViewById<Button>(R.id.btn_back_login)
         btnPopupOk.setOnClickListener {
-            popupWindow.dismiss()
+            // Apply fade-out animation before dismissing the popup
+            val fadeOut = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_out)
+            popupView.startAnimation(fadeOut)
+            fadeOut.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
+                override fun onAnimationStart(animation: android.view.animation.Animation?) {}
+                override fun onAnimationEnd(animation: android.view.animation.Animation?) {
+                    popupWindow.dismiss()
+                }
+                override fun onAnimationRepeat(animation: android.view.animation.Animation?) {}
+            })
         }
 
         // Show the popup window
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
+
+        // Apply fade-in animation when the popup is shown
+        val fadeIn = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        popupView.startAnimation(fadeIn)
     }
 
     override fun onStart() {
