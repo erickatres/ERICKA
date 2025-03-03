@@ -11,7 +11,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,17 +137,28 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/login_bottom"
-                app:layout_constraintTop_toBottomOf="parent">
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottom_design"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/login_bottom"
+                    android:layout_marginEnd="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/btn_login"
                     android:layout_width="309dp"
                     android:layout_height="68dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="-185dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginBottom="170dp"
                     android:backgroundTint="@color/main"
                     android:text="Login"
                     android:textSize="24sp"
@@ -150,7 +166,6 @@
                     app:cornerRadius="21dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.87"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.494" />
@@ -176,7 +191,7 @@
                     android:gravity="center"
                     android:text="Don't have an account yet? "
                     android:textColor="@color/main"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/bottom_design"
                     app:layout_constraintEnd_toEndOf="@+id/btn_login"
                     app:layout_constraintHorizontal_bias="0.335"
                     app:layout_constraintStart_toStartOf="@+id/btn_login"
