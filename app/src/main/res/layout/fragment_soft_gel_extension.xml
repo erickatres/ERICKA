@@ -379,7 +379,6 @@
             android:layout_weight="1"
             android:layout_marginStart="20dp"
             android:orientation="vertical">
-
             <!-- Price Text -->
             <TextView
                 android:layout_width="wrap_content"
