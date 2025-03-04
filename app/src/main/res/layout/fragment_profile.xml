@@ -11,13 +11,15 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
             android:orientation="vertical">
 
             <TextView
@@ -26,22 +28,22 @@
                 android:text="Profile"
                 android:textColor="@color/btn"
                 android:textSize="24sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="30dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/IVAvatar"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@drawable/sample"
+                    android:background="@drawable/circleimage"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/circleimage"/>
+                    android:src="@drawable/sample" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -57,7 +59,7 @@
                         android:text="Loopy"
                         android:textColor="@color/black"
                         android:textSize="24sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/TVChangeAvatar"
@@ -65,14 +67,15 @@
                         android:layout_height="wrap_content"
                         android:text="Change avatar"
                         android:textColor="@color/black"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
+
                 <ImageView
                     android:id="@+id/btnChangeAvatar"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/button2"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/button2" />
             </LinearLayout>
 
             <View
@@ -88,8 +91,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Settings"
                 android:layout_marginTop="30dp"
+                android:text="Settings"
                 android:textColor="@color/btn"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -100,9 +103,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="30dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/TVAccount"
@@ -117,8 +120,9 @@
                     android:id="@+id/btnAccount"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/button2"/>
+                    android:src="@drawable/button2" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -134,9 +138,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="30dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/TVChangePassword"
@@ -151,8 +155,9 @@
                     android:id="@+id/btnChangePassword"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/button2"/>
+                    android:src="@drawable/button2" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -168,18 +173,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Support"
                 android:layout_marginTop="30dp"
+                android:text="Support"
                 android:textColor="@color/btn"
                 android:textSize="24sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="30dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/TVAboutUs"
@@ -188,13 +193,13 @@
                     android:layout_weight="1"
                     android:text="About Us"
                     android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/btnAboutUs"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/button2"/>
+                    android:src="@drawable/button2" />
             </LinearLayout>
 
             <View
@@ -206,9 +211,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="30dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/TVOurPolicies"
@@ -217,13 +222,13 @@
                     android:layout_weight="1"
                     android:text="Our Policies"
                     android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/btnOurPolicies"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/button2"/>
+                    android:src="@drawable/button2" />
             </LinearLayout>
 
 
@@ -236,9 +241,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="30dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/TVFAQS"
@@ -253,30 +258,28 @@
                     android:id="@+id/btnFAQS"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/button2"/>
+                    android:src="@drawable/button2" />
+
             </LinearLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="30dp"
-                android:background="@android:color/darker_gray"/>
+                android:layout_height="120dp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/btn_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Log out"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnFAQS" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/btn_logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Log out"
-                android:layout_marginTop="30dp"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

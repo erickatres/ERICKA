@@ -1,15 +1,19 @@
 package com.example.bookyournailsmobile.Activities
 
-import com.example.bookyournailsmobile.Fragments.HomeFragment
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Fragments.BookingFragment
+import com.example.bookyournailsmobile.Fragments.HomeFragment
 import com.example.bookyournailsmobile.Fragments.PricelistFragment
 import com.example.bookyournailsmobile.Fragments.ProfileFragment
 import com.example.bookyournailsmobile.R
@@ -39,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Hide the system navigation bar
 
         sessionManagement = SessionManagement(this)
         if (sessionManagement.getSession() == null) { // Check for null instead of -1
@@ -82,6 +88,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun hideSystemNavigationBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // For Android 11 and above
+            window.insetsController?.let {
+                it.hide(WindowInsets.Type.navigationBars())
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            // For older versions
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    )
+        }
+    }
+
 
     private fun initViews() {
         homeLayout = findViewById(R.id.home_layout)
