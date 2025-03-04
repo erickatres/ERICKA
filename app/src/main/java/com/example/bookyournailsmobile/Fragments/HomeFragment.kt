@@ -34,7 +34,6 @@ fun Context.getUserFromPreferences(): User? {
 class HomeFragment : Fragment() {
 
     private lateinit var firstNameTextView: TextView
-    private lateinit var progressBar: ProgressBar
     private lateinit var serviceRegular: ImageView
     private lateinit var serviceSoftGelExtension: ImageView
     private lateinit var serviceRemoval: ImageView
@@ -54,13 +53,9 @@ class HomeFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         firstNameTextView = view.findViewById(R.id.greeting_text)
-        progressBar = view.findViewById(R.id.progressBar)
 
         // Initialize ProgressBars
-        progressBarRegular = view.findViewById(R.id.progressBar_Regular)
-        progressBarGelPolish = view.findViewById(R.id.progressBar_Gel_polish)
-        progressBarSoftGelExtension = view.findViewById(R.id.progressBar_Soft_gel_extension)
-        progressBarRemoval = view.findViewById(R.id.progressBar_Removal)
+
 
         // Initialize Service ImageViews
         text_on_text_below_loyalty_1 = view.findViewById(R.id.text_below_loyalty)
@@ -76,17 +71,6 @@ class HomeFragment : Fragment() {
 
 
 
-        // Initially hide the Service and Promo ImageViews and TextViews
-        text_on_image_1.visibility = View.INVISIBLE
-        text_on_text_below_loyalty_1.visibility = View.INVISIBLE
-        serviceRegular.visibility = View.INVISIBLE
-        serviceSoftGelExtension.visibility = View.INVISIBLE
-        serviceRemoval.visibility = View.INVISIBLE
-        serviceGelPolish.visibility = View.INVISIBLE
-        promoImage1.visibility = View.INVISIBLE
-        promoImage2.visibility = View.INVISIBLE
-        text_on_image_1.visibility = View.INVISIBLE
-        text_on_text_below_loyalty_1.visibility = View.INVISIBLE
 
         return view
     }
@@ -94,12 +78,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         makeFullScreen()
+        setupButtonListeners(view)
 
-        // Show the ProgressBar when loading starts
-        progressBar.visibility = View.VISIBLE
 
-        // Simulate loading (replace this with your actual loading logic)
-        simulateLoading()
+
+
 
         // Retrieve user data and set the first name to the TextView
         val user = requireContext().getUserFromPreferences()
@@ -108,34 +91,9 @@ class HomeFragment : Fragment() {
         }
 
         // Set up button click listeners after the delay
-        Handler(Looper.getMainLooper()).postDelayed({
-            setupButtonListeners(view)
-            showPromoImages()
-            showPromoText()
-
-            // Show progress bars for 3 seconds
-            showProgressBars()
-
-            // Hide progress bars after 3 seconds
-            Handler(Looper.getMainLooper()).postDelayed({
-                hideProgressBars()
-            }, 300)
-        }, 500) // 3 seconds delay before setting up listeners and showing promo images
     }
 
-    private fun showProgressBars() {
-        progressBarRegular.visibility = View.VISIBLE
-        progressBarGelPolish.visibility = View.VISIBLE
-        progressBarSoftGelExtension.visibility = View.VISIBLE
-        progressBarRemoval.visibility = View.VISIBLE
-    }
 
-    private fun hideProgressBars() {
-        progressBarRegular.visibility = View.INVISIBLE
-        progressBarGelPolish.visibility = View.INVISIBLE
-        progressBarSoftGelExtension.visibility = View.INVISIBLE
-        progressBarRemoval.visibility = View.INVISIBLE
-    }
     private fun makeFullScreen() {
         activity?.window?.let { window ->
             window.setFlags(
@@ -197,11 +155,4 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun simulateLoading() {
-        // Simulate a delay for loading (replace this with your actual loading logic)
-        Handler(Looper.getMainLooper()).postDelayed({
-            // Hide the ProgressBar when loading is complete
-            progressBar.visibility = View.GONE
-        }, 1000) // 3 seconds delay for demonstration
-    }
 }
