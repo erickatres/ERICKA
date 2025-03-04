@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.R
@@ -14,11 +17,22 @@ import java.util.*
 
 class AppointmentFragment : Fragment() {
 
+    private lateinit var appointment_backBTN: FrameLayout
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_appointment, container, false)
+
+        // Initialize the back button correctly
+        appointment_backBTN = view.findViewById(R.id.appointment_backBTN)
+
+        // Set an OnClickListener on the back button
+        appointment_backBTN.setOnClickListener {
+            // Navigate back to BookingFragment
+            navigateBackToBookingFragment()
+        }
 
         val textViewSD = view.findViewById<TextView>(R.id.textViewSD) // Date display
 
@@ -26,6 +40,15 @@ class AppointmentFragment : Fragment() {
         showMaterialDatePicker(textViewSD)
 
         return view
+    }
+
+    private fun navigateBackToBookingFragment() {
+        // Use FragmentManager to navigate back to BookingFragment
+        val fragmentManager = parentFragmentManager
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, BookingFragment())
+            .addToBackStack(null) // Optional: Add to back stack
+            .commit()
     }
 
     private fun showMaterialDatePicker(textView: TextView) {

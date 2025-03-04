@@ -40,6 +40,7 @@
                     android:layout_gravity="top|start">
 
                     <ImageView
+                        android:id="@+id/_soft_gel_extension_back_arrow"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
