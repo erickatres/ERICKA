@@ -41,11 +41,7 @@ class HomeFragment : Fragment() {
     private lateinit var promoImage1: ImageView
     private lateinit var promoImage2: ImageView
     private lateinit var text_on_image_1: TextView
-    private lateinit var text_on_text_below_loyalty_1: TextView
-    private lateinit var progressBarRegular: ProgressBar
-    private lateinit var progressBarGelPolish: ProgressBar
-    private lateinit var progressBarSoftGelExtension: ProgressBar
-    private lateinit var progressBarRemoval: ProgressBar
+    private lateinit var Home_points_text: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,16 +54,12 @@ class HomeFragment : Fragment() {
 
 
         // Initialize Service ImageViews
-        text_on_text_below_loyalty_1 = view.findViewById(R.id.text_below_loyalty)
-        text_on_image_1 = view.findViewById(R.id.text_on_image_1)
+        Home_points_text = view.findViewById(R.id.Home_points_text)
         serviceRegular = view.findViewById(R.id.Service_regular)
         serviceSoftGelExtension = view.findViewById(R.id.Service_soft_gel_extension)
         serviceRemoval = view.findViewById(R.id.Service_removal)
         serviceGelPolish = view.findViewById(R.id.Service_gelpolish)
 
-        // Initialize Promo ImageViews
-        promoImage1 = view.findViewById(R.id.image_1)
-        promoImage2 = view.findViewById(R.id.image_2)
 
 
 
@@ -137,12 +129,6 @@ class HomeFragment : Fragment() {
         promoImage2.visibility = View.VISIBLE
     }
 
-
-    private fun showPromoText() {
-        // Make Promo TextView visible after the delay
-        text_on_image_1.visibility = View.VISIBLE
-        text_on_text_below_loyalty_1.visibility = View.VISIBLE
-    }
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentName = fragment::class.java.simpleName

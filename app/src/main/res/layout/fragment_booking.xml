@@ -16,20 +16,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"></FrameLayout>
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="412dp"
         android:layout_height="94dp"
         android:background="@drawable/rectanglebg"
+        android:gravity="center"
         android:text="Booking"
         android:textAlignment="center"
-        android:gravity="center"
         android:textColor="@color/btn"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
