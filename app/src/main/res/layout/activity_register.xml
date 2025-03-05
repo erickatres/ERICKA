@@ -231,6 +231,7 @@
                         android:paddingRight="17dp"
                         app:boxStrokeColor="@color/grey2"
                         app:errorEnabled="true"
+                        app:endIconMode="password_toggle"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tl_password">

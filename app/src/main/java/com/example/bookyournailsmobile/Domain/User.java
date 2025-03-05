@@ -5,6 +5,7 @@ public class User {
     private String full_name;
     private String email;
     private String first_name;
+    private String last_name;
     private String password;
     private String role; // Add this line
 
@@ -36,9 +37,15 @@ public class User {
     public String getFirstname() {
         return first_name;
     }
+    public String getLastname() {
+        return last_name;
+    }
 
     public void setFirstname(String firstname) {
         this.first_name = firstname;
+    }
+    public void setLastname(String lastname) {
+        this.last_name = lastname;
     }
 
     public String getPassword() {
