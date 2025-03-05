@@ -52,7 +52,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/personal_details"
                 android:layout_width="match_parent"
-                android:layout_height="360dp"
+                android:layout_height="375dp"
                 android:gravity="center">
 
                 <TextView
@@ -80,7 +80,6 @@
                     android:paddingRight="17dp"
                     app:boxStrokeColor="@color/grey2"
                     app:errorEnabled="true"
-
                     app:layout_constraintStart_toStartOf="@+id/textView"
                     app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -192,7 +191,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="155dp"
                         android:gravity="center"
-                        android:layout_marginTop="15dp"
                         android:text="Set password"
                         android:textColor="@color/main"
                         android:textSize="20dp"
