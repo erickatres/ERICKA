@@ -39,6 +39,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // Remove the error icon from the password field
         tilPassword.errorIconDrawable = null
+        tilConfirmPassword.errorIconDrawable = null
 
         val registerBtn = findViewById<Button>(R.id.button_signup)
         val loginBack = findViewById<TextView>(R.id.tv_loginback)
@@ -69,6 +70,11 @@ class RegisterActivity : AppCompatActivity() {
         tilPassword.editText?.setOnClickListener {
             if (tilPassword.error != null) {
                 tilPassword.error = null // Remove error message
+            }
+        }
+        tilConfirmPassword.editText?.setOnClickListener {
+            if (tilConfirmPassword.error != null) {
+                tilConfirmPassword.error = null // Remove error message
             }
         }
 
