@@ -23,6 +23,7 @@ import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.vishnusivadas.advanced_httpurlconnection.PutData
+import com.example.bookyournailsmobile.NetUtils.Urls
 
 fun Context.saveUserToPreferences(user: User) {
     val sharedPreferences = this.getSharedPreferences("UserPref", Context.MODE_PRIVATE)
@@ -81,7 +82,7 @@ fun Context.saveUserToPreferences(user: User) {
                     val field = arrayOf("email", "password")
                     val data = arrayOf(email, password)
                     val putData = PutData(
-                        "http://192.168.68.106/BookYourNails/public/login_test.php",
+                        Urls.URL_LOGIN,
                         "POST",
                         field,
                         data

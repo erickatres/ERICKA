@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.bookyournailsmobile.R
 import com.google.android.material.textfield.TextInputLayout
 import com.vishnusivadas.advanced_httpurlconnection.PutData
+import com.example.bookyournailsmobile.NetUtils.Urls
 
 class RegisterActivity : AppCompatActivity() {
     private val shownErrors = mutableSetOf<String>() // Track shown error messages
@@ -97,7 +98,7 @@ class RegisterActivity : AppCompatActivity() {
                     val field = arrayOf("first_name", "last_name", "email", "phone", "password")
                     val data = arrayOf(firstname, lastname, email, phone, password)
 
-                    val putData = PutData("http://192.168.68.106/BookYourNails/public/signup.php", "POST", field, data)
+                    val putData = PutData(Urls.URL_REGISTER, "POST", field, data)
 
                     if (putData.startPut() && putData.onComplete()) {
                         val result = putData.result

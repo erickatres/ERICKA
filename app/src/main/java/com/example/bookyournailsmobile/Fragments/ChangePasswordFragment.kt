@@ -78,4 +78,3 @@ class ChangePasswordFragment : Fragment() {
         bottomNav?.visibility = View.VISIBLE
     }
 }
-
