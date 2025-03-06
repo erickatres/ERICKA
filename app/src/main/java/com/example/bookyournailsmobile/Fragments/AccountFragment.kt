@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.example.bookyournailsmobile.R
 import com.vishnusivadas.advanced_httpurlconnection.PutData
+import com.example.bookyournailsmobile.NetUtils.Urls
 
 class AccountFragment : Fragment() {
 
@@ -118,7 +119,7 @@ class AccountFragment : Fragment() {
 
             // Replace with your API endpoint
             val putData = PutData(
-                "http://192.168.68.106/BookYourNails/public/update_user.php",
+                Urls.URL_CHANGE_ACCOUNT,
                 "POST",
                 field,
                 data
