@@ -1,6 +1,7 @@
 package com.example.bookyournailsmobile.Fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,6 +13,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Activities.LoginActivity
 import com.example.bookyournailsmobile.R
 import com.vishnusivadas.advanced_httpurlconnection.PutData
 import com.example.bookyournailsmobile.NetUtils.Urls
@@ -57,7 +59,7 @@ class ChangePasswordFragment : Fragment() {
 
         // Handle Update Password button click
         updatePasswordButton.setOnClickListener {
-            val password = etOldPassword.text.toString()
+            val oldPassword = etOldPassword.text.toString()
             val newPassword = newPasswordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
 
@@ -71,12 +73,12 @@ class ChangePasswordFragment : Fragment() {
             } else {
                 errorTextView.visibility = View.GONE
                 // Proceed with password update
-                updatePassword(password)
+                updatePassword(oldPassword, newPassword)
             }
         }
     }
 
-    private fun updatePassword(password: String) {
+    private fun updatePassword(oldPassword: String, newPassword: String) {
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             // Retrieve user ID from SessionManagement
@@ -88,12 +90,12 @@ class ChangePasswordFragment : Fragment() {
             }
 
             // Prepare fields and data for the API request
-            val field = arrayOf("user_id", "password")
-            val data = arrayOf(userId, password)
+            val field = arrayOf("user_id", "old_password", "new_password")
+            val data = arrayOf(userId, oldPassword, newPassword)
 
             // Use PutData to send the request
             val putData = PutData(
-                Urls.URL_CHANGE_PASSWORD, // Replace with your password update endpoint
+                Urls.URL_CHANGE_PASSWORD,
                 "POST",
                 field,
                 data
@@ -103,12 +105,21 @@ class ChangePasswordFragment : Fragment() {
                 if (putData.onComplete()) {
                     val result = putData.result
                     activity?.runOnUiThread {
-                        if (result == "Update Success") {
-                            Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
-                            // Navigate back or perform other actions
-                            parentFragmentManager.popBackStack()
-                        } else {
-                            Toast.makeText(requireContext(), "Failed to update password: $result", Toast.LENGTH_SHORT).show()
+                        when (result) {
+                            "Update Success" -> {
+                                sessionManagement.clearSession()
+                                val intent = Intent(activity, LoginActivity::class.java)
+                                startActivity(intent)
+                                activity?.finish()
+                                Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
+                                // Navigate back or perform other actions
+                            }
+                            "Old password is incorrect" -> {
+                                Toast.makeText(requireContext(), "Old password is incorrect", Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                                Toast.makeText(requireContext(), "Failed to update password: $result", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
