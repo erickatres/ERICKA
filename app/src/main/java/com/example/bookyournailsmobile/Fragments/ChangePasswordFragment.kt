@@ -1,6 +1,9 @@
 package com.example.bookyournailsmobile.Fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +13,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.R
-
+import com.vishnusivadas.advanced_httpurlconnection.PutData
+import com.example.bookyournailsmobile.NetUtils.Urls
+import com.example.bookyournailsmobile.Managers.SessionManagement
 
 class ChangePasswordFragment : Fragment() {
 
@@ -18,6 +23,8 @@ class ChangePasswordFragment : Fragment() {
     private lateinit var confirmPasswordEditText: EditText
     private lateinit var errorTextView: TextView
     private lateinit var updatePasswordButton: Button
+    private lateinit var etOldPassword: EditText
+    private lateinit var sessionManagement: SessionManagement
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,9 +37,14 @@ class ChangePasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Initialize views
+        etOldPassword = view.findViewById(R.id.etOldPassword)
         newPasswordEditText = view.findViewById(R.id.etnewPassword)
         confirmPasswordEditText = view.findViewById(R.id.etconfirmPassword)
         updatePasswordButton = view.findViewById(R.id.updatePasswordButton)
+        errorTextView = view.findViewById(R.id.errorTextView)
+
+        // Initialize SessionManagement
+        sessionManagement = SessionManagement(requireContext())
 
         // Set up back button functionality
         view.findViewById<View>(R.id.btnBack).setOnClickListener {
@@ -45,6 +57,7 @@ class ChangePasswordFragment : Fragment() {
 
         // Handle Update Password button click
         updatePasswordButton.setOnClickListener {
+            val password = etOldPassword.text.toString()
             val newPassword = newPasswordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
 
@@ -57,10 +70,48 @@ class ChangePasswordFragment : Fragment() {
                 errorTextView.visibility = View.VISIBLE
             } else {
                 errorTextView.visibility = View.GONE
-                // Proceed with password update (you can replace this with actual logic to save the new password)
-                Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
+                // Proceed with password update
+                updatePassword(password)
+            }
+        }
+    }
 
+    private fun updatePassword(password: String) {
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            // Retrieve user ID from SessionManagement
+            val userId = sessionManagement.getSession()
 
+            if (userId == null) {
+                Toast.makeText(requireContext(), "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show()
+                return@post
+            }
+
+            // Prepare fields and data for the API request
+            val field = arrayOf("user_id", "password")
+            val data = arrayOf(userId, password)
+
+            // Use PutData to send the request
+            val putData = PutData(
+                Urls.URL_CHANGE_PASSWORD, // Replace with your password update endpoint
+                "POST",
+                field,
+                data
+            )
+
+            if (putData.startPut()) {
+                if (putData.onComplete()) {
+                    val result = putData.result
+                    activity?.runOnUiThread {
+                        if (result == "Update Success") {
+                            Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
+                            // Navigate back or perform other actions
+                            parentFragmentManager.popBackStack()
+                        } else {
+                            Toast.makeText(requireContext(), "Failed to update password: $result", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
         }
     }

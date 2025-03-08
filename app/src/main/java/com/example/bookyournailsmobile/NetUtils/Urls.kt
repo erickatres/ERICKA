@@ -1,9 +1,11 @@
 package com.example.bookyournailsmobile.NetUtils
 
 object Urls {
-    const val ROOT_URL = "http://192.168.68.106/BookYourNails/public/"
-    const val URL_LOGIN = ROOT_URL + "login_test.php"
-    const val URL_REGISTER = ROOT_URL + "signup.php"
-    const val URL_CHANGE_ACCOUNT = ROOT_URL + "update_user.php"
-    const val URL_CHANGE_PASSWORD = ROOT_URL + "update_password.php"
+    const val ROOT = "http://"
+    const val IP_ADDRESS = "192.168.68.106"
+    const val DIRECTORY = "/BookYourNails/public/"
+    const val URL_LOGIN = ROOT + IP_ADDRESS + DIRECTORY + "login_test.php"
+    const val URL_REGISTER = ROOT + IP_ADDRESS + DIRECTORY + "signup.php"
+    const val URL_CHANGE_ACCOUNT = ROOT + IP_ADDRESS + DIRECTORY + "update_user.php"
+    const val URL_CHANGE_PASSWORD = ROOT + IP_ADDRESS + DIRECTORY + "updatePassword.php"
 }
