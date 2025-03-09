@@ -4,6 +4,7 @@ public class User {
     private String user_id;
     private String full_name;
     private String email;
+    private String phone;
     private String first_name;
     private String last_name;
     private String password;
@@ -34,8 +35,15 @@ public class User {
         this.email = email;
     }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getFirstname() {
         return first_name;
+    }
+    public String getPhone() {
+        return phone;
     }
     public String getLastname() {
         return last_name;

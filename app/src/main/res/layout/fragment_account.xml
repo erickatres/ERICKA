@@ -5,143 +5,228 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
-        android:id="@+id/btnBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/whitecircle"
-        android:elevation="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:src="@drawable/backarrow"/>
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:gravity="center"
-        android:text="Account info"
-        android:textAlignment="center"
-        android:textColor="@color/btn"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:fillViewport="true">
 
-    <EditText
-        android:id="@+id/usernameEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Username"
-        android:layout_marginTop="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:padding="16dp"
-        android:inputType="text"
-        android:maxLines="1"
-        android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@id/textView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+                <FrameLayout
+                    android:id="@+id/btnBack"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/whitecircle"
+                    android:elevation="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/editUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="45dp"
-        android:gravity="end"
-        android:textSize="15sp"
-        android:text="Edit"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/usernameEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/usernameEditText" />
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/backarrow" />
+                </FrameLayout>
 
-    <EditText
-        android:id="@+id/firstnameEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="25dp"
-        android:hint="First Name"
-        android:padding="16dp"
-        android:inputType="text"
-        android:maxLines="1"
-        android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Account info"
+                    android:textAlignment="center"
+                    android:textColor="@color/btn"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnBack" />
 
-    <TextView
-        android:id="@+id/editFirstname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="45dp"
-        android:gravity="end"
-        android:text="Edit"
-        android:textSize="15sp"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/lastnameEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
+                <EditText
+                    android:id="@+id/firstnameEditText"
+                    android:layout_width="360dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="54dp"
+                    android:hint="First Name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="16dp"
+                    android:singleLine="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <EditText
-        android:id="@+id/lastnameEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="25dp"
-        android:hint="Last Name"
-        android:padding="16dp"
-        android:inputType="text"
-        android:maxLines="1"
-        android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstnameEditText" />
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="239dp"
+                    android:layout_marginStart="45dp"
+                    android:layout_marginBottom="45dp"
+                    android:text="Firstname"
+                    android:textSize="18dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/firstnameEditText"
+                    app:layout_constraintEnd_toStartOf="@+id/editFirstname"
+                    app:layout_constraintStart_toStartOf="@+id/firstnameEditText"
+                    app:layout_constraintTop_toTopOf="@+id/firstnameEditText" />
 
-    <TextView
-        android:id="@+id/editLastname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        android:textSize="15sp"
-        android:textColor="@color/black"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="45dp"
-        android:gravity="end"
-        app:layout_constraintTop_toTopOf="@id/lastnameEditText"
-        app:layout_constraintEnd_toEndOf="parent"/>
+                <TextView
+                    android:id="@+id/editFirstname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_marginTop="30dp"
+                    android:text="Edit"
+                    android:layout_marginEnd="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="@+id/firstnameEditText"
+                    app:layout_constraintTop_toTopOf="@+id/firstnameEditText" />
 
-    <Button
-        android:id="@+id/saveChangesButton"
-        android:layout_width="334dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/btn"
-        android:text="Save Changes"
-        android:textSize="18dp"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastnameEditText" />
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="239dp"
+                    android:layout_marginStart="45dp"
+                    android:layout_marginBottom="45dp"
+                    android:text="Lastname"
+                    android:textSize="18dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/lastnameEditText"
+                    app:layout_constraintEnd_toStartOf="@+id/editLastname"
+                    app:layout_constraintStart_toStartOf="@+id/lastnameEditText"
+                    app:layout_constraintTop_toTopOf="@+id/lastnameEditText" />
+
+                <EditText
+                    android:id="@+id/lastnameEditText"
+                    android:layout_width="360dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="13dp"
+                    android:hint="Last Name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="16dp"
+                    android:singleLine="true"
+                    app:layout_constraintEnd_toEndOf="@+id/firstnameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/firstnameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/firstnameEditText" />
+
+                <TextView
+                    android:id="@+id/editLastname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Edit"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="@+id/lastnameEditText"
+                    app:layout_constraintTop_toTopOf="@+id/lastnameEditText" />
+
+                <EditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="360dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="23dp"
+                    android:hint="Email"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="16dp"
+                    android:singleLine="true"
+                    app:layout_constraintEnd_toEndOf="@+id/lastnameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/lastnameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/lastnameEditText" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="228dp"
+                    android:layout_marginBottom="45dp"
+                    android:text="Email"
+                    android:textSize="18dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/emailEditText"
+                    app:layout_constraintEnd_toStartOf="@+id/editUsername"
+                    app:layout_constraintStart_toStartOf="@+id/emailEditText"
+                    app:layout_constraintTop_toTopOf="@+id/emailEditText" />
+
+                <TextView
+                    android:id="@+id/editUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Edit"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+                    app:layout_constraintTop_toTopOf="@+id/emailEditText" />
+
+                <EditText
+                    android:id="@+id/Mobilenumber_edittext"
+                    android:layout_width="360dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="23dp"
+                    android:hint="Mobile no."
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="16dp"
+                    android:singleLine="true"
+                    app:layout_constraintEnd_toEndOf="@+id/lastnameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/lastnameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+
+                <TextView
+                    android:id="@+id/editUsername2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:gravity="end"
+                    android:text="Edit"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="@+id/Mobilenumber_edittext"
+                    app:layout_constraintTop_toTopOf="@+id/Mobilenumber_edittext" />
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="190dp"
+                    android:layout_marginBottom="45dp"
+                    android:text="Mobile no."
+                    android:textSize="18dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/Mobilenumber_edittext"
+                    app:layout_constraintEnd_toStartOf="@+id/editUsername2"
+                    app:layout_constraintStart_toStartOf="@+id/Mobilenumber_edittext"
+                    app:layout_constraintTop_toTopOf="@+id/Mobilenumber_edittext" />
+
+                <Button
+                    android:id="@+id/saveChangesButton"
+                    android:layout_width="334dp"
+                    android:layout_height="68dp"
+                    android:backgroundTint="@color/btn"
+                    android:text="Save Changes"
+                    android:textColor="@android:color/white"
+                    android:textSize="18dp"
+                    android:layout_marginTop="130dp"
+                    app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+                    app:layout_constraintStart_toStartOf="@+id/emailEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
