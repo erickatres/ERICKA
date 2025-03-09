@@ -7,9 +7,19 @@ import retrofit2.http.POST
 
 interface ApiService {
     @FormUrlEncoded
-    @POST("login_test.php") // Replace with your actual login endpoint
+    @POST("login.php") // Replace with your actual login endpoint
     fun login(
         @Field("email") email: String,
+        @Field("password") password: String
+    ): Call<User>
+
+    @FormUrlEncoded
+    @POST("signup.php") // Replace with your actual registration endpoint
+    fun register(
+        @Field("first_name") firstName: String,
+        @Field("last_name") lastName: String,
+        @Field("email") email: String,
+        @Field("phone") phone: String,
         @Field("password") password: String
     ): Call<User>
 }
