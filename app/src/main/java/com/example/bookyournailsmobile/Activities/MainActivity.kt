@@ -1,5 +1,4 @@
 package com.example.bookyournailsmobile.Activities
-
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build

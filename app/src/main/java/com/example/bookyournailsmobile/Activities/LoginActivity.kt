@@ -3,6 +3,7 @@ package com.example.bookyournailsmobile.Activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,17 +14,16 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
-import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.vishnusivadas.advanced_httpurlconnection.PutData
+import com.example.bookyournailsmobile.NetUtils.Urls
 
 fun Context.saveUserToPreferences(user: User) {
     val sharedPreferences = this.getSharedPreferences("UserPref", Context.MODE_PRIVATE)
@@ -32,9 +32,7 @@ fun Context.saveUserToPreferences(user: User) {
     val userJson = gson.toJson(user)
     editor.putString("user_data", userJson)
     editor.apply()
-}
-
-class LoginActivity : AppCompatActivity() {
+}class LoginActivity : AppCompatActivity() {
     private lateinit var sessionManagement: SessionManagement
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,44 +76,56 @@ class LoginActivity : AppCompatActivity() {
             if (hasError) {
                 showValidationPopup(errorMessage)
             } else {
-                // Proceed with login logic using Retrofit
-                val call = RetrofitClient.instance.login(email, password)
-                call.enqueue(object : Callback<User> {
-                    override fun onResponse(call: Call<User>, response: Response<User>) {
-                        if (response.isSuccessful) {
-                            val user = response.body()
-                            if (user != null) {
-                                val userID = user.id
-                                if (userID != null) {
-                                    sessionManagement.saveSession(userID)
-                                } else {
-                                    showValidationPopup("Invalid user ID")
-                                    return
-                                }
+                // Proceed with login logic
+                val handler = android.os.Handler()
+                handler.post {
+                    val field = arrayOf("email", "password")
+                    val data = arrayOf(email, password)
+                    val putData = PutData(
+                        Urls.URL_LOGIN,
+                        "POST",
+                        field,
+                        data
+                    )
+                    if (putData.startPut()) {
+                        if (putData.onComplete()) {
+                            val result = putData.result
+                            Log.d("LoginActivity", "API Response: $result") // Log the raw response
 
-                                saveUserToPreferences(user)
-
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Login Successful",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                            if (result == "null") {
+                                showValidationPopup("Wrong email or password")
                             } else {
-                                showValidationPopup("Invalid user data")
+                                try {
+                                    val gson = Gson()
+                                    val user = gson.fromJson(result, User::class.java)
+                                    Log.d("LoginActivity", "Parsed User: $user") // Log the parsed user object
+
+                                    val userID = user.id
+                                    if (userID != null) {
+                                        sessionManagement.saveSession(userID)
+                                    } else {
+                                        showValidationPopup("Invalid user ID")
+                                        return@post
+                                    }
+
+                                    saveUserToPreferences(user)
+
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Login Successful",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                } catch (e: Exception) {
+                                    Log.e("LoginActivity", "Error parsing user data", e)
+                                    showValidationPopup("Error logging in. Please try again.")
+                                }
                             }
-                        } else {
-                            showValidationPopup("Wrong email or password")
                         }
                     }
-
-                    override fun onFailure(call: Call<User>, t: Throwable) {
-                        Log.e("LoginActivity", "Error logging in", t)
-                        showValidationPopup("Error logging in. Please try again.")
-                    }
-                })
+                }
             }
         }
     }
@@ -131,6 +141,9 @@ class LoginActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true
         )
+
+
+
 
         // Set up the OK button to dismiss the popup
         val btnPopupOk = popupView.findViewById<Button>(R.id.btn_back_login)

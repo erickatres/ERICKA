@@ -2,9 +2,12 @@ package com.example.bookyournailsmobile.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -13,13 +16,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
-import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.android.material.textfield.TextInputLayout
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.vishnusivadas.advanced_httpurlconnection.PutData
+import com.example.bookyournailsmobile.NetUtils.Urls
 
 class RegisterActivity : AppCompatActivity() {
     private val shownErrors = mutableSetOf<String>() // Track shown error messages
@@ -96,27 +96,27 @@ class RegisterActivity : AppCompatActivity() {
             val isConfirmPasswordValid = validateConfirmPassword(confirmPassword, password, tilConfirmPassword)
 
             if (isFirstnameValid && isLastnameValid && isEmailValid && isMobileNumberValid && isPasswordValid && isConfirmPasswordValid) {
-                // Proceed with registration logic using Retrofit
-                val call = RetrofitClient.instance.register(firstname, lastname, email, phone, password)
-                call.enqueue(object : Callback<User> {
-                    override fun onResponse(call: Call<User>, response: Response<User>) {
-                        if (response.isSuccessful) {
-                            val user = response.body()
-                            if (user != null) {
+                // Proceed with registration logic
+                Toast.makeText(applicationContext, "✅ All inputs are valid!", Toast.LENGTH_SHORT).show()
+
+                val handler = Handler(Looper.getMainLooper())
+                handler.post {
+                    val field = arrayOf("first_name", "last_name", "email", "phone", "password")
+                    val data = arrayOf(firstname, lastname, email, phone, password)
+
+                    val putData = PutData(Urls.URL_REGISTER, "POST", field, data)
+
+                    if (putData.startPut() && putData.onComplete()) {
+                        val result = putData.result
+                        runOnUiThread {
+                            Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
+                            if (result == "Sign Up Success") {
                                 // Show success popup dialog
                                 showSuccessPopup()
-                            } else {
-                                Toast.makeText(applicationContext, "Registration failed: Invalid response", Toast.LENGTH_SHORT).show()
                             }
-                        } else {
-                            Toast.makeText(applicationContext, "Registration failed: ${response.message()}", Toast.LENGTH_SHORT).show()
                         }
                     }
-
-                    override fun onFailure(call: Call<User>, t: Throwable) {
-                        Toast.makeText(applicationContext, "Registration failed: ${t.message}", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                }
             } else {
                 // Show error messages for all invalid fields
                 if (firstname.isEmpty()) tilFirstname.error = "First name is required"
@@ -170,7 +170,6 @@ class RegisterActivity : AppCompatActivity() {
             })
         }
     }
-
     // TextWatcher for real-time validation
     private fun createTextWatcher(validator: (String) -> Boolean): TextWatcher {
         return object : TextWatcher {
