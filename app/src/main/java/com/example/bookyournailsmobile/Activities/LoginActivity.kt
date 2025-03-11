@@ -13,6 +13,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bookyournailsmobile.Domain.User
@@ -24,6 +25,8 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 
 fun Context.saveUserToPreferences(user: User) {
     val sharedPreferences = this.getSharedPreferences("UserPref", Context.MODE_PRIVATE)
@@ -36,11 +39,16 @@ fun Context.saveUserToPreferences(user: User) {
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var sessionManagement: SessionManagement
+    private lateinit var blurView: BlurView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeFullScreen()
         setContentView(R.layout.activity_login)
+
+        // Initialize BlurView
+        blurView = findViewById(R.id.blurView)
+        setupBlurView()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -120,7 +128,24 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupBlurView() {
+        val radius = 20f // Adjust the blur radius as needed
+
+        // Set up the BlurView
+        blurView.setupWith(findViewById<ViewGroup>(R.id.main_content))
+            .setFrameClearDrawable(window.decorView.background)
+//            .setBlurAlgorithm(RenderScriptBlur(this))
+//            .setBlurRadius(radius)
+//            .setHasFixedTransformationMatrix(true)
+
+        // Initially hide the BlurView
+        blurView.visibility = android.view.View.GONE
+    }
+
     private fun showValidationPopup(message: String) {
+        // Show the blur effect
+        blurView.visibility = android.view.View.VISIBLE
+
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.login_failed_popup, null)
 
@@ -131,10 +156,20 @@ class LoginActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true
         )
+        // Prevent the popup from being dismissed when touching outside
+        popupWindow.isOutsideTouchable = false
+        popupWindow.isFocusable = true
+        popupWindow.setOnDismissListener {
+            // Hide the blur effect when the popup is dismissed
+            blurView.visibility = android.view.View.GONE
+        }
 
         // Set up the OK button to dismiss the popup
         val btnPopupOk = popupView.findViewById<Button>(R.id.btn_back_login)
         btnPopupOk.setOnClickListener {
+            // Hide the blur effect
+            blurView.visibility = android.view.View.GONE
+
             // Apply fade-out animation before dismissing the popup
             val fadeOut = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_out)
             popupView.startAnimation(fadeOut)
