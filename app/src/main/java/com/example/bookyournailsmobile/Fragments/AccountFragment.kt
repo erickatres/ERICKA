@@ -164,7 +164,7 @@ class AccountFragment : Fragment() {
                 data.add(email)
             }
             if (mobileNumber.isNotEmpty()) {
-                fields.add("mobile_number")
+                fields.add("phone")
                 data.add(mobileNumber)
             }
 
