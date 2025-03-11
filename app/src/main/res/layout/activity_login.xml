@@ -2,10 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.LoginActivity">
+
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:blurOverlayColor="#E4EDE4"/>
+<!--        app:blurRadius="12"-->
+<!--        app:blurAutoUpdate="true"/>-->
 
 
     <androidx.core.widget.NestedScrollView
@@ -28,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:background="@drawable/login_top"
+                android:backgroundTint="#2F7889"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,50 +47,28 @@
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout3">
 
                 <ImageView
-                    android:id="@+id/imageView18"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-100dp"
-                    app:layout_constraintBottom_toTopOf="@+id/tl_email_login"
+                    android:id="@+id/imageView17"
+                    android:layout_width="250dp"
+                    android:layout_height="150dp"
+                    android:layout_marginEnd="25dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/login_bookyour" />
-
-                <ImageView
-                    android:id="@+id/imageView17"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView18"
-                    app:layout_constraintStart_toStartOf="@+id/imageView18"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView18"
-                    app:srcCompat="@drawable/login_nails" />
-
-                <ImageView
-                    android:id="@+id/imageView19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-80dp"
-                    app:layout_constraintBottom_toTopOf="@+id/tl_email_login"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView17"
-                    app:layout_constraintStart_toStartOf="@+id/imageView17"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView17"
-                    app:srcCompat="@drawable/login_letyournails" />
+                    app:srcCompat="@drawable/nailscapelogo" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tl_email_login"
                     android:layout_width="312dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="100dp"
+                    android:layout_marginTop="-50dp"
                     android:paddingLeft="17dp"
                     android:paddingRight="17dp"
                     app:boxStrokeColor="@color/grey2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView19"
-                    app:layout_constraintStart_toStartOf="@+id/imageView19"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.503">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView17">
 
                     <com.google.android.material.textfield.TextInputEditText
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -121,13 +109,12 @@
 
                 <TextView
                     android:id="@+id/login_forgot_password"
-                    android:layout_width="200dp"
-                    android:layout_height="17dp"
-                    android:layout_marginLeft="254dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="165dp"
                     android:layout_marginTop="6dp"
                     android:text="Forgot password?"
-                    android:textColor="@color/main"
-
+                    android:textColor="#2F7889"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tl_password" />
@@ -139,6 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
+                android:backgroundTint="#004B59"
                 android:background="@drawable/login_bottom"
                 app:layout_constraintBottom_toBottomOf="parent">
 
@@ -147,7 +135,7 @@
                     android:layout_width="309dp"
                     android:layout_height="68dp"
                     android:layout_gravity="center"
-                    android:backgroundTint="@color/main"
+                    android:backgroundTint="#82AEC0"
                     android:text="Login"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -161,7 +149,7 @@
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:text="Sign up"
-                    android:textColor="@color/main"
+                    android:textColor="#FFFFFF"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/textView4"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
@@ -175,12 +163,11 @@
                     android:layout_marginEnd="35dp"
                     android:layout_marginTop="25dp"
                     android:text="Don't have an account yet? "
-                    android:textColor="@color/main"
+                    android:textColor="#FFFFFF"
                     app:layout_constraintEnd_toEndOf="@+id/btn_login"
                     app:layout_constraintStart_toStartOf="@+id/btn_login"
                     app:layout_constraintTop_toBottomOf="@+id/btn_login" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

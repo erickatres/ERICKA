@@ -53,6 +53,7 @@ dependencies {
     implementation("com.github.VishnuSivadasVS:Advanced-HttpURLConnection:1.2")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.github.Dimezis:BlurView:version-2.0.6")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.github.bumptech.glide:glide:4.15.1") // Keep the latest version
     implementation("com.github.ismaeldivita:chip-navigation-bar:1.4.0")
