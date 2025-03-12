@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Success!"
-        android:textColor="@color/main"
+        android:textColor="#2F7889"
         android:textSize="30sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -55,10 +55,10 @@
             android:text="Back to login"
             android:padding="12dp"
             android:textSize="18dp"
-            app:strokeColor="@color/main"
+            app:strokeColor="#82AEC0"
             app:strokeWidth="2dp"
             app:cornerRadius="10dp"
-            android:backgroundTint="@color/main"
+            android:backgroundTint="#82AEC0"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"/>
 

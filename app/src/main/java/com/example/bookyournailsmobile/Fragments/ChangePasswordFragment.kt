@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -18,15 +17,19 @@ import com.example.bookyournailsmobile.R
 import com.vishnusivadas.advanced_httpurlconnection.PutData
 import com.example.bookyournailsmobile.NetUtils.Urls
 import com.example.bookyournailsmobile.Managers.SessionManagement
+import com.google.android.material.textfield.TextInputLayout
 
 class ChangePasswordFragment : Fragment() {
 
-    private lateinit var newPasswordEditText: EditText
-    private lateinit var confirmPasswordEditText: EditText
+    private lateinit var newPasswordEditText: com.google.android.material.textfield.TextInputEditText
+    private lateinit var confirmPasswordEditText: com.google.android.material.textfield.TextInputEditText
     private lateinit var errorTextView: TextView
     private lateinit var updatePasswordButton: Button
-    private lateinit var etOldPassword: EditText
+    private lateinit var etOldPassword: com.google.android.material.textfield.TextInputEditText
     private lateinit var sessionManagement: SessionManagement
+    private lateinit var oldPasswordLayout: TextInputLayout
+    private lateinit var newPasswordLayout: TextInputLayout
+    private lateinit var confirmPasswordLayout: TextInputLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,9 @@ class ChangePasswordFragment : Fragment() {
         confirmPasswordEditText = view.findViewById(R.id.etconfirmPassword)
         updatePasswordButton = view.findViewById(R.id.updatePasswordButton)
         errorTextView = view.findViewById(R.id.errorTextView)
+        oldPasswordLayout = view.findViewById(R.id.textInputLayout)
+        newPasswordLayout = view.findViewById(R.id.textInputLayout2)
+        confirmPasswordLayout = view.findViewById(R.id.textInputLayout3)
 
         // Initialize SessionManagement
         sessionManagement = SessionManagement(requireContext())
@@ -63,18 +69,38 @@ class ChangePasswordFragment : Fragment() {
             val newPassword = newPasswordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
 
-            // Validate passwords
-            if (newPassword != confirmPassword) {
-                errorTextView.text = "Passwords do not match!"
-                errorTextView.visibility = View.VISIBLE
-            } else if (!isValidPassword(newPassword)) {
-                errorTextView.text = "Password must be at least 8 characters long, contain a number, and a special character!"
-                errorTextView.visibility = View.VISIBLE
-            } else {
-                errorTextView.visibility = View.GONE
-                // Proceed with password update
-                updatePassword(oldPassword, newPassword)
+            // Clear previous errors
+            oldPasswordLayout.error = null
+            newPasswordLayout.error = null
+            confirmPasswordLayout.error = null
+
+            // Validate old password
+            if (oldPassword.isEmpty()) {
+                oldPasswordLayout.error = "Old password cannot be empty!"
+                return@setOnClickListener
             }
+
+            // Validate new password
+            if (newPassword.isEmpty()) {
+                newPasswordLayout.error = "New password cannot be empty!"
+                return@setOnClickListener
+            } else if (!isValidPassword(newPassword)) {
+                newPasswordLayout.error = "Password must be at least 8 characters long, contain a number, and a special character!"
+                return@setOnClickListener
+            }
+
+            // Validate confirm password
+            if (confirmPassword.isEmpty()) {
+                confirmPasswordLayout.error = "Confirm password cannot be empty!"
+                return@setOnClickListener
+            } else if (newPassword != confirmPassword) {
+                confirmPasswordLayout.error = "Passwords do not match!"
+                return@setOnClickListener
+            }
+
+            // If all validations pass, proceed with password update
+            errorTextView.visibility = View.GONE
+            updatePassword(oldPassword, newPassword)
         }
     }
 

@@ -45,7 +45,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/backarrow" />
+                        android:src="@drawable/back_arrorw" />
                 </FrameLayout>
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:gravity="center"
                     android:text="Regular Plain"
                     android:textAlignment="center"
-                    android:textColor="@color/btn"
+                    android:textColor="#2F7889"
                     android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/view7"
@@ -152,7 +152,7 @@
                     android:gravity="center"
                     android:text="About Service"
                     android:textAlignment="center"
-                    android:textColor="@color/btn"
+                    android:textColor="#2F7889"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/view7"
@@ -186,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nail Care Tips"
-                    android:textColor="@color/btn"
+                    android:textColor="#2F7889"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"
@@ -218,7 +218,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Be Gentle"
-                            android:textColor="#FF9999"
+                            android:textColor="#2F7889"
                             android:textSize="20sp"
                             android:textStyle="bold"/>
 
@@ -249,7 +249,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Moisturize Daily"
-                            android:textColor="#FF9999"
+                            android:textColor="#2F7889"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -291,7 +291,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Glove Up"
-                            android:textColor="#FF9999"
+                            android:textColor="#2F7889"
                             android:textSize="20sp"
                             android:textStyle="bold"/>
 
@@ -333,7 +333,7 @@
                         android:text="Ratings and testimonials"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#FF9999"
+                        android:textColor="#2F7889"
                         android:layout_weight="1"/>
 
                     <ImageView
@@ -357,7 +357,7 @@
                     android:text="See all reviews"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#FF9999"
+                    android:textColor="#2F7889"
                     android:layout_marginBottom="100dp"
                     android:layout_gravity="start"/>
             </LinearLayout>
@@ -388,7 +388,7 @@
         <Button
             android:layout_width="142dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/btn"
+            android:backgroundTint="#2F7889"
             android:padding="10dp"
             android:text="Book"
             android:textColor="#FFFFFF"

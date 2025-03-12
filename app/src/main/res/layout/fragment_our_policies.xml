@@ -43,7 +43,7 @@
                         android:layout_marginBottom="4dp"
                         android:layout_gravity="center"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/backarrow" />
+                        android:src="@drawable/back_arrorw" />
                 </FrameLayout>
 
                 <TextView
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="Our Policy"
-                    android:textColor="@color/btn"
+                    android:textColor="#2F7889"
                     android:textSize="28sp"
                     android:textStyle="bold"/>
             </LinearLayout>
@@ -62,7 +62,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Salon Policy"
-                android:textColor="@color/btn"
+                android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Appointments"
-                android:textColor="@color/btn"
+                android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -141,7 +141,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Service Guarantee"
-                android:textColor="@color/btn"
+                android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -179,7 +179,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Clieant Etiquette"
-                android:textColor="@color/btn"
+                android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -231,7 +231,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Salon Environment"
-                android:textColor="@color/btn"
+                android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -270,7 +270,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Privacy Policy"
-                android:textColor="@color/btn"
+                android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

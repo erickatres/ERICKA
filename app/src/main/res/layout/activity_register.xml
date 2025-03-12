@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,7 +10,19 @@
     android:gravity="center"
     tools:context=".Activities.RegisterActivity">
 
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="900dp"
+        android:fillViewport="true"
+        app:blurOverlayColor="#E4EDE4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -28,24 +41,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:background="@drawable/register_top"
+                android:backgroundTint="#2F7889"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageView15"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="70dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/register_book_your" />
 
                 <ImageView
                     android:id="@+id/imageView14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView15"
-                    app:layout_constraintStart_toStartOf="@+id/imageView15"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView15"
-                    app:srcCompat="@drawable/register_nails" />
+                    android:layout_marginTop="50dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/register_logo2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -59,11 +67,11 @@
                     android:id="@+id/textView"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="135dp"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
                     android:text="Personal Details"
-                    android:textColor="@color/main"
+                    android:textColor="#2F7889"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +109,6 @@
                     android:paddingRight="17dp"
                     app:boxStrokeColor="@color/grey2"
                     app:errorEnabled="true"
-
                     app:layout_constraintEnd_toEndOf="@+id/tl_firstname"
                     app:layout_constraintStart_toStartOf="@+id/tl_firstname"
                     app:layout_constraintTop_toBottomOf="@+id/tl_firstname">
@@ -170,9 +177,10 @@
                     android:id="@+id/bottom_background"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="150dp"
                     android:layout_marginStart="130dp"
+                    android:layout_marginTop="150dp"
                     android:background="@drawable/register_bottom"
+                    android:backgroundTint="#004B59"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +200,7 @@
                         android:layout_marginEnd="155dp"
                         android:gravity="center"
                         android:text="Set password"
-                        android:textColor="@color/main"
+                        android:textColor="#2F7889"
                         android:textSize="20dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -230,8 +238,8 @@
                         android:paddingLeft="17dp"
                         android:paddingRight="17dp"
                         app:boxStrokeColor="@color/grey2"
-                        app:errorEnabled="true"
                         app:endIconMode="password_toggle"
+                        app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tl_password">
@@ -250,7 +258,7 @@
                         android:layout_width="312dp"
                         android:layout_height="68dp"
                         android:layout_gravity="center"
-                        android:backgroundTint="@color/main"
+                        android:backgroundTint="#82AEC0"
                         android:text="Create account"
                         android:textSize="23sp"
                         app:cornerRadius="21dp"
@@ -266,7 +274,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="30dp"
                         android:text="Already have an account?"
-                        android:textColor="@color/main"
+                        android:textColor="#82AEC0"
                         app:layout_constraintEnd_toEndOf="@+id/button_signup"
                         app:layout_constraintStart_toStartOf="@+id/button_signup"
                         app:layout_constraintTop_toBottomOf="@+id/button_signup" />
@@ -276,7 +284,7 @@
                         android:layout_width="39dp"
                         android:layout_height="20dp"
                         android:text="Login"
-                        android:textColor="@color/main"
+                        android:textColor="#82AEC0"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/textView6"
                         app:layout_constraintStart_toEndOf="@+id/textView6"

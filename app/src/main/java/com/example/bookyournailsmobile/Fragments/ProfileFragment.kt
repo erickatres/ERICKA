@@ -14,21 +14,31 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.Activities.LoginActivity
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
+import eightbitlab.com.blurview.BlurView
 
 class ProfileFragment : Fragment() {
 
     private lateinit var sessionManagement: SessionManagement
-
     private lateinit var TVUser: TextView
+    private lateinit var blurView: BlurView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         sessionManagement = SessionManagement(requireContext())
         TVUser = view.findViewById(R.id.TVUser)
+
+        // Initialize BlurView
+        blurView = view.findViewById(R.id.blurView)
+        setupBlurView()
 
         val user = requireContext().getUserFromPreferences()
         user?.let {
@@ -70,8 +80,21 @@ class ProfileFragment : Fragment() {
         faqsButton.setOnClickListener {
             replaceFragment(FaqsFragment())
         }
+    }
 
-        return view
+    private fun setupBlurView() {
+        val radius = 20f // Adjust the blur radius as needed
+
+        // Ensure the view is not null
+        val rootView = view ?: return
+
+        // Set up the BlurView
+        blurView.setupWith(rootView.findViewById<ViewGroup>(R.id.main_content_profile))
+            .setFrameClearDrawable(requireActivity().window.decorView.background)
+            .setBlurRadius(radius)
+
+        // Hide the BlurView initially
+        blurView.visibility = View.GONE
     }
 
     // Helper function to replace fragments
@@ -85,6 +108,9 @@ class ProfileFragment : Fragment() {
 
     // Show a confirmation dialog for logout
     private fun showLogoutConfirmationDialog() {
+        // Show the blur effect
+        blurView.visibility = View.VISIBLE
+
         // Inflate the custom layout
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout_confirmation, null)
 
@@ -99,6 +125,8 @@ class ProfileFragment : Fragment() {
         val btnYes = dialogView.findViewById<Button>(R.id.btn_yes)
 
         btnNo.setOnClickListener {
+            // Hide the blur effect
+            blurView.visibility = View.GONE
             alertDialog.dismiss() // Dismiss the dialog
         }
 

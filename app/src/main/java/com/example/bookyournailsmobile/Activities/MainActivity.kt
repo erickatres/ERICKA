@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setActiveTab(icon: ImageButton, text: TextView, layout: LinearLayout) {
         icon.setImageResource(getFilledIcon(icon.id))
-        text.setTextColor(Color.parseColor("#FF9E9E"))
+        text.setTextColor(Color.parseColor("#2F7889"))
     }
 
     private fun getUnfilledIcon(id: Int) = when (id) {
@@ -209,10 +209,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getFilledIcon(id: Int) = when (id) {
-        R.id.btn_home -> R.drawable.home_with_fill
-        R.id.btn_pricelist -> R.drawable.pricelist_with_fill
-        R.id.btn_booking -> R.drawable.booking_with_fill
-        R.id.btn_profile -> R.drawable.profile_with_fill
+        R.id.btn_home -> R.drawable.home_vector
+        R.id.btn_pricelist -> R.drawable.pricelist_vector
+        R.id.btn_booking -> R.drawable.booking_vector
+        R.id.btn_profile -> R.drawable.profile_vector
         else -> 0
     }
 

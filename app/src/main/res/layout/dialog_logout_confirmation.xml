@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Logout"
-        android:textColor="@color/main"
+        android:textColor="#2F7889"
         android:textSize="30sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -60,10 +60,10 @@
             android:layout_weight="1"
             android:text="Yes"
             android:padding="12dp"
-            app:strokeColor="@color/main"
+            app:strokeColor="#2F7889"
             app:strokeWidth="2dp"
             app:cornerRadius="10dp"
-            android:backgroundTint="@color/main"
+            android:backgroundTint="#2F7889"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"/>
 

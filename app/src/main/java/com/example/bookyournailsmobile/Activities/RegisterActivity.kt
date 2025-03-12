@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -20,15 +21,21 @@ import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import eightbitlab.com.blurview.BlurView
 
 class RegisterActivity : AppCompatActivity() {
     private val shownErrors = mutableSetOf<String>() // Track shown error messages
     private val shownSuccesses = mutableSetOf<String>() // Track shown success messages
+    private lateinit var blurView: BlurView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeFullScreen()
         setContentView(R.layout.activity_register)
+
+        // Initialize BlurView
+        blurView = findViewById(R.id.blurView)
+        setupBlurView()
 
         // Use TextInputLayout
         val tilFirstname = findViewById<TextInputLayout>(R.id.tl_firstname)
@@ -129,8 +136,23 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupBlurView() {
+        val radius = 50f // Adjust the blur radius as needed
+
+        // Set up the BlurView
+        blurView.setupWith(findViewById<ViewGroup>(R.id.main_content))
+            .setFrameClearDrawable(window.decorView.background)
+            .setBlurRadius(radius)
+
+        // Hide the BlurView initially
+        blurView.visibility = android.view.View.GONE
+    }
+
     // Function to show success popup dialog
     private fun showSuccessPopup() {
+        // Show the blur effect
+        blurView.visibility = android.view.View.VISIBLE
+
         // Inflate the custom layout
         val inflater = layoutInflater
         val popupView = inflater.inflate(R.layout.success_popup_registration, null)
@@ -163,6 +185,8 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onAnimationRepeat(animation: Animation?) {}
                 override fun onAnimationEnd(animation: Animation?) {
                     dialog.dismiss()
+                    // Hide the blur effect
+                    blurView.visibility = android.view.View.GONE
                     // Navigate back to LoginActivity
                     startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                     finish() // Close the current activity
@@ -227,12 +251,12 @@ class RegisterActivity : AppCompatActivity() {
                 tilMobileNumber.error = "Mobile number is required"
                 false
             }
-            mobileNumber.length != 11 -> {
-                tilMobileNumber.error = "Mobile number must be 11 digits"
-                false
-            }
             !mobileNumber.startsWith("09") -> {
                 tilMobileNumber.error = "Mobile number must start with 09"
+                false
+            }
+            mobileNumber.length != 11 -> {
+                tilMobileNumber.error = "Mobile number must be 11 digits"
                 false
             }
             else -> {

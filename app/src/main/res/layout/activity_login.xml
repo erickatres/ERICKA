@@ -11,13 +11,16 @@
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:blurOverlayColor="#E4EDE4"/>
-<!--        app:blurRadius="12"-->
-<!--        app:blurAutoUpdate="true"/>-->
+        android:layout_height="900dp"
+        android:fillViewport="true"
+        app:blurOverlayColor="#E4EDE4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -126,8 +129,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                android:backgroundTint="#004B59"
                 android:background="@drawable/login_bottom"
+                android:backgroundTint="#004B59"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <Button
@@ -159,9 +162,9 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginEnd="35dp"
                     android:layout_marginTop="25dp"
+                    android:layout_marginEnd="35dp"
+                    android:gravity="center"
                     android:text="Don't have an account yet? "
                     android:textColor="#FFFFFF"
                     app:layout_constraintEnd_toEndOf="@+id/btn_login"

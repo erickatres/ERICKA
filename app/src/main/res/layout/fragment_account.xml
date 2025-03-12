@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
@@ -35,7 +36,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/backarrow" />
+                        android:src="@drawable/back_arrorw" />
                 </FrameLayout>
 
                 <TextView
@@ -45,7 +46,7 @@
                     android:gravity="center"
                     android:text="Account info"
                     android:textAlignment="center"
-                    android:textColor="@color/btn"
+                    android:textColor="#2F7889"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -216,7 +217,7 @@
                     android:id="@+id/saveChangesButton"
                     android:layout_width="334dp"
                     android:layout_height="68dp"
-                    android:backgroundTint="@color/btn"
+                    android:backgroundTint="#82AEC0"
                     android:text="Save Changes"
                     android:textColor="@android:color/white"
                     android:textSize="18dp"

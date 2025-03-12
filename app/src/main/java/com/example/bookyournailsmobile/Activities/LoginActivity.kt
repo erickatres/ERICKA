@@ -129,13 +129,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupBlurView() {
-        val radius = 20f // Adjust the blur radius as needed
+        val radius = 50f // Adjust the blur radius as needed
 
         // Set up the BlurView
         blurView.setupWith(findViewById<ViewGroup>(R.id.main_content))
             .setFrameClearDrawable(window.decorView.background)
 //            .setBlurAlgorithm(RenderScriptBlur(this))
-//            .setBlurRadius(radius)
+            .setBlurRadius(radius)
 //            .setHasFixedTransformationMatrix(true)
 
         // Initially hide the BlurView

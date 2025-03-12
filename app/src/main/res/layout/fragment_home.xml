@@ -41,7 +41,7 @@
                     android:layout_height="39dp"
                     android:layout_marginStart="5dp"
                     android:text="Loopy!"
-                    android:textColor="@color/main"
+                    android:textColor="#2F7889"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/textView5"
@@ -55,7 +55,7 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="70dp"
                     android:text="Hi,"
-                    android:textColor="@color/main"
+                    android:textColor="#2F7889"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +103,7 @@
                         android:layout_marginEnd="295dp"
                         android:layout_marginBottom="70dp"
                         android:text="0"
-                        android:textColor="@color/main"
+                        android:textColor="#2F7889"
                         android:textSize="24dp"
                         android:textStyle="bold" />
 
@@ -120,7 +120,7 @@
                         android:layout_marginEnd="210dp"
                         android:layout_marginBottom="60dp"
                         android:text="points"
-                        android:textColor="@color/main"
+                        android:textColor="#2F7889"
                         android:textSize="24dp"
                         android:textStyle="bold" />
 
@@ -215,7 +215,7 @@
                                 android:layout_marginStart="50dp"
                                 android:layout_marginTop="115dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/design" />
+                                android:src="@drawable/homepage_rectangle" />
 
                             <TextView
                                 android:layout_width="42dp"
@@ -255,7 +255,7 @@
                                 android:layout_marginStart="50dp"
                                 android:layout_marginTop="112dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/design" />
+                                android:src="@drawable/homepage_rectangle" />
 
                             <TextView
                                 android:layout_width="60dp"
@@ -303,7 +303,7 @@
                                 android:layout_marginStart="50dp"
                                 android:layout_marginTop="112dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/design" />
+                                android:src="@drawable/homepage_rectangle" />
 
                             <TextView
                                 android:layout_width="55dp"
@@ -342,7 +342,7 @@
                                 android:layout_marginStart="45dp"
                                 android:layout_marginTop="115dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/design" />
+                                android:src="@drawable/homepage_rectangle" />
 
                             <TextView
                                 android:layout_width="45dp"

@@ -43,7 +43,7 @@
                         android:layout_marginBottom="4dp"
                         android:layout_gravity="center"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/backarrow" />
+                        android:src="@drawable/back_arrorw" />
                 </FrameLayout>
 
                 <TextView
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="FAQ's"
-                    android:textColor="@color/btn"
+                    android:textColor="#2F7889"
                     android:textSize="28sp"
                     android:textStyle="bold"/>
             </LinearLayout>
@@ -62,7 +62,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Frequently Asked Questions (FAQs)"
-                android:textColor="@color/btn"
+                android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
