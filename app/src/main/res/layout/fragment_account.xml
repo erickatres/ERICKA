@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
@@ -14,6 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:orientation="vertical" >
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,7 +55,7 @@
 
                 <EditText
                     android:id="@+id/firstnameEditText"
-                    android:layout_width="360dp"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginTop="54dp"
                     android:hint="First Name"
@@ -70,12 +71,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="239dp"
-                    android:layout_marginStart="45dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginBottom="45dp"
                     android:text="Firstname"
                     android:textSize="18dp"
                     app:layout_constraintBottom_toBottomOf="@+id/firstnameEditText"
-                    app:layout_constraintEnd_toStartOf="@+id/editFirstname"
                     app:layout_constraintStart_toStartOf="@+id/firstnameEditText"
                     app:layout_constraintTop_toTopOf="@+id/firstnameEditText" />
 
@@ -97,18 +97,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="239dp"
-                    android:layout_marginStart="45dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginBottom="45dp"
                     android:text="Lastname"
                     android:textSize="18dp"
                     app:layout_constraintBottom_toBottomOf="@+id/lastnameEditText"
-                    app:layout_constraintEnd_toStartOf="@+id/editLastname"
                     app:layout_constraintStart_toStartOf="@+id/lastnameEditText"
                     app:layout_constraintTop_toTopOf="@+id/lastnameEditText" />
 
                 <EditText
                     android:id="@+id/lastnameEditText"
-                    android:layout_width="360dp"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginTop="13dp"
                     android:hint="Last Name"
@@ -135,7 +134,7 @@
 
                 <EditText
                     android:id="@+id/emailEditText"
-                    android:layout_width="360dp"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginTop="23dp"
                     android:hint="Email"
@@ -151,12 +150,12 @@
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="228dp"
+                    android:layout_marginEnd="239dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginBottom="45dp"
                     android:text="Email"
                     android:textSize="18dp"
                     app:layout_constraintBottom_toBottomOf="@+id/emailEditText"
-                    app:layout_constraintEnd_toStartOf="@+id/editUsername"
                     app:layout_constraintStart_toStartOf="@+id/emailEditText"
                     app:layout_constraintTop_toTopOf="@+id/emailEditText" />
 
@@ -175,7 +174,7 @@
 
                 <EditText
                     android:id="@+id/Mobilenumber_edittext"
-                    android:layout_width="360dp"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginTop="23dp"
                     android:hint="Mobile no."
@@ -204,12 +203,12 @@
                     android:id="@+id/textView13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="190dp"
+                    android:layout_marginEnd="239dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginBottom="45dp"
                     android:text="Mobile no."
                     android:textSize="18dp"
                     app:layout_constraintBottom_toBottomOf="@+id/Mobilenumber_edittext"
-                    app:layout_constraintEnd_toStartOf="@+id/editUsername2"
                     app:layout_constraintStart_toStartOf="@+id/Mobilenumber_edittext"
                     app:layout_constraintTop_toTopOf="@+id/Mobilenumber_edittext" />
 
