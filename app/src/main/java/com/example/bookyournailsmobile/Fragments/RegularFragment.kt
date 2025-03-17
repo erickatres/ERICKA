@@ -3,19 +3,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
+import com.example.bookyournailsmobile.Fragments.AppointmentFragment
 import com.example.bookyournailsmobile.R
-
 
 class RegularFragment : Fragment() {
 
     private lateinit var viewPager: ViewPager2
     private lateinit var tvImageCount: TextView
     private lateinit var btnBack: FrameLayout
+    private lateinit var btnBook: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +39,7 @@ class RegularFragment : Fragment() {
         viewPager = view.findViewById(R.id.viewPagerRegular)
         tvImageCount = view.findViewById(R.id.tvImageCountRegular)
         btnBack = view.findViewById(R.id.btnBack)
+        btnBook = view.findViewById(R.id.btn_book)
 
         // Ensure btnBack is visible
         btnBack.visibility = View.VISIBLE
@@ -70,6 +73,25 @@ class RegularFragment : Fragment() {
             Log.d("RegularFragment", "Back button clicked")
             parentFragmentManager.popBackStack()
         }
+
+        // Book Button Click
+        btnBook.setOnClickListener {
+            Log.d("RegularFragment", "Book button clicked")
+            navigateToAppointmentFragment("Regular")
+        }
+    }
+
+    private fun navigateToAppointmentFragment(serviceType: String) {
+        val appointmentFragment = AppointmentFragment().apply {
+            arguments = Bundle().apply {
+                putString("SERVICE_TYPE", serviceType) // Pass the service type to AppointmentFragment
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, appointmentFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {

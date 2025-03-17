@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="150dp"
+                    android:text="Select Time"
+                    android:textColor="#2F7385"
+                    android:textSize="38sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/durationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration: 2 hours"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/title"
+                    app:layout_constraintStart_toStartOf="@+id/title"
+                    app:layout_constraintTop_toBottomOf="@+id/title" />
+
+                <LinearLayout
+                    android:id="@+id/timeButtonsContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="90dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="@+id/durationText"
+                    app:layout_constraintEnd_toEndOf="@+id/durationText"
+                    app:layout_constraintTop_toBottomOf="@+id/durationText">
+
+                    <ImageView
+                        android:id="@+id/timeButton1"
+                        android:layout_width="300dp"
+                        android:layout_height="80dp"
+                        android:clickable="true"
+                        android:contentDescription="9:00 AM"
+                        android:focusable="true"
+                        android:src="@drawable/time_unselected_9am" />
+
+                    <ImageView
+                        android:id="@+id/timeButton2"
+                        android:layout_width="300dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="16dp"
+                        android:clickable="true"
+                        android:contentDescription="1:00 PM"
+                        android:focusable="true"
+                        android:src="@drawable/time_unselected_1pm" />
+
+                    <ImageView
+                        android:id="@+id/timeButton3"
+                        android:layout_width="300dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="16dp"
+                        android:clickable="true"
+                        android:contentDescription="4:00 PM"
+                        android:focusable="true"
+                        android:src="@drawable/time_unselected_4pm" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/continueBooking"
+                    android:layout_width="320dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="100dp"
+                    android:background="@drawable/continue_unfilled"
+                    android:enabled="false"
+                    android:text="Continue"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/timeButtonsContainer"
+                    app:layout_constraintStart_toStartOf="@+id/timeButtonsContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/timeButtonsContainer" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

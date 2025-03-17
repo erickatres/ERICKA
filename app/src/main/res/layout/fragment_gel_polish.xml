@@ -404,6 +404,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/btn_book"
             android:layout_width="142dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

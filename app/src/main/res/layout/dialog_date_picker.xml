@@ -17,7 +17,7 @@
     android:layout_height="68dp"
     android:layout_marginBottom="70dp"
     android:layout_gravity="center|bottom"
-    android:backgroundTint="@color/btn"
+    android:backgroundTint="#82AEC0"
     android:text="Continue"/>
 
 </FrameLayout>
