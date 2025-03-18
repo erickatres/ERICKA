@@ -83,23 +83,23 @@ class BookingSelectTimeFragment : Fragment() {
         if (selectedTime != null) {
             Log.d("BookingSelectTimeFragment", "Selected Time: $selectedTime for $serviceType")
 
-            // Navigate to BookingSelectColorFragment
-            navigateToBookingSelectColorFragment()
+            // Navigate to BookingAttachImageFragment
+            navigateToBookingAttachImageFragment()
         } else {
             Log.e("BookingSelectTimeFragment", "No time selected")
         }
     }
 
-    private fun navigateToBookingSelectColorFragment() {
-        // Create a new instance of BookingSelectColorFragment
-        val bookingSelectColorFragment = BookingSelectColorFragment.newInstance(
+    private fun navigateToBookingAttachImageFragment() {
+        // Create a new instance of BookingAttachImageFragment
+        val bookingAttachImageFragment = BookingAttachImageFragment.newInstance(
             serviceType = serviceType ?: "Unknown",
             selectedTime = selectedTime ?: "Unknown"
         )
 
-        // Replace the current fragment with BookingSelectColorFragment
+        // Replace the current fragment with BookingAttachImageFragment
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, bookingSelectColorFragment)
+            .replace(R.id.fragment_container, bookingAttachImageFragment)
             .addToBackStack(null) // Add the transaction to the back stack
             .commit()
     }

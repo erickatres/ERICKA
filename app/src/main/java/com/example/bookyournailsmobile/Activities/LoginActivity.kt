@@ -149,13 +149,18 @@ class LoginActivity : AppCompatActivity() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.login_failed_popup, null)
 
-        // Set up the popup window
+        // Define the width and height for the popup window
+        val width = resources.getDimensionPixelSize(R.dimen.popup_width) // Define this dimension in your dimens.xml
+        val height = resources.getDimensionPixelSize(R.dimen.popup_height) // Define this dimension in your dimens.xml
+
+        // Set up the popup window with specific width and height
         val popupWindow = PopupWindow(
             popupView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
+            width, // Use the defined width
+            height, // Use the defined height
             true
         )
+
         // Prevent the popup from being dismissed when touching outside
         popupWindow.isOutsideTouchable = false
         popupWindow.isFocusable = true
@@ -189,7 +194,6 @@ class LoginActivity : AppCompatActivity() {
         val fadeIn = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_in)
         popupView.startAnimation(fadeIn)
     }
-
     override fun onStart() {
         super.onStart()
         checkSession()

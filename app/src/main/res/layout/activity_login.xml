@@ -47,13 +47,15 @@
                 android:id="@+id/constraintLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="410dp"
+                android:layout_gravity="center"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout3">
 
                 <ImageView
                     android:id="@+id/imageView17"
-                    android:layout_width="250dp"
-                    android:layout_height="150dp"
+                    android:layout_width="260dp"
+                    android:layout_height="100dp"
                     android:layout_marginEnd="25dp"
+                    android:layout_marginTop="40dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -64,7 +66,7 @@
                     android:layout_width="312dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="-50dp"
+                    android:layout_marginTop="-140dp"
                     android:paddingLeft="17dp"
                     android:paddingRight="17dp"
                     app:boxStrokeColor="@color/grey2"
@@ -88,7 +90,7 @@
                     android:layout_width="312dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="-20dp"
+                    android:layout_marginTop="-70dp"
                     android:paddingLeft="17dp"
                     android:paddingRight="17dp"
                     app:boxStrokeColor="@color/grey2"
@@ -135,7 +137,7 @@
 
                 <Button
                     android:id="@+id/btn_login"
-                    android:layout_width="309dp"
+                    android:layout_width="285dp"
                     android:layout_height="68dp"
                     android:layout_gravity="center"
                     android:backgroundTint="#82AEC0"
@@ -153,6 +155,7 @@
                     android:layout_height="wrap_content"
                     android:text="Sign up"
                     android:textColor="#FFFFFF"
+                    android:layout_marginStart="5dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/textView4"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
