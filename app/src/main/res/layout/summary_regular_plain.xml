@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
@@ -20,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -51,46 +51,91 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/summary_service"
-                    style="@style/LabelStyle"
-                    android:text="Service" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/tvService"
-                    style="@style/ValueStyle" />
+                    <TextView
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Service" />
 
-                <TextView
-                    android:id="@+id/summary_color"
-                    style="@style/LabelStyle"
-                    android:text="Color" />
+                    <TextView
+                        android:id="@+id/tvService"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Regular Plain" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvShape"
-                    style="@style/ValueStyle" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/summary_date"
-                    style="@style/LabelStyle"
-                    android:text="Date" />
+                    <TextView
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Date" />
 
-                <TextView
-                    android:id="@+id/tvLength"
-                    style="@style/ValueStyle" />
+                    <TextView
+                        android:id="@+id/tvdate"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="March 8, 2025" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/summary_time"
-                    style="@style/LabelStyle"
-                    android:text="Time" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/tvColor"
-                    style="@style/ValueStyle" />
+                    <TextView
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Time" />
 
-                <TextView
-                    android:id="@+id/summary_mobile_number"
-                    style="@style/LabelStyle"
-                    android:text="Mobile no." />
+                    <TextView
+                        android:id="@+id/tvTime"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="9:00 AM" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Mobile no." />
+
+                    <TextView
+                        android:id="@+id/tvMobile"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="09875142367" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvAddOns"
@@ -116,11 +161,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:paddingTop="12dp"
                 android:orientation="vertical">
 
-                <TextView
-                    style="@style/LabelStyle"
-                    android:text="Regular Plain" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Regular Plain" />
+
+                    <TextView
+                        android:id="@+id/tvservicePrice"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="₱350" />
+                </LinearLayout>
 
                 <!-- Divider -->
                 <View
@@ -129,36 +192,32 @@
                     android:layout_marginTop="12dp"
                     android:background="#BDBDBD" />
 
-
-                <TextView
-                    android:id="@+id/textView14"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="240dp"
-                    android:layout_marginTop="50dp"
-                    android:text="TextView" />
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:weightSum="2">
 
+                    <TextView
+                        android:layout_height="wrap_content"
+                        style="@style/LabelBold"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Total"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"/>
 
-
-
-                <TextView
-                    android:id="@+id/summary_total"
-                    style="@style/LabelStyle"
-                    android:text="Total"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="20dp"/>
-
-                <TextView
-                    android:id="@+id/tvAddOnsPrice"
-                    style="@style/ValueStyle" />
-
-                <TextView
-                    style="@style/LabelBold"
-                    android:text="Total" />
-
-                <TextView
-                    android:id="@+id/tvTotalPrice"
-                    style="@style/ValueBold" />
+                    <TextView
+                        style="@style/ValueStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:layout_marginBottom="12dp"
+                        android:text="₱350" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

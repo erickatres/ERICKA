@@ -90,14 +90,13 @@
                         android:src="@drawable/time_unselected_4pm" />
                 </LinearLayout>
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/continueBooking"
                     android:layout_width="320dp"
                     android:layout_height="65dp"
                     android:layout_marginTop="100dp"
                     android:background="@drawable/continue_unfilled"
                     android:enabled="false"
-                    android:text="Continue"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold"

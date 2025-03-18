@@ -1,33 +1,34 @@
 package com.example.bookyournailsmobile.Fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.bookyournailsmobile.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SummaryRegularPlainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SummaryRegularPlainFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var serviceType: String? = null
+    private var selectedDate: String? = null
+    private var selectedTime: String? = null
+
+    private lateinit var tvService: TextView
+    private lateinit var tvDate: TextView
+    private lateinit var tvTime: TextView
+    private lateinit var tvMobile: TextView
+    private lateinit var tvServicePrice: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        // Retrieve the service type, selected date, and selected time from arguments
+        serviceType = arguments?.getString("SERVICE_TYPE")
+        selectedDate = arguments?.getString("SELECTED_DATE")
+        selectedTime = arguments?.getString("SELECTED_TIME")
+        Log.d("SummaryRegularPlainFragment", "Service Type: $serviceType, Selected Date: $selectedDate, Selected Time: $selectedTime")
     }
 
     override fun onCreateView(
@@ -36,24 +37,41 @@ class SummaryRegularPlainFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.summary_regular_plain, container, false)
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Initialize TextViews
+        tvService = view.findViewById(R.id.tvService)
+        tvDate = view.findViewById(R.id.tvdate)
+        tvTime = view.findViewById(R.id.tvTime)
+        tvMobile = view.findViewById(R.id.tvMobile)
+        tvServicePrice = view.findViewById(R.id.tvservicePrice)
+
+        val user = requireContext().getUserFromPreferences()
+        user?.let {
+            tvMobile.text = it.phone 
+        }
+
+
+
+        // Set data to TextViews
+        tvService.text = serviceType ?: "N/A"
+        tvDate.text = selectedDate ?: "N/A" // Display the selected date
+        tvTime.text = selectedTime ?: "N/A"
+        tvServicePrice.text = "₱350" // Assuming fixed price for now
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SummaryRegularPlainFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(serviceType: String, selectedDate: String, selectedTime: String) =
             SummaryRegularPlainFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString("SERVICE_TYPE", serviceType)
+                    putString("SELECTED_DATE", selectedDate)
+                    putString("SELECTED_TIME", selectedTime)
                 }
             }
     }

@@ -48,6 +48,9 @@ class BookingAttachImageFragment : Fragment() {
         layoutParams.width = imageSize
         layoutParams.height = imageSize
         uploadImageView.layoutParams = layoutParams
+
+        // Initially disable the continue button
+        continueBookingButton.isEnabled = false
     }
 
     override fun onCreateView(
@@ -93,6 +96,9 @@ class BookingAttachImageFragment : Fragment() {
                 // Set the selected image to the uploadImageView
                 uploadImageView.setImageURI(selectedImageUri)
                 Toast.makeText(requireContext(), "Image selected successfully!", Toast.LENGTH_SHORT).show()
+
+                // Enable the continue button after image is selected
+                continueBookingButton.isEnabled = true
             } else {
                 Toast.makeText(requireContext(), "Failed to load image!", Toast.LENGTH_SHORT).show()
             }
@@ -106,11 +112,34 @@ class BookingAttachImageFragment : Fragment() {
             // Proceed to the next step (e.g., navigate to another fragment or activity)
             Toast.makeText(requireContext(), "Proceeding to the next step...", Toast.LENGTH_SHORT).show()
             Log.d("BookingAttachImageFragment", "Proceeding with service: $serviceType, time: $selectedTime")
+
+            // Navigate to SummaryRegularPlainFragment
+            navigateToSummaryRegularPlainFragment()
         } else {
             Toast.makeText(requireContext(), "Please upload an image first!", Toast.LENGTH_SHORT).show()
         }
     }
 
+    // Function to navigate to SummaryRegularPlainFragment
+    // Function to navigate to SummaryRegularPlainFragment
+    private fun navigateToSummaryRegularPlainFragment() {
+        // Ensure selectedTime and selectedDate are not null
+        val time = selectedTime ?: "Unknown"
+        val date = arguments?.getString("SELECTED_DATE") ?: "Unknown" // Retrieve selectedDate from arguments
+
+        // Create a new instance of SummaryRegularPlainFragment with service type, selected date, and selected time
+        val summaryFragment = SummaryRegularPlainFragment.newInstance(
+            serviceType ?: "Unknown", // Pass serviceType
+            date, // Pass selectedDate
+            time // Pass selectedTime
+        )
+
+        // Replace the current fragment with SummaryRegularPlainFragment
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, summaryFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
     companion object {
         // Request code for gallery intent
         private const val PICK_IMAGE_REQUEST_CODE = 100

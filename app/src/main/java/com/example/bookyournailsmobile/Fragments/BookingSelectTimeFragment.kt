@@ -13,14 +13,16 @@ import com.example.bookyournailsmobile.databinding.BookingSelectTimeBinding
 class BookingSelectTimeFragment : Fragment() {
 
     private var serviceType: String? = null // To store the service type (Regular or Gel Polish)
+    private var selectedDate: String? = null // To store the selected date from AppointmentFragment
     private lateinit var binding: BookingSelectTimeBinding // ViewBinding for the layout
     private var selectedTime: String? = null // To store the selected time
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Retrieve the service type from arguments
+        // Retrieve the service type and selected date from arguments
         serviceType = arguments?.getString("SERVICE_TYPE")
-        Log.d("BookingSelectTimeFragment", "Service Type: $serviceType")
+        selectedDate = arguments?.getString("SELECTED_DATE")
+        Log.d("BookingSelectTimeFragment", "Service Type: $serviceType, Selected Date: $selectedDate")
     }
 
     override fun onCreateView(
@@ -66,9 +68,9 @@ class BookingSelectTimeFragment : Fragment() {
         // Store the selected time
         selectedTime = time
 
-        // Enable the continue button
+        // Enable the continue button and change its background to the filled state
         binding.continueBooking.isEnabled = true
-        binding.continueBooking.background = resources.getDrawable(R.drawable.continue_filled, null)
+        binding.continueBooking.setBackgroundResource(R.drawable.continue_filled) // Use setBackgroundResource instead
     }
 
     private fun resetTimeButtons() {
@@ -83,7 +85,7 @@ class BookingSelectTimeFragment : Fragment() {
         if (selectedTime != null) {
             Log.d("BookingSelectTimeFragment", "Selected Time: $selectedTime for $serviceType")
 
-            // Navigate to BookingAttachImageFragment
+            // Navigate to BookingAttachImageFragment with the service type, selected date, and selected time
             navigateToBookingAttachImageFragment()
         } else {
             Log.e("BookingSelectTimeFragment", "No time selected")
@@ -91,11 +93,17 @@ class BookingSelectTimeFragment : Fragment() {
     }
 
     private fun navigateToBookingAttachImageFragment() {
-        // Create a new instance of BookingAttachImageFragment
+        // Ensure selectedTime is not null
+        val time = selectedTime ?: "Unknown"
+
+        // Create a new instance of BookingAttachImageFragment with service type and selected time
         val bookingAttachImageFragment = BookingAttachImageFragment.newInstance(
-            serviceType = serviceType ?: "Unknown",
-            selectedTime = selectedTime ?: "Unknown"
+            serviceType = serviceType ?: "Unknown", // Pass serviceType
+            selectedTime = time // Pass selectedTime
         )
+
+        // Pass the selected date to BookingAttachImageFragment
+        bookingAttachImageFragment.arguments?.putString("SELECTED_DATE", selectedDate)
 
         // Replace the current fragment with BookingAttachImageFragment
         parentFragmentManager.beginTransaction()
@@ -106,16 +114,18 @@ class BookingSelectTimeFragment : Fragment() {
 
     companion object {
         /**
-         * Create a new instance of BookingSelectTimeFragment with the service type.
+         * Create a new instance of BookingSelectTimeFragment with the service type and selected date.
          *
          * @param serviceType The type of service (e.g., "Regular" or "Gel Polish").
+         * @param selectedDate The selected date from AppointmentFragment.
          * @return A new instance of BookingSelectTimeFragment.
          */
         @JvmStatic
-        fun newInstance(serviceType: String) =
+        fun newInstance(serviceType: String, selectedDate: String) =
             BookingSelectTimeFragment().apply {
                 arguments = Bundle().apply {
                     putString("SERVICE_TYPE", serviceType)
+                    putString("SELECTED_DATE", selectedDate)
                 }
             }
     }

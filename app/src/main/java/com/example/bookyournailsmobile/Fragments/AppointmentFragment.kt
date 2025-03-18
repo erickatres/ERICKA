@@ -90,10 +90,18 @@ class AppointmentFragment : Fragment() {
         // Show the picker
         datePicker.show(parentFragmentManager, "MATERIAL_DATE_PICKER")
 
-        // Adjust size AFTER the dialog is shown (optional)
+        // Remove the Confirm and Cancel buttons after the dialog is shown
         datePicker.dialog?.setOnShowListener {
-            val window = datePicker.dialog?.window
-            window?.setLayout(900, 500) // Adjust width and height (in pixels)
+            val dialog = datePicker.dialog as? android.app.Dialog
+            dialog?.window?.decorView?.let { decorView ->
+                // Find the Confirm and Cancel buttons by their IDs
+                val confirmButton = decorView.findViewById<Button>(com.google.android.material.R.id.confirm_button)
+                val cancelButton = decorView.findViewById<Button>(com.google.android.material.R.id.cancel_button)
+
+                // Hide the buttons
+                confirmButton?.visibility = View.GONE
+                cancelButton?.visibility = View.GONE
+            }
         }
 
         // Handle the selected date
@@ -109,8 +117,11 @@ class AppointmentFragment : Fragment() {
     }
 
     private fun navigateToBookingSelectTimeFragment(serviceType: String) {
-        // Create a new instance of BookingSelectTimeFragment
-        val bookingSelectTimeFragment = BookingSelectTimeFragment.newInstance(serviceType)
+        // Get the selected date from the TextView
+        val selectedDate = textViewSD.text.toString()
+
+        // Create a new instance of BookingSelectTimeFragment and pass the service type and selected date
+        val bookingSelectTimeFragment = BookingSelectTimeFragment.newInstance(serviceType, selectedDate)
 
         // Replace the current fragment with BookingSelectTimeFragment
         parentFragmentManager.beginTransaction()
