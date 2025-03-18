@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
         // Retrieve user data and set the first name to the TextView
         val user = requireContext().getUserFromPreferences()
         user?.let {
-            firstNameTextView.text = it.firstname
+            firstNameTextView.text = "${it.firstname}!" // Add an exclamation mark
         }
 
         // Set up button click listeners after the delay

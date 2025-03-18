@@ -46,7 +46,6 @@ class ChangePasswordFragment : Fragment() {
         newPasswordEditText = view.findViewById(R.id.etnewPassword)
         confirmPasswordEditText = view.findViewById(R.id.etconfirmPassword)
         updatePasswordButton = view.findViewById(R.id.updatePasswordButton)
-        errorTextView = view.findViewById(R.id.errorTextView)
         oldPasswordLayout = view.findViewById(R.id.textInputLayout)
         newPasswordLayout = view.findViewById(R.id.textInputLayout2)
         confirmPasswordLayout = view.findViewById(R.id.textInputLayout3)

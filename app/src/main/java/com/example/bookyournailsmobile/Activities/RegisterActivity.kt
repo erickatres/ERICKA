@@ -55,6 +55,12 @@ class RegisterActivity : AppCompatActivity() {
         loginBack.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
+        tilFirstname.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilFirstname))
+        tilLastname.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilLastname))
+        tilEmail.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilEmail))
+        tilMobileNumber.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilMobileNumber))
+        tilPassword.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilPassword))
+        tilConfirmPassword.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilConfirmPassword))
 
         // Real-time validation listeners for EditText inside TextInputLayout
         tilFirstname.editText?.addTextChangedListener(createTextWatcher { validateFirstname(it, tilFirstname) })
@@ -65,6 +71,7 @@ class RegisterActivity : AppCompatActivity() {
         tilConfirmPassword.editText?.addTextChangedListener(createTextWatcher {
             validateConfirmPassword(it, tilPassword.editText?.text.toString(), tilConfirmPassword)
         })
+
 
         // Set focus change listeners to validate fields when they lose focus
         tilFirstname.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFirstname(tilFirstname.editText?.text.toString(), tilFirstname) }
@@ -265,6 +272,23 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+    private fun createSpacePreventionTextWatcher(textInputLayout: TextInputLayout): TextWatcher {
+        return object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val text = s?.toString() ?: ""
+
+                // Prevent spaces when the field is empty
+                if (text.isNotEmpty() && text.trim().isEmpty()) {
+                    // If the field is empty and the user tries to type a space, clear it
+                    textInputLayout.editText?.setText("")
+                }
+            }
+        }
+    }
 
     // Strong password validation without error icon manipulation
     private fun validatePassword(password: String, tilPassword: TextInputLayout): Boolean {
@@ -273,8 +297,11 @@ class RegisterActivity : AppCompatActivity() {
                 tilPassword.error = "Password is required"
                 false
             }
-            password.length < 6 -> {
-                tilPassword.error = "Must be at least 6 characters"
+            password.length < 8 -> {
+                tilPassword.error = "Must be at least 8 characters"
+                false
+            }password.length > 16 -> {
+                tilPassword.error = "Password must not exceed 16 characters"
                 false
             }
             !password.matches(".*[A-Z].*".toRegex()) -> {

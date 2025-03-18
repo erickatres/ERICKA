@@ -155,7 +155,7 @@
                     android:layout_height="wrap_content"
                     android:text="Sign up"
                     android:textColor="#FFFFFF"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="3dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/textView4"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
