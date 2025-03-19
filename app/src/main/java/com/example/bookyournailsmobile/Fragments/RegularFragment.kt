@@ -77,7 +77,7 @@ class RegularFragment : Fragment() {
         // Book Button Click
         btnBook.setOnClickListener {
             Log.d("RegularFragment", "Book button clicked")
-            navigateToAppointmentFragment("Regular")
+            navigateToAppointmentFragment("Regular Plain")
         }
     }
 

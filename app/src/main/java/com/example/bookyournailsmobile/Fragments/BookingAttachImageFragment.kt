@@ -26,13 +26,20 @@ class BookingAttachImageFragment : Fragment() {
     // Variables to store passed data
     private var serviceType: String? = null
     private var selectedTime: String? = null
+    private var servicePrice: String? = null // Add service price variable
+    private var selectedImageUri: Uri? = null // Add variable to store the selected image URI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Retrieve the service type and selected time from arguments
         serviceType = arguments?.getString("SERVICE_TYPE")
         selectedTime = arguments?.getString("SELECTED_TIME")
-        Log.d("BookingAttachImageFragment", "Service Type: $serviceType, Selected Time: $selectedTime")
+        // Determine the service price based on the service type
+        servicePrice = getServicePrice(serviceType)
+        Log.d(
+            "BookingAttachImageFragment",
+            "Service Type: $serviceType, Selected Time: $selectedTime, Service Price: $servicePrice"
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,7 +98,7 @@ class BookingAttachImageFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == android.app.Activity.RESULT_OK && data != null) {
-            val selectedImageUri: Uri? = data.data
+            selectedImageUri = data.data
             if (selectedImageUri != null) {
                 // Set the selected image to the uploadImageView
                 uploadImageView.setImageURI(selectedImageUri)
@@ -121,17 +128,19 @@ class BookingAttachImageFragment : Fragment() {
     }
 
     // Function to navigate to SummaryRegularPlainFragment
-    // Function to navigate to SummaryRegularPlainFragment
     private fun navigateToSummaryRegularPlainFragment() {
-        // Ensure selectedTime and selectedDate are not null
+        // Ensure selectedTime, selectedDate, and servicePrice are not null
         val time = selectedTime ?: "Unknown"
         val date = arguments?.getString("SELECTED_DATE") ?: "Unknown" // Retrieve selectedDate from arguments
+        val price = servicePrice ?: "₱350" // Default price if not provided
 
-        // Create a new instance of SummaryRegularPlainFragment with service type, selected date, and selected time
+        // Create a new instance of SummaryRegularPlainFragment with service type, selected date, selected time, and service price
         val summaryFragment = SummaryRegularPlainFragment.newInstance(
             serviceType ?: "Unknown", // Pass serviceType
             date, // Pass selectedDate
-            time // Pass selectedTime
+            time, // Pass selectedTime
+            price, // Pass servicePrice
+            selectedImageUri.toString() // Pass the selected image URI as a string
         )
 
         // Replace the current fragment with SummaryRegularPlainFragment
@@ -140,6 +149,17 @@ class BookingAttachImageFragment : Fragment() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+    // Function to determine the service price based on the service type
+    private fun getServicePrice(serviceType: String?): String {
+        return when (serviceType) {
+            "Regular" -> "₱350"
+            "Gel Polish" -> "₱450"
+            "Removal" -> "₱250"
+            else -> "₱350" // Default price if service type is unknown
+        }
+    }
+
     companion object {
         // Request code for gallery intent
         private const val PICK_IMAGE_REQUEST_CODE = 100

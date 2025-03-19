@@ -386,6 +386,7 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/btn_book"
             android:layout_width="142dp"
             android:layout_height="wrap_content"
             android:backgroundTint="#2F7889"
