@@ -39,13 +39,13 @@ class BookingSelectTimeFragment : Fragment() {
 
         // Set click listeners for time buttons
         binding.timeButton1.setOnClickListener {
-            handleTimeButtonClick(binding.timeButton1, "9:00 AM")
+            handleTimeButtonClick(binding.timeButton1, "9:00:00 AM")
         }
         binding.timeButton2.setOnClickListener {
-            handleTimeButtonClick(binding.timeButton2, "1:00 PM")
+            handleTimeButtonClick(binding.timeButton2, "13:00:00 PM")
         }
         binding.timeButton3.setOnClickListener {
-            handleTimeButtonClick(binding.timeButton3, "4:00 PM")
+            handleTimeButtonClick(binding.timeButton3, "16:00:00 PM")
         }
 
         // Set click listener for the continue button
@@ -61,8 +61,8 @@ class BookingSelectTimeFragment : Fragment() {
         // Set the selected time button to its selected state
         when (time) {
             "9:00 AM" -> button.setImageResource(R.drawable.time_selected_9am)
-            "1:00 PM" -> button.setImageResource(R.drawable.time_selected_1pm)
-            "4:00 PM" -> button.setImageResource(R.drawable.time_selected_4pm)
+            "13:00:00 PM" -> button.setImageResource(R.drawable.time_selected_1pm)
+            "16:00:00 PM" -> button.setImageResource(R.drawable.time_selected_4pm)
         }
 
         // Store the selected time

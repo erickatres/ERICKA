@@ -1,14 +1,19 @@
 package com.example.bookyournailsmobile.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Activities.LoginActivity
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
@@ -133,6 +138,7 @@ class SummaryRegularPlainFragment : Fragment() {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Booking created successfully!", Toast.LENGTH_SHORT).show()
                     Log.d("SummaryRegularPlainFragment", "Booking uploaded successfully")
+                    showSuccessPopup()
                 } else {
                     Toast.makeText(requireContext(), "Failed to create booking. Please try again.", Toast.LENGTH_SHORT).show()
                     Log.e("SummaryRegularPlainFragment", "Failed to upload booking: ${response.errorBody()?.string()}")
@@ -145,6 +151,52 @@ class SummaryRegularPlainFragment : Fragment() {
             }
         })
     }
+    private fun showSuccessPopup() {
+        // Inflate the custom layout
+        val inflater = LayoutInflater.from(requireContext())
+        val popupView = inflater.inflate(R.layout.success_booking, null)
+
+        // Build the AlertDialog
+        val builder = AlertDialog.Builder(requireContext()).apply {
+            setView(popupView) // Set the custom layout
+            setCancelable(false) // Prevent dismissing the dialog by tapping outside
+        }
+
+        // Create the dialog
+        val dialog = builder.create()
+
+        // Set the fade-in animation when the dialog is shown
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
+        // Show the dialog
+        dialog.show()
+
+        // Set click listener for the button
+        val btnOk = popupView.findViewById<Button>(R.id.btn_see_booking)
+        btnOk.setOnClickListener {
+            // Apply fade-out animation before dismissing the dialog
+            val fadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+            dialog.window?.decorView?.startAnimation(fadeOut)
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment()) // Replace `fragment_container` with your container ID
+                .addToBackStack(null) // Optional: Add to back stack for back navigation
+                .commit()
+            fadeOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+                override fun onAnimationRepeat(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    dialog.dismiss()
+
+
+                    // Navigate to HomeFragment
+                }
+            })
+            dialog.dismiss()
+        }
+    }
+
+
 
     companion object {
         @JvmStatic

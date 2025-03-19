@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "404322691165",
+    "project_id": "nailscape-2d5ce",
+    "storage_bucket": "nailscape-2d5ce.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404322691165:android:14441dd4a588e0052bc5b4",
+        "android_client_info": {
+          "package_name": "com.example.bookyournailsmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-hOwNsLNO0JD8z0Kiptpf8F0ij7zDOEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

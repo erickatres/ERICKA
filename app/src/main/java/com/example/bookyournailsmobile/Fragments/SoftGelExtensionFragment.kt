@@ -3,11 +3,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
+import com.example.bookyournailsmobile.Fragments.AppointmentFragment
 import com.example.bookyournailsmobile.R
 
 class SoftGelExtensionFragment : Fragment() {
@@ -15,6 +17,7 @@ class SoftGelExtensionFragment : Fragment() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tvImageCount: TextView
     private lateinit var btnBack: FrameLayout
+    private lateinit var btnBook: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,17 +31,14 @@ class SoftGelExtensionFragment : Fragment() {
 
         Log.d("SoftGelExtensionFragment", "Fragment created successfully")
 
-
-
         // Initialize views
         viewPager = view.findViewById(R.id.viewPagerSoftGelExtension)
         tvImageCount = view.findViewById(R.id.tvImageCountSoftGelExtension)
         btnBack = view.findViewById(R.id.btnBack)
+        btnBook = view.findViewById(R.id.book_now)
 
         // Ensure btnBack is visible
         btnBack.visibility = View.VISIBLE
-
-
 
         // Image List
         val imageList = listOf(
@@ -67,12 +67,33 @@ class SoftGelExtensionFragment : Fragment() {
         // Hide bottom navigation
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.GONE
+
         // Back Button Click
         btnBack.setOnClickListener {
-            Log.d("RegularPlainFragment", "Back button clicked")
+            Log.d("SoftGelExtensionFragment", "Back button clicked")
             parentFragmentManager.popBackStack()
         }
+
+        // Book Button Click
+        btnBook.setOnClickListener {
+            Log.d("SoftGelExtensionFragment", "Book button clicked")
+            navigateToAppointmentFragment("Soft Gel X") // Pass the service type
+        }
     }
+
+    private fun navigateToAppointmentFragment(serviceType: String) {
+        val appointmentFragment = AppointmentFragment().apply {
+            arguments = Bundle().apply {
+                putString("SERVICE_TYPE", serviceType) // Pass the service type to AppointmentFragment
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, appointmentFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         // Show bottom navigation when leaving this fragment

@@ -16,12 +16,6 @@ class BookingFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_booking, container, false)
 
-        view.findViewById<FrameLayout>(R.id.circle_plus_icon).setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, AppointmentFragment())
-                .addToBackStack(null)
-                .commit()
-        }
 
         return view
     }

@@ -13,9 +13,9 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
@@ -26,7 +26,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import eightbitlab.com.blurview.BlurView
-import eightbitlab.com.blurview.RenderScriptBlur
 
 fun Context.saveUserToPreferences(user: User) {
     val sharedPreferences = this.getSharedPreferences("UserPref", Context.MODE_PRIVATE)
@@ -40,6 +39,7 @@ fun Context.saveUserToPreferences(user: User) {
 class LoginActivity : AppCompatActivity() {
     private lateinit var sessionManagement: SessionManagement
     private lateinit var blurView: BlurView
+    private lateinit var btnForgotPassword: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,10 +62,17 @@ class LoginActivity : AppCompatActivity() {
         val passwordInputLayout = findViewById<TextInputLayout>(R.id.tl_password)
         val loginButton = findViewById<Button>(R.id.btn_login)
         val signupBtn = findViewById<TextView>(R.id.tv_signup)
+        btnForgotPassword = findViewById(R.id.login_forgot_password) // Initialize btnForgotPassword
 
         signupBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+        }
+
+        btnForgotPassword.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+
         }
 
         loginButton.setOnClickListener {
@@ -194,6 +201,7 @@ class LoginActivity : AppCompatActivity() {
         val fadeIn = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_in)
         popupView.startAnimation(fadeIn)
     }
+
     override fun onStart() {
         super.onStart()
         checkSession()

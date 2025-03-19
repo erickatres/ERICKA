@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/dialog_background_login"> <!-- Add a custom background if needed -->
+
+    <!-- Title -->
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Booking pending"
+        android:textColor="#2F7889"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="16dp"/>
+
+    <!-- Message -->
+
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="8dp">
+
+        <!-- No Button -->
+
+        <!-- Yes Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_see_booking"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:text="See booking"
+            android:padding="12dp"
+            android:textSize="18dp"
+            app:strokeColor="#82AEC0"
+            app:strokeWidth="2dp"
+            app:cornerRadius="10dp"
+            android:backgroundTint="#82AEC0"
+            android:textColor="@color/white"
+            android:layout_marginEnd="10dp"/>
+
+    </LinearLayout>
+</LinearLayout>
