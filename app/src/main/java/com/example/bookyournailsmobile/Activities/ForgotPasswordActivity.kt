@@ -113,7 +113,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
                             if (status == "success") {
                                 Toast.makeText(this@ForgotPasswordActivity, message, Toast.LENGTH_SHORT).show()
-
                                 // Transition to ForgotPassword2Activity
                                 val intent = Intent(this@ForgotPasswordActivity, ForgotPassword2Activity::class.java)
                                 intent.putExtra("EMAIL", email)

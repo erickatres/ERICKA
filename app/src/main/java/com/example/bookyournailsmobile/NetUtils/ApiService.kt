@@ -28,7 +28,16 @@ interface ApiService {
     // Add a new endpoint for creating a booking
     @POST("create_booking.php")
     fun createBooking(@Body bookingData: BookingRequest): Call<Void>
+
+    // Add a new endpoint for OTP verification
+    @FormUrlEncoded
+    @POST("verify_otp.php")
+    fun verifyOtp(
+        @Field("email") email: String,
+        @Field("otp") otp: String
+    ): Call<VerifyOtpResponse>
 }
+
 data class BookingRequest(
     val user_id: String,
     val service_type: String,
@@ -37,4 +46,9 @@ data class BookingRequest(
     val price: String,
     val date: String,
     val time: String
+)
+
+data class VerifyOtpResponse(
+    val status: String,
+    val message: String
 )
