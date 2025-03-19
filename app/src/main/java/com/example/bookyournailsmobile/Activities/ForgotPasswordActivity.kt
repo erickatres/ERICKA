@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.io.IOException
 import com.example.bookyournailsmobile.NetUtils.Urls
 
@@ -44,12 +45,12 @@ class ForgotPasswordActivity : AppCompatActivity() {
         etEmail = findViewById(R.id.etEmail)
         btnContinue = findViewById(R.id.btnContinue)
 
-        // Example: Set a click listener for the back button
+        // Back button listener
         btnBack.setOnClickListener {
             onBackPressed() // Go back to the previous activity
         }
 
-        // Example: Set a click listener for the continue button
+        // Continue button listener
         btnContinue.setOnClickListener {
             val email = etEmail.text.toString().trim()
             if (email.isEmpty()) {
@@ -93,21 +94,39 @@ class ForgotPasswordActivity : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(this@ForgotPasswordActivity, "Failed to send OTP", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ForgotPasswordActivity, "Network error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    runOnUiThread {
-                        Toast.makeText(this@ForgotPasswordActivity, "OTP sent to $email", Toast.LENGTH_SHORT).show()
-                        // Transition to ForgotPassword2Activity
-                        val intent = Intent(this@ForgotPasswordActivity, ForgotPassword2Activity::class.java)
-                        intent.putExtra("EMAIL", email)
-                        startActivity(intent)
-                    }
-                } else {
-                    runOnUiThread {
+                val responseBody = response.body?.string()
+
+                runOnUiThread {
+                    if (response.isSuccessful && !responseBody.isNullOrEmpty()) {
+                        try {
+                            // Log the raw response for debugging
+                            println("Server Response: $responseBody")
+
+                            val jsonResponse = JSONObject(responseBody)
+                            val status = jsonResponse.getString("status")
+                            val message = jsonResponse.getString("message")
+
+                            if (status == "success") {
+                                Toast.makeText(this@ForgotPasswordActivity, message, Toast.LENGTH_SHORT).show()
+
+                                // Transition to ForgotPassword2Activity
+                                val intent = Intent(this@ForgotPasswordActivity, ForgotPassword2Activity::class.java)
+                                intent.putExtra("EMAIL", email)
+                                startActivity(intent)
+                            } else {
+                                Toast.makeText(this@ForgotPasswordActivity, message, Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            // Log the exception for debugging
+                            e.printStackTrace()
+                            Toast.makeText(this@ForgotPasswordActivity, "Failed to parse server response: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
                         Toast.makeText(this@ForgotPasswordActivity, "Failed to send OTP", Toast.LENGTH_SHORT).show()
                     }
                 }
