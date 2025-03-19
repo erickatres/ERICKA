@@ -16,6 +16,7 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+import com.example.bookyournailsmobile.NetUtils.Urls
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
@@ -85,7 +86,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         val body = """{"email": "$email"}""".toRequestBody(mediaType)
 
         val request = Request.Builder()
-            .url("http://10.0.2.2:3000/send-otp") // Use your backend URL
+            .url(Urls.URL_FORGOT_PASSWORD) // Use your backend URL
             .post(body)
             .build()
 
