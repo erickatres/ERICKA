@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
+import com.example.bookyournailsmobile.Request.BookingRequest
 
 class SummaryRegularPlainFragment : Fragment() {
 
@@ -90,30 +91,51 @@ class SummaryRegularPlainFragment : Fragment() {
 
     private fun uploadBookingToServer(user: User?) {
         // Ensure all fields are not null
-        val userId = user?.getId() ?: "Unknown" // Fetch user_id from the User object
-        val serviceType = serviceType ?: "Unknown"
-        val selectedDate = selectedDate ?: "Unknown"
-        val selectedTime = selectedTime ?: "Unknown"
-        val servicePrice = servicePrice ?: "Unknown"
-        val referenceImageUri = referenceImageUri ?: "Unknown"
+        val userId = user?.getId() ?: run {
+            Toast.makeText(requireContext(), "User ID is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val serviceType = serviceType ?: run {
+            Toast.makeText(requireContext(), "Service type is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val selectedDate = selectedDate ?: run {
+            Toast.makeText(requireContext(), "Date is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val selectedTime = selectedTime ?: run {
+            Toast.makeText(requireContext(), "Time is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val servicePrice = servicePrice ?: run {
+            Toast.makeText(requireContext(), "Price is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val referenceImageUri = referenceImageUri ?: run {
+            Toast.makeText(requireContext(), "Reference image is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        // Make an API call to upload the booking data
-        apiService.createBooking(
-            userId, // Pass user_id
-            serviceType,
-            "Pending", // Default status
-            selectedDate,
-            selectedTime,
-            servicePrice,
-            referenceImageUri
-        ).enqueue(object : retrofit2.Callback<Void> {
+        // Create a BookingRequest object
+        val bookingRequest = com.example.bookyournailsmobile.NetUtils.BookingRequest(
+            user_id = userId,
+            service_type = serviceType,
+            status = "Pending", // Default status
+            reference_img = referenceImageUri,
+            price = servicePrice,
+            date = selectedDate,
+            time = selectedTime
+        )
+
+        // Make an API call to upload the booking data as JSON
+        apiService.createBooking(bookingRequest).enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Booking created successfully!", Toast.LENGTH_SHORT).show()
                     Log.d("SummaryRegularPlainFragment", "Booking uploaded successfully")
                 } else {
                     Toast.makeText(requireContext(), "Failed to create booking. Please try again.", Toast.LENGTH_SHORT).show()
-                    Log.e("SummaryRegularPlainFragment", "Failed to upload booking: ${response.errorBody()}")
+                    Log.e("SummaryRegularPlainFragment", "Failed to upload booking: ${response.errorBody()?.string()}")
                 }
             }
 

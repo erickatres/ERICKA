@@ -2,6 +2,7 @@ package com.example.bookyournailsmobile.NetUtils
 
 import com.example.bookyournailsmobile.Domain.User
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -25,15 +26,15 @@ interface ApiService {
     ): Call<User>
 
     // Add a new endpoint for creating a booking
-    @FormUrlEncoded
-    @POST("create_booking.php") // Replace with your actual booking endpoint
-    fun createBooking(
-        @Field("user_id") userId: String, // Add user_id
-        @Field("service_type") serviceType: String,
-        @Field("status") status: String,
-        @Field("selected_date") selectedDate: String,
-        @Field("selected_time") selectedTime: String,
-        @Field("service_price") servicePrice: String,
-        @Field("reference_image_uri") referenceImageUri: String
-    ): Call<Void>
+    @POST("create_booking.php")
+    fun createBooking(@Body bookingData: BookingRequest): Call<Void>
 }
+data class BookingRequest(
+    val user_id: String,
+    val service_type: String,
+    val status: String,
+    val reference_img: String,
+    val price: String,
+    val date: String,
+    val time: String
+)
