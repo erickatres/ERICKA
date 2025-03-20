@@ -9,7 +9,7 @@ import retrofit2.http.POST
 
 interface ApiService {
     @POST("login2")
-    fun login(@Body loginRequest: LoginRequest): Call<User>
+    fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
     @FormUrlEncoded
     @POST("signup.php") // Replace with your actual registration endpoint
     fun register(
@@ -21,7 +21,7 @@ interface ApiService {
     ): Call<User>
 
     // Add a new endpoint for creating a booking
-    @POST("create_booking.php")
+    @POST("newbooking")
     fun createBooking(@Body bookingData: BookingRequest): Call<Void>
 
     // Add a new endpoint for OTP verification
@@ -42,6 +42,13 @@ data class BookingRequest(
     val date: String,
     val time: String
 )
+data class LoginResponse(
+    val message: String,
+    val session_token: String,
+    val user: User
+)
+
+
 data class LoginRequest(
     val email: String,
     val password: String

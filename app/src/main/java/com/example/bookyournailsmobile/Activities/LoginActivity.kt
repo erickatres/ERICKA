@@ -20,6 +20,7 @@ import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.example.bookyournailsmobile.NetUtils.LoginRequest
+import com.example.bookyournailsmobile.NetUtils.LoginResponse
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -86,12 +87,14 @@ class LoginActivity : AppCompatActivity() {
                 val loginRequest = LoginRequest(email, password)
                 val call = RetrofitClient.instance.login(loginRequest)
 
-                call.enqueue(object : Callback<User> {
-                    override fun onResponse(call: Call<User>, response: Response<User>) {
+                call.enqueue(object : Callback<LoginResponse> {
+                    override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                         if (response.isSuccessful) {
-                            val user = response.body()
-                            if (user != null) {
-                                sessionManagement.saveSession(user.id ?: "")
+                            val loginResponse = response.body()
+                            if (loginResponse != null && loginResponse.user != null) {
+                                val user = loginResponse.user
+                                sessionManagement.saveSession(user.getId() ?: "")
+
                                 saveUserToPreferences(user)
 
                                 Toast.makeText(
@@ -99,6 +102,7 @@ class LoginActivity : AppCompatActivity() {
                                     "Login Successful",
                                     Toast.LENGTH_SHORT
                                 ).show()
+
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 finish()
                             } else {
@@ -109,10 +113,11 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<User>, t: Throwable) {
+                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                         showValidationPopup("Error logging in. Please try again.")
                     }
                 })
+
             }
         }
     }

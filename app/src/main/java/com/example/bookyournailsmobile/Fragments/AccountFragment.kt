@@ -54,8 +54,8 @@ class AccountFragment : Fragment() {
         // Retrieve user data from SharedPreferences
         val user = requireContext().getUserFromPreferences()
         user?.let {
-            firstnameEditText.hint = it.firstname
-            lastnameEditText.hint = it.lastname
+            firstnameEditText.hint = it.first_name
+            lastnameEditText.hint = it.last_name
             emailEditText.hint = it.email
             mobileNumberEditText.hint = it.phone
         }

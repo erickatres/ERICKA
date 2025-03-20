@@ -14,6 +14,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.bookyournailsmobile.R
+import com.example.bookyournailsmobile.Fragments.SummaryRegularPlainFragment
+
 
 class BookingAttachImageFragment : Fragment() {
 

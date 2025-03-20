@@ -1,30 +1,52 @@
 package com.example.bookyournailsmobile.Domain;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
+
+    @SerializedName("user_id")
     private String user_id;
+
+    @SerializedName("full_name")
     private String full_name;
+
+    @SerializedName("email")
     private String email;
+
+    @SerializedName("phone")
     private String phone;
+
+    @SerializedName("first_name")
     private String first_name;
+
+    @SerializedName("last_name")
     private String last_name;
+
+    @SerializedName("password")
     private String password;
-    private String role; // Add this line
+
+    @SerializedName("role")
+    private String role;
+
+    // Default Constructor (Required for Retrofit)
+    public User() {
+    }
 
     // Getters and Setters
     public String getId() {
         return user_id;
     }
 
-    public void setId(String id) {
-        this.user_id = id;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public String getFullname() {
+    public String getFull_name() {
         return full_name;
     }
 
-    public void setFullname(String fullname) {
-        this.full_name = fullname;
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
     public String getEmail() {
@@ -35,25 +57,28 @@ public class User {
         this.email = email;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getFirstname() {
+    public String getFirst_name() {
         return first_name;
     }
-    public String getPhone() {
-        return phone;
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
-    public String getLastname() {
+
+    public String getLast_name() {
         return last_name;
     }
 
-    public void setFirstname(String firstname) {
-        this.first_name = firstname;
-    }
-    public void setLastname(String lastname) {
-        this.last_name = lastname;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getPassword() {

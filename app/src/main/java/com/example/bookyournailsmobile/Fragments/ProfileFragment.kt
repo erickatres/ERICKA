@@ -42,7 +42,7 @@ class ProfileFragment : Fragment() {
 
         val user = requireContext().getUserFromPreferences()
         user?.let {
-            TVUser.text = it.firstname
+            TVUser.text = it.first_name
         }
 
         // Logout Button
