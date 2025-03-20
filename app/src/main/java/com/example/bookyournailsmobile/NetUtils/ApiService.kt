@@ -8,13 +8,8 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface ApiService {
-    @FormUrlEncoded
-    @POST("login.php") // Replace with your actual login endpoint
-    fun login(
-        @Field("email") email: String,
-        @Field("password") password: String
-    ): Call<User>
-
+    @POST("login2")
+    fun login(@Body loginRequest: LoginRequest): Call<User>
     @FormUrlEncoded
     @POST("signup.php") // Replace with your actual registration endpoint
     fun register(
@@ -47,6 +42,11 @@ data class BookingRequest(
     val date: String,
     val time: String
 )
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
 
 data class VerifyOtpResponse(
     val status: String,

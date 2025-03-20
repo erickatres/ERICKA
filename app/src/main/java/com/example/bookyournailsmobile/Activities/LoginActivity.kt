@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
+import com.example.bookyournailsmobile.NetUtils.LoginRequest
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -79,35 +80,18 @@ class LoginActivity : AppCompatActivity() {
             val email = emailInputLayout.editText?.text.toString().trim()
             val password = passwordInputLayout.editText?.text.toString().trim()
 
-            var hasError = false
-            var errorMessage = ""
-
-            if (email.isEmpty()) {
-                errorMessage = "Email is required"
-                hasError = true
-            } else if (password.isEmpty()) {
-                errorMessage = "Password is required"
-                hasError = true
-            }
-
-            if (hasError) {
-                showValidationPopup(errorMessage)
+            if (email.isEmpty() || password.isEmpty()) {
+                showValidationPopup("Email and Password are required")
             } else {
-                // Proceed with login logic using Retrofit
-                val call = RetrofitClient.instance.login(email, password)
+                val loginRequest = LoginRequest(email, password)
+                val call = RetrofitClient.instance.login(loginRequest)
+
                 call.enqueue(object : Callback<User> {
                     override fun onResponse(call: Call<User>, response: Response<User>) {
                         if (response.isSuccessful) {
                             val user = response.body()
                             if (user != null) {
-                                val userID = user.id
-                                if (userID != null) {
-                                    sessionManagement.saveSession(userID)
-                                } else {
-                                    showValidationPopup("Invalid user ID")
-                                    return
-                                }
-
+                                sessionManagement.saveSession(user.id ?: "")
                                 saveUserToPreferences(user)
 
                                 Toast.makeText(
@@ -115,8 +99,7 @@ class LoginActivity : AppCompatActivity() {
                                     "Login Successful",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                startActivity(intent)
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 finish()
                             } else {
                                 showValidationPopup("Invalid user data")
@@ -127,7 +110,6 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<User>, t: Throwable) {
-                        Log.e("LoginActivity", "Error logging in", t)
                         showValidationPopup("Error logging in. Please try again.")
                     }
                 })

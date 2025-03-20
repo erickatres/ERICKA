@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = Urls.ROOT + Urls.IP_ADDRESS + Urls.DIRECTORY // Replace with your actual base URL
+    private const val BASE_URL = Urls.ROOT // Replace with your actual base URL
 
     val instance: ApiService by lazy {
         // Create a Gson instance with lenient mode enabled
