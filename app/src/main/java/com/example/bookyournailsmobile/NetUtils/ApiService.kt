@@ -1,32 +1,57 @@
 package com.example.bookyournailsmobile.NetUtils
 
 import com.example.bookyournailsmobile.Domain.User
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.HeaderMap
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
 
 interface ApiService {
     @POST("login2")
     fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
-    @FormUrlEncoded
-    @POST("signup.php") // Replace with your actual registration endpoint
-    fun register(
-        @Field("first_name") firstName: String,
-        @Field("last_name") lastName: String,
-        @Field("email") email: String,
-        @Field("phone") phone: String,
-        @Field("password") password: String
-    ): Call<User>
 
-    // Add a new endpoint for creating a booking
-    @POST("newbooking")
-    fun createBooking(@Body bookingData: BookingRequest): Call<Void>
+    @POST("signup") // Replace with your actual registration endpoint
+    fun register(@Body registerRequest: RegisterRequest): Call<User>
 
-    // Add a new endpoint for OTP verification
+    @Multipart
+    @POST("newbooking") // Replace with your actual endpoint
+    fun createBooking(
+        @Part("user_id") userId: RequestBody,
+        @Part("service_type") serviceType: RequestBody,
+        @Part("date") date: RequestBody,
+        @Part("time") time: RequestBody,
+        @Part("price") price: RequestBody,
+        @Part referenceImg: MultipartBody.Part
+    ): Call<Void>
+
+    @POST("resetpassword") // Replace with your actual endpoint
+    fun resetPassword(
+        @HeaderMap headers: Map<String, String>,
+        @Body resetPasswordRequest: ResetPasswordRequest
+    ): Call<ResetPasswordResponse>
+
+    // Add this to your ApiService interface
+    @POST("checkemail") // Replace with your actual endpoint
+    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Call<ForgotPasswordResponse>
+
+    @POST("checkresetcode") // Replace with your actual endpoint
+    fun verifyResetCode(
+        @HeaderMap headers: Map<String, String>,
+        @Body verifyResetCodeRequest: VerifyResetCodeRequest
+    ): Call<VerifyResetCodeResponse>
+
+    @POST("verify_otp") // Replace with your actual endpoint
+    fun verifyOtp(@Body verifyOtpRequest: VerifyOtpRequest): Call<VerifyOtpResponse>
+
     @FormUrlEncoded
-    @POST("verify_otp.php")
+    @POST("verify_otp.php") // Replace with your actual endpoint
     fun verifyOtp(
         @Field("email") email: String,
         @Field("otp") otp: String
@@ -42,20 +67,64 @@ data class BookingRequest(
     val date: String,
     val time: String
 )
+
+data class ForgotPasswordRequest(
+    val email: String
+)
+
+data class ForgotPasswordResponse(
+    val message: String,
+    val password_reset_token: String? = null // Optional, depending on your backend response
+)
+data class VerifyOtpRequest(
+    val email: String,
+    val otp: String,
+    val password_reset_token: String
+)
+
+data class VerifyOtpResponse(
+    val status: String,
+    val message: String
+)
+
 data class LoginResponse(
     val message: String,
     val session_token: String,
     val user: User
 )
 
-
 data class LoginRequest(
     val email: String,
     val password: String
 )
+data class RegisterRequest(
+    val first_name: String,
+    val last_name: String,
+    val email: String,
+    val phone: String,
+    val password: String,
+    val confirm_password: String
+)
+data class VerifyResetCodeRequest(
+    val code: String
+)
 
+data class VerifyResetCodeResponse(
+    val message: String,
+    val code: String? = null // Optional, depending on your backend response
+)
+data class ResetPasswordRequest(
+    val password: String,          // Change from "new_password"
+    val confirm_password: String   // Change from "confirm_password"
+)
 
-data class VerifyOtpResponse(
+data class ResetPasswordResponse(
     val status: String,
     val message: String
 )
+
+data class ChangePasswordResponse(
+    val status: String,
+    val message: String
+)
+

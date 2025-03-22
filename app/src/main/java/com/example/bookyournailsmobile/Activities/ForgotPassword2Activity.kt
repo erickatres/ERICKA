@@ -12,13 +12,16 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bookyournailsmobile.NetUtils.ApiService
-import com.example.bookyournailsmobile.NetUtils.VerifyOtpResponse
+import com.example.bookyournailsmobile.NetUtils.ForgotPasswordRequest
+import com.example.bookyournailsmobile.NetUtils.ForgotPasswordResponse
+import com.example.bookyournailsmobile.NetUtils.RetrofitClient
+import com.example.bookyournailsmobile.NetUtils.VerifyResetCodeRequest
+import com.example.bookyournailsmobile.NetUtils.VerifyResetCodeResponse
 import com.example.bookyournailsmobile.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import java.util.HashMap
 
 class ForgotPassword2Activity : AppCompatActivity() {
 
@@ -56,12 +59,7 @@ class ForgotPassword2Activity : AppCompatActivity() {
         btnContinue = findViewById(R.id.btnContinue)
 
         // Initialize Retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://your-server-url.com/") // Replace with your server URL
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        apiService = retrofit.create(ApiService::class.java)
+        apiService = RetrofitClient.create(this)
 
         // Back button listener
         btnBack.setOnClickListener {
@@ -71,6 +69,12 @@ class ForgotPassword2Activity : AppCompatActivity() {
         // Resend code click listener
         tvResendCode.setOnClickListener {
             // Implement resend code logic here
+            val email = intent.getStringExtra("EMAIL") ?: ""
+            if (email.isNotEmpty()) {
+                resendOtp(email)
+            } else {
+                Toast.makeText(this, "Email not found", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Auto move focus to next OTP field
@@ -86,8 +90,8 @@ class ForgotPassword2Activity : AppCompatActivity() {
             if (otpCode.length < 4) {
                 Toast.makeText(this, "Please enter a valid OTP", Toast.LENGTH_SHORT).show()
             } else {
-                val email = intent.getStringExtra("email") ?: ""
-                verifyOtp(email, otpCode)
+                val passwordResetToken = intent.getStringExtra("PASSWORD_RESET_TOKEN") ?: ""
+                verifyResetCode(passwordResetToken, otpCode)
             }
         }
     }
@@ -108,23 +112,77 @@ class ForgotPassword2Activity : AppCompatActivity() {
         }
     }
 
-    private fun verifyOtp(email: String, otp: String) {
-        apiService.verifyOtp(email, otp).enqueue(object : Callback<VerifyOtpResponse> {
-            override fun onResponse(call: Call<VerifyOtpResponse>, response: Response<VerifyOtpResponse>) {
-                if (response.isSuccessful && response.body()?.status == "success") {
-                    // OTP is correct, navigate to NewPasswordActivity
-                    val intent = Intent(this@ForgotPassword2Activity, NewPasswordActivity::class.java)
-                    intent.putExtra("email", email)
-                    startActivity(intent)
-                    finish()
+    private fun verifyResetCode(passwordResetToken: String, code: String) {
+        val verifyResetCodeRequest = VerifyResetCodeRequest(code)
+
+        // Add the passwordResetToken to the headers
+        val headers = HashMap<String, String>()
+        headers["Authorization"] = passwordResetToken
+
+        apiService.verifyResetCode(headers, verifyResetCodeRequest).enqueue(object : Callback<VerifyResetCodeResponse> {
+            override fun onResponse(call: Call<VerifyResetCodeResponse>, response: Response<VerifyResetCodeResponse>) {
+                if (response.isSuccessful) {
+                    val verifyResetCodeResponse = response.body()
+                    if (verifyResetCodeResponse != null) {
+                        // Handle success
+                        Toast.makeText(this@ForgotPassword2Activity, verifyResetCodeResponse.message, Toast.LENGTH_SHORT).show()
+
+                        // Navigate to NewPasswordActivity
+                        navigateToNewPasswordActivity(passwordResetToken)
+                    } else {
+                        // Handle failure
+                        Toast.makeText(this@ForgotPassword2Activity, "Failed to verify code: Invalid response", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    // OTP is incorrect, show error message
-                    Toast.makeText(this@ForgotPassword2Activity, "Invalid OTP", Toast.LENGTH_SHORT).show()
+                    // Handle HTTP error
+                    val errorMessage = when (response.code()) {
+                        400 -> "Invalid request."
+                        404 -> "Token not found."
+                        500 -> "Server error. Please try again later."
+                        else -> "Failed to verify code: ${response.message()}"
+                    }
+                    Toast.makeText(this@ForgotPassword2Activity, errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<VerifyOtpResponse>, t: Throwable) {
+            override fun onFailure(call: Call<VerifyResetCodeResponse>, t: Throwable) {
                 // Handle network error
+                Toast.makeText(this@ForgotPassword2Activity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun navigateToNewPasswordActivity(passwordResetToken: String) {
+        val intent = Intent(this, NewPasswordActivity::class.java)
+        intent.putExtra("PASSWORD_RESET_TOKEN", passwordResetToken) // Pass the token
+        startActivity(intent)
+        finish() // Close the current activity
+    }
+
+    private fun resendOtp(email: String) {
+        val forgotPasswordRequest = ForgotPasswordRequest(email)
+
+        apiService.forgotPassword(forgotPasswordRequest).enqueue(object : Callback<ForgotPasswordResponse> {
+            override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
+                if (response.isSuccessful) {
+                    val forgotPasswordResponse = response.body()
+                    if (forgotPasswordResponse != null) {
+                        Toast.makeText(this@ForgotPassword2Activity, "OTP resent successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@ForgotPassword2Activity, "Failed to resend OTP: Invalid response", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    val errorMessage = when (response.code()) {
+                        400 -> "Email is required."
+                        404 -> "Email not found."
+                        500 -> "Failed to resend OTP. Please try again later."
+                        else -> "Failed to resend OTP: ${response.message()}"
+                    }
+                    Toast.makeText(this@ForgotPassword2Activity, errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
                 Toast.makeText(this@ForgotPassword2Activity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

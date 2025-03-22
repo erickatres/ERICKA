@@ -2,19 +2,34 @@ package com.example.bookyournailsmobile.Managers
 
 import android.content.Context
 import android.content.SharedPreferences
+
 class SessionManagement(context: Context) {
-    private var sharedPreferences: SharedPreferences = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-    private var editor: SharedPreferences.Editor = sharedPreferences.edit()
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("SessionPref", Context.MODE_PRIVATE)
 
-    fun saveSession(userId: String) { // Change parameter type to String
-        editor.putString("USER_ID", userId).commit()
+    // Save the session token and user ID
+    fun saveSession(userId: String, sessionToken: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("user_id", userId)
+        editor.putString("session_token", sessionToken)
+        editor.apply()
     }
 
-    fun getSession(): String? { // Change return type to String?
-        return sharedPreferences.getString("USER_ID", null)
+    // Retrieve the session token
+    fun getSessionToken(): String? {
+        return sharedPreferences.getString("session_token", null)
     }
 
+    // Retrieve the user ID
+    fun getUserId(): String? {
+        return sharedPreferences.getString("user_id", null)
+    }
+
+    // Clear the session (for logout)
     fun clearSession() {
-        editor.clear().commit()
+        val editor = sharedPreferences.edit()
+        editor.remove("user_id")
+        editor.remove("session_token")
+        editor.apply()
     }
 }

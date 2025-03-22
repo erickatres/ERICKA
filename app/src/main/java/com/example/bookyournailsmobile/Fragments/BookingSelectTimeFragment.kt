@@ -60,7 +60,7 @@ class BookingSelectTimeFragment : Fragment() {
 
         // Set the selected time button to its selected state
         when (time) {
-            "9:00 AM" -> button.setImageResource(R.drawable.time_selected_9am)
+            "9:00:00 AM" -> button.setImageResource(R.drawable.time_selected_9am)
             "13:00:00 PM" -> button.setImageResource(R.drawable.time_selected_1pm)
             "16:00:00 PM" -> button.setImageResource(R.drawable.time_selected_4pm)
         }

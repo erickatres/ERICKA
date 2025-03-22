@@ -1,7 +1,7 @@
 package com.example.bookyournailsmobile.NetUtils
 
 object Urls {
-    const val ROOT = "http://192.168.68.112:8000/"
+    const val ROOT = "http://192.168.16.44:8000/"
     const val URL_LOGIN = ROOT + "login2"
    // const val ROOT = "http://"
     const val IP_ADDRESS = "172.20.10.3:8000"

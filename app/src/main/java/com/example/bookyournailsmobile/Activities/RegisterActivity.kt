@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
+import com.example.bookyournailsmobile.NetUtils.RegisterRequest // Add this import
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -55,12 +56,6 @@ class RegisterActivity : AppCompatActivity() {
         loginBack.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
-        tilFirstname.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilFirstname))
-        tilLastname.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilLastname))
-        tilEmail.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilEmail))
-        tilMobileNumber.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilMobileNumber))
-        tilPassword.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilPassword))
-        tilConfirmPassword.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilConfirmPassword))
 
         // Real-time validation listeners for EditText inside TextInputLayout
         tilFirstname.editText?.addTextChangedListener(createTextWatcher { validateFirstname(it, tilFirstname) })
@@ -71,15 +66,6 @@ class RegisterActivity : AppCompatActivity() {
         tilConfirmPassword.editText?.addTextChangedListener(createTextWatcher {
             validateConfirmPassword(it, tilPassword.editText?.text.toString(), tilConfirmPassword)
         })
-
-
-        // Set focus change listeners to validate fields when they lose focus
-        tilFirstname.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFirstname(tilFirstname.editText?.text.toString(), tilFirstname) }
-        tilLastname.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateLastname(tilLastname.editText?.text.toString(), tilLastname) }
-        tilEmail.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateEmail(tilEmail.editText?.text.toString(), tilEmail) }
-        tilMobileNumber.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateMobileNumber(tilMobileNumber.editText?.text.toString(), tilMobileNumber) }
-        tilPassword.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validatePassword(tilPassword.editText?.text.toString(), tilPassword) }
-        tilConfirmPassword.editText?.setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateConfirmPassword(tilConfirmPassword.editText?.text.toString(), tilPassword.editText?.text.toString(), tilConfirmPassword) }
 
         // Set click listener to remove error when password field is clicked
         tilPassword.editText?.setOnClickListener {
@@ -111,19 +97,24 @@ class RegisterActivity : AppCompatActivity() {
 
             if (isFirstnameValid && isLastnameValid && isEmailValid && isMobileNumberValid && isPasswordValid && isConfirmPasswordValid) {
                 // Proceed with registration logic using Retrofit
-                val call = RetrofitClient.instance.register(firstname, lastname, email, phone, password)
+                val apiService = RetrofitClient.create(this) // Create Retrofit service
+                val registerRequest = RegisterRequest(firstname, lastname, email, phone, password, confirmPassword) // Create request object
+
+                // Make the Retrofit call
+                val call = apiService.register(registerRequest)
                 call.enqueue(object : Callback<User> {
                     override fun onResponse(call: Call<User>, response: Response<User>) {
                         if (response.isSuccessful) {
                             val user = response.body()
                             if (user != null) {
-                                // Show success popup dialog
                                 showSuccessPopup()
                             } else {
                                 Toast.makeText(applicationContext, "Registration failed: Invalid response", Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            Toast.makeText(applicationContext, "Registration failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                            // Handle server errors
+                            val errorBody = response.errorBody()?.string()
+                            Toast.makeText(applicationContext, "Registration failed: $errorBody", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -272,6 +263,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun createSpacePreventionTextWatcher(textInputLayout: TextInputLayout): TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -300,7 +292,8 @@ class RegisterActivity : AppCompatActivity() {
             password.length < 8 -> {
                 tilPassword.error = "Must be at least 8 characters"
                 false
-            }password.length > 16 -> {
+            }
+            password.length > 16 -> {
                 tilPassword.error = "Password must not exceed 16 characters"
                 false
             }

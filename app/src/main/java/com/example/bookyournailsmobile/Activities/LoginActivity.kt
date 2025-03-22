@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.FragmentTransaction
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
@@ -29,6 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import eightbitlab.com.blurview.BlurView
 
+// Save user data to SharedPreferences
 fun Context.saveUserToPreferences(user: User) {
     val sharedPreferences = this.getSharedPreferences("UserPref", Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
@@ -58,25 +58,28 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        // Initialize SessionManagement
         sessionManagement = SessionManagement(this)
 
         val emailInputLayout = findViewById<TextInputLayout>(R.id.tl_email_login)
         val passwordInputLayout = findViewById<TextInputLayout>(R.id.tl_password)
         val loginButton = findViewById<Button>(R.id.btn_login)
         val signupBtn = findViewById<TextView>(R.id.tv_signup)
-        btnForgotPassword = findViewById(R.id.login_forgot_password) // Initialize btnForgotPassword
+        btnForgotPassword = findViewById(R.id.login_forgot_password)
 
+        // Navigate to RegisterActivity
         signupBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
+        // Navigate to ForgotPasswordActivity
         btnForgotPassword.setOnClickListener {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
-
         }
 
+        // Handle login button click
         loginButton.setOnClickListener {
             val email = emailInputLayout.editText?.text.toString().trim()
             val password = passwordInputLayout.editText?.text.toString().trim()
@@ -85,7 +88,8 @@ class LoginActivity : AppCompatActivity() {
                 showValidationPopup("Email and Password are required")
             } else {
                 val loginRequest = LoginRequest(email, password)
-                val call = RetrofitClient.instance.login(loginRequest)
+                val apiService = RetrofitClient.create(this) // Use the updated RetrofitClient
+                val call = apiService.login(loginRequest)
 
                 call.enqueue(object : Callback<LoginResponse> {
                     override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
@@ -93,8 +97,15 @@ class LoginActivity : AppCompatActivity() {
                             val loginResponse = response.body()
                             if (loginResponse != null && loginResponse.user != null) {
                                 val user = loginResponse.user
-                                sessionManagement.saveSession(user.getId() ?: "")
+                                val sessionToken = loginResponse.session_token // Get the session token
 
+                                Log.d("LoginActivity", "User ID: ${user.getId()}")
+                                Log.d("LoginActivity", "Session Token: $sessionToken")
+
+                                // Save the session token and user ID
+                                sessionManagement.saveSession(user.getId() ?: "", sessionToken)
+
+                                // Save user data to SharedPreferences
                                 saveUserToPreferences(user)
 
                                 Toast.makeText(
@@ -103,6 +114,7 @@ class LoginActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
+                                // Navigate to MainActivity
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 finish()
                             } else {
@@ -115,61 +127,52 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                         showValidationPopup("Error logging in. Please try again.")
+                        Log.e("LoginActivity", "Login failed: ${t.message}")
                     }
                 })
-
             }
         }
     }
 
+    // Set up the BlurView
     private fun setupBlurView() {
         val radius = 50f // Adjust the blur radius as needed
 
-        // Set up the BlurView
         blurView.setupWith(findViewById<ViewGroup>(R.id.main_content))
             .setFrameClearDrawable(window.decorView.background)
-//            .setBlurAlgorithm(RenderScriptBlur(this))
             .setBlurRadius(radius)
-//            .setHasFixedTransformationMatrix(true)
 
         // Initially hide the BlurView
         blurView.visibility = android.view.View.GONE
     }
 
+    // Show a validation popup with a message
     private fun showValidationPopup(message: String) {
-        // Show the blur effect
         blurView.visibility = android.view.View.VISIBLE
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.login_failed_popup, null)
 
-        // Define the width and height for the popup window
-        val width = resources.getDimensionPixelSize(R.dimen.popup_width) // Define this dimension in your dimens.xml
-        val height = resources.getDimensionPixelSize(R.dimen.popup_height) // Define this dimension in your dimens.xml
+        val width = resources.getDimensionPixelSize(R.dimen.popup_width)
+        val height = resources.getDimensionPixelSize(R.dimen.popup_height)
 
-        // Set up the popup window with specific width and height
         val popupWindow = PopupWindow(
             popupView,
-            width, // Use the defined width
-            height, // Use the defined height
+            width,
+            height,
             true
         )
 
-        // Prevent the popup from being dismissed when touching outside
         popupWindow.isOutsideTouchable = false
         popupWindow.isFocusable = true
         popupWindow.setOnDismissListener {
-            // Hide the blur effect when the popup is dismissed
             blurView.visibility = android.view.View.GONE
         }
 
-        // Set up the OK button to dismiss the popup
         val btnPopupOk = popupView.findViewById<Button>(R.id.btn_back_login)
         btnPopupOk.setOnClickListener {
-            // Hide the blur effect
             blurView.visibility = android.view.View.GONE
 
-            // Apply fade-out animation before dismissing the popup
             val fadeOut = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_out)
             popupView.startAnimation(fadeOut)
             fadeOut.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
@@ -181,34 +184,34 @@ class LoginActivity : AppCompatActivity() {
             })
         }
 
-        // Show the popup window
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
 
-        // Apply fade-in animation when the popup is shown
         val fadeIn = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_in)
         popupView.startAnimation(fadeIn)
     }
 
+    // Check if the user is already logged in
     override fun onStart() {
         super.onStart()
         checkSession()
     }
 
     private fun checkSession() {
-        val userID = sessionManagement.getSession()
+        val userID = sessionManagement.getUserId()
         if (userID != null) {
             moveToMainActivity()
         }
     }
 
+    // Navigate to MainActivity
     private fun moveToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 
+    // Make the activity full screen
     private fun makeFullScreen() {
-        // Set the window to full screen
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN

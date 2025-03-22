@@ -18,14 +18,15 @@ import com.vishnusivadas.advanced_httpurlconnection.PutData
 import com.example.bookyournailsmobile.NetUtils.Urls
 import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.TextInputEditText
 
 class ChangePasswordFragment : Fragment() {
 
-    private lateinit var newPasswordEditText: com.google.android.material.textfield.TextInputEditText
-    private lateinit var confirmPasswordEditText: com.google.android.material.textfield.TextInputEditText
+    private lateinit var newPasswordEditText: TextInputEditText
+    private lateinit var confirmPasswordEditText: TextInputEditText
     private lateinit var errorTextView: TextView
     private lateinit var updatePasswordButton: Button
-    private lateinit var etOldPassword: com.google.android.material.textfield.TextInputEditText
+    private lateinit var etOldPassword: TextInputEditText
     private lateinit var sessionManagement: SessionManagement
     private lateinit var oldPasswordLayout: TextInputLayout
     private lateinit var newPasswordLayout: TextInputLayout
@@ -49,6 +50,7 @@ class ChangePasswordFragment : Fragment() {
         oldPasswordLayout = view.findViewById(R.id.textInputLayout)
         newPasswordLayout = view.findViewById(R.id.textInputLayout2)
         confirmPasswordLayout = view.findViewById(R.id.textInputLayout3)
+
 
         // Initialize SessionManagement
         sessionManagement = SessionManagement(requireContext())
@@ -107,7 +109,7 @@ class ChangePasswordFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             // Retrieve user ID from SessionManagement
-            val userId = sessionManagement.getSession()
+            val userId = sessionManagement.getUserId()
 
             if (userId == null) {
                 Toast.makeText(requireContext(), "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show()
@@ -132,12 +134,12 @@ class ChangePasswordFragment : Fragment() {
                     activity?.runOnUiThread {
                         when (result) {
                             "Update Success" -> {
+                                // Clear the session and navigate to LoginActivity
                                 sessionManagement.clearSession()
                                 val intent = Intent(activity, LoginActivity::class.java)
                                 startActivity(intent)
                                 activity?.finish()
                                 Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
-                                // Navigate back or perform other actions
                             }
                             "Old password is incorrect" -> {
                                 Toast.makeText(requireContext(), "Old password is incorrect", Toast.LENGTH_SHORT).show()

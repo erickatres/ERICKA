@@ -180,6 +180,8 @@
                         android:layout_weight="1"
                         android:text="Regular Plain" />
 
+
+
                     <TextView
                         android:id="@+id/tvservicePrice"
                         style="@style/ValueStyle"

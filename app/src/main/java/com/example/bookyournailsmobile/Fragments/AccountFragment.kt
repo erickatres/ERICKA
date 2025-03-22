@@ -110,8 +110,8 @@ class AccountFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Retrieve the user ID from SharedPreferences
-            val userId = sessionManagement.getSession()
+            // Retrieve the user ID from SessionManagement
+            val userId = sessionManagement.getUserId()
             if (userId != null) {
                 // Update the database via API call
                 updateUserInDatabase(userId, updatedFirstname, updatedLastname, updatedEmail, updatedMobileNumber)
@@ -185,13 +185,13 @@ class AccountFragment : Fragment() {
                     val result = putData.result
                     if (result == "Update Success") {
                         // Update SharedPreferences with new data
-                        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                        val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
                         val editor = sharedPreferences.edit()
 
-                        if (firstname.isNotEmpty()) editor.putString("firstname", firstname)
-                        if (lastname.isNotEmpty()) editor.putString("lastname", lastname)
+                        if (firstname.isNotEmpty()) editor.putString("first_name", firstname)
+                        if (lastname.isNotEmpty()) editor.putString("last_name", lastname)
                         if (email.isNotEmpty()) editor.putString("email", email)
-                        if (mobileNumber.isNotEmpty()) editor.putString("mobileNumber", mobileNumber)
+                        if (mobileNumber.isNotEmpty()) editor.putString("phone", mobileNumber)
 
                         editor.apply()
 

@@ -1,4 +1,5 @@
 package com.example.bookyournailsmobile.Activities
+
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -43,21 +44,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Hide the system navigation bar
-
+        // Initialize SessionManagement
         sessionManagement = SessionManagement(this)
-        if (sessionManagement.getSession() == null) { // Check for null instead of -1
+
+        // Check if the user is logged in
+        if (sessionManagement.getUserId() == null) {
+            // Redirect to LoginActivity if not logged in
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
+            return
         }
 
+        // Initialize views and set up the UI
         initViews()
         setClickListeners()
 
+        // Handle fragment restoration on configuration changes
         if (savedInstanceState == null) {
+            // Load the HomeFragment by default
             switchTab(HomeFragment(), homeIcon, homeText, homeLayout)
         } else {
+            // Restore the current fragment
             currentFragmentTag = savedInstanceState.getString("CURRENT_FRAGMENT_TAG")
             supportFragmentManager.findFragmentByTag(currentFragmentTag)?.let {
                 showFragment(it)
@@ -88,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Hide the system navigation bar
     private fun hideSystemNavigationBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // For Android 11 and above
@@ -107,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    // Initialize views
     private fun initViews() {
         homeLayout = findViewById(R.id.home_layout)
         pricelistLayout = findViewById(R.id.pricelist_layout)
@@ -125,6 +134,7 @@ class MainActivity : AppCompatActivity() {
         profileText = findViewById(R.id.profile_txt)
     }
 
+    // Set click listeners for the bottom navigation tabs
     private fun setClickListeners() {
         val tabs = listOf(
             Triple(homeLayout, homeIcon, homeText),
@@ -139,6 +149,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Get the corresponding fragment for a tab
     private fun getFragmentForTab(id: Int): Fragment = when (id) {
         R.id.btn_pricelist -> PricelistFragment()
         R.id.btn_booking -> BookingFragment()
@@ -146,6 +157,7 @@ class MainActivity : AppCompatActivity() {
         else -> HomeFragment()
     }
 
+    // Switch to the selected tab and fragment
     private fun switchTab(
         fragment: Fragment,
         icon: ImageButton,
@@ -155,6 +167,7 @@ class MainActivity : AppCompatActivity() {
         val tag = fragment::class.java.simpleName
 
         if (tag == HomeFragment::class.java.simpleName) {
+            // Clear all fragments and load the HomeFragment
             val transaction = supportFragmentManager.beginTransaction()
             supportFragmentManager.fragments.forEach { transaction.remove(it) }
             transaction.replace(R.id.fragment_container, HomeFragment(), tag)
@@ -163,6 +176,7 @@ class MainActivity : AppCompatActivity() {
             setActiveTab(icon, text, layout)
             currentFragmentTag = tag
         } else {
+            // Load the selected fragment if it's not already loaded
             if (currentFragmentTag != tag) {
                 showFragment(fragment)
                 resetTabs()
@@ -172,6 +186,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Show the selected fragment
     private fun showFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         val tag = fragment::class.java.simpleName
@@ -185,6 +200,7 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
+    // Reset all tabs to their default state
     private fun resetTabs() {
         listOf(homeIcon, pricelistIcon, bookingIcon, profileIcon).forEach {
             it.setImageResource(getUnfilledIcon(it.id))
@@ -195,11 +211,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Set the active tab's icon and text color
     private fun setActiveTab(icon: ImageButton, text: TextView, layout: LinearLayout) {
         icon.setImageResource(getFilledIcon(icon.id))
         text.setTextColor(Color.parseColor("#2F7889"))
     }
 
+    // Get the unfilled icon resource for a tab
     private fun getUnfilledIcon(id: Int) = when (id) {
         R.id.btn_home -> R.drawable.home_without_fill
         R.id.btn_pricelist -> R.drawable.pricelist_without_fill
@@ -208,6 +226,7 @@ class MainActivity : AppCompatActivity() {
         else -> 0
     }
 
+    // Get the filled icon resource for a tab
     private fun getFilledIcon(id: Int) = when (id) {
         R.id.btn_home -> R.drawable.home_vector
         R.id.btn_pricelist -> R.drawable.pricelist_vector
@@ -216,6 +235,7 @@ class MainActivity : AppCompatActivity() {
         else -> 0
     }
 
+    // Save the current fragment tag on configuration changes
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("CURRENT_FRAGMENT_TAG", currentFragmentTag)
