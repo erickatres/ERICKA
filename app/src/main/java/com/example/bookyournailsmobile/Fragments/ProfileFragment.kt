@@ -1,6 +1,7 @@
 package com.example.bookyournailsmobile.Fragments
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,9 +48,11 @@ class ProfileFragment : Fragment() {
 
         // Logout Button
         val logoutButton = view.findViewById<TextView>(R.id.btn_logout)
+        logoutButton.paintFlags = logoutButton.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         logoutButton.setOnClickListener {
             showLogoutConfirmationDialog()
         }
+
 
         // Policies Button
         val policiesButton = view.findViewById<ImageView>(R.id.btnOurPolicies)
@@ -72,7 +75,7 @@ class ProfileFragment : Fragment() {
         // About Us Button
         val aboutUsButton = view.findViewById<ImageView>(R.id.btnAboutUs)
         aboutUsButton.setOnClickListener {
-            replaceFragment(AboutUsFragment())
+            replaceFragment(ContactUsFragment())
         }
 
         // FAQs Button

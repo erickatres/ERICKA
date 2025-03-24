@@ -195,7 +195,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="About Us"
+                    android:text="Contact Us"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -280,6 +280,7 @@
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:paintFlags="underline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnFAQS" />
             </LinearLayout>
