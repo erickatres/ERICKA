@@ -44,18 +44,37 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:padding="16dp">
 
-                <ImageView
-                    android:id="@+id/IVAvatar"
+                <!-- Avatar with Edit Icon -->
+                <FrameLayout
                     android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/circleimage"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/loopy_nailscape" />
+                    android:layout_height="120dp">
 
+                    <!-- Profile Image -->
+                    <ImageView
+                        android:id="@+id/IVAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/circleimage"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/loopy_nailscape" />
+
+                    <!-- Pencil Edit Icon -->
+                    <ImageView
+                        android:id="@+id/IVEditAvatar"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@drawable/editprofile"
+                        android:padding="4dp"/>
+                </FrameLayout>
+
+                <!-- User Info and Change Avatar Option -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -80,7 +99,12 @@
                         android:textColor="@color/black"
                         android:textSize="16sp" />
                 </LinearLayout>
+
             </LinearLayout>
+
+
+
+
 
             <View
                 android:layout_width="match_parent"
@@ -195,7 +219,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Contact Us"
+                    android:text="About Us"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -280,7 +304,6 @@
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:paintFlags="underline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnFAQS" />
             </LinearLayout>
