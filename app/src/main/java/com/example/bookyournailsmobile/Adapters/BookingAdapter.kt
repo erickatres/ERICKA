@@ -30,7 +30,7 @@ class BookingAdapter(
         if (booking?.status == "Completed") {
             rateButton.setImageResource(R.drawable.my_rating_button) // Update with your drawable
         } else {
-            rateButton.setImageResource(R.drawable.btn_Rate) // Use a default icon
+            rateButton.setImageResource(R.drawable.rate_button) // Use a default icon
         }
 
         return view

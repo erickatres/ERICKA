@@ -71,9 +71,11 @@ class BookingFragment : Fragment() {
                                 val bookings = bookingHistoryResponse.history.map { bookingHistory ->
                                     Booking(
                                         service_type = bookingHistory.service_type,
-                                        date_formatted = bookingHistory.date_formatted
+                                        date_formatted = bookingHistory.date_formatted,
+                                        status = bookingHistory.status // Pass the status here
                                     )
                                 }
+
 
                                 // Log the mapped bookings for debugging
                                 println("Mapped Bookings: $bookings")
