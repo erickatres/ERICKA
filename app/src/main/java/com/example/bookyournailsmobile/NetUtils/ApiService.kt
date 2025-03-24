@@ -7,11 +7,13 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiService {
     @POST("login2")
@@ -31,7 +33,7 @@ interface ApiService {
         @Part referenceImg: MultipartBody.Part
     ): Call<Void>
 
-    @POST("resetpassword") // Replace with your actual endpoint
+    @PUT("resetpassword") // Ensure this matches the backend route
     fun resetPassword(
         @HeaderMap headers: Map<String, String>,
         @Body resetPasswordRequest: ResetPasswordRequest
@@ -47,84 +49,93 @@ interface ApiService {
         @Body verifyResetCodeRequest: VerifyResetCodeRequest
     ): Call<VerifyResetCodeResponse>
 
-    @POST("verify_otp") // Replace with your actual endpoint
-    fun verifyOtp(@Body verifyOtpRequest: VerifyOtpRequest): Call<VerifyOtpResponse>
+    @GET("historylist/{user_id}")
+    fun getBookingHistoryByUserId(@Path("user_id") userId: String): Call<BookingHistoryResponse>
 
-    @FormUrlEncoded
-    @POST("verify_otp.php") // Replace with your actual endpoint
-    fun verifyOtp(
-        @Field("email") email: String,
-        @Field("otp") otp: String
-    ): Call<VerifyOtpResponse>
+    data class BookingRequest(
+        val user_id: String,
+        val service_type: String,
+        val status: String,
+        val reference_img: String,
+        val price: String,
+        val date: String,
+        val time: String
+    )
+
+    data class ForgotPasswordRequest(
+        val email: String
+    )
+
+    data class ForgotPasswordResponse(
+        val message: String,
+        val password_reset_token: String? = null // Optional, depending on your backend response
+    )
+
+    data class VerifyOtpRequest(
+        val email: String,
+        val otp: String,
+        val password_reset_token: String
+    )
+
+    data class VerifyOtpResponse(
+        val status: String,
+        val message: String
+    )
+
+    data class LoginResponse(
+        val message: String,
+        val session_token: String,
+        val user: User
+    )
+
+    data class LoginRequest(
+        val email: String,
+        val password: String
+    )
+
+    data class RegisterRequest(
+        val first_name: String,
+        val last_name: String,
+        val email: String,
+        val phone: String,
+        val password: String,
+        val confirm_password: String
+    )
+
+    data class VerifyResetCodeRequest(
+        val code: String
+    )
+
+    data class VerifyResetCodeResponse(
+        val message: String,
+        val code: String? = null // Optional, depending on your backend response
+    )
+
+    data class ResetPasswordRequest(
+        val password: String,          // Change from "new_password"
+        val confirm_password: String   // Change from "confirm_password"
+    )
+
+    data class ResetPasswordResponse(
+        val status: String,
+        val message: String
+    )
+
+    data class ChangePasswordResponse(
+        val status: String,
+        val message: String
+    )
+
+    data class BookingHistoryResponse(
+        val history: List<BookingHistory>, // Match the backend response
+        val count: Int // Optional, if you need the count
+    )
+
+    data class BookingHistory(
+        val service_type: String,
+        val date_formatted: String,
+        val date: String, // Optional, if needed
+        val status: String // Optional, if needed
+    )
+
 }
-
-data class BookingRequest(
-    val user_id: String,
-    val service_type: String,
-    val status: String,
-    val reference_img: String,
-    val price: String,
-    val date: String,
-    val time: String
-)
-
-data class ForgotPasswordRequest(
-    val email: String
-)
-
-data class ForgotPasswordResponse(
-    val message: String,
-    val password_reset_token: String? = null // Optional, depending on your backend response
-)
-data class VerifyOtpRequest(
-    val email: String,
-    val otp: String,
-    val password_reset_token: String
-)
-
-data class VerifyOtpResponse(
-    val status: String,
-    val message: String
-)
-
-data class LoginResponse(
-    val message: String,
-    val session_token: String,
-    val user: User
-)
-
-data class LoginRequest(
-    val email: String,
-    val password: String
-)
-data class RegisterRequest(
-    val first_name: String,
-    val last_name: String,
-    val email: String,
-    val phone: String,
-    val password: String,
-    val confirm_password: String
-)
-data class VerifyResetCodeRequest(
-    val code: String
-)
-
-data class VerifyResetCodeResponse(
-    val message: String,
-    val code: String? = null // Optional, depending on your backend response
-)
-data class ResetPasswordRequest(
-    val password: String,          // Change from "new_password"
-    val confirm_password: String   // Change from "confirm_password"
-)
-
-data class ResetPasswordResponse(
-    val status: String,
-    val message: String
-)
-
-data class ChangePasswordResponse(
-    val status: String,
-    val message: String
-)
-

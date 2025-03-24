@@ -15,9 +15,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bookyournailsmobile.Domain.User
+import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.R
-import com.example.bookyournailsmobile.NetUtils.RetrofitClient
-import com.example.bookyournailsmobile.NetUtils.RegisterRequest // Add this import
+import com.example.bookyournailsmobile.NetUtils.RetrofitClient // Add this import
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -98,7 +98,14 @@ class RegisterActivity : AppCompatActivity() {
             if (isFirstnameValid && isLastnameValid && isEmailValid && isMobileNumberValid && isPasswordValid && isConfirmPasswordValid) {
                 // Proceed with registration logic using Retrofit
                 val apiService = RetrofitClient.create(this) // Create Retrofit service
-                val registerRequest = RegisterRequest(firstname, lastname, email, phone, password, confirmPassword) // Create request object
+                val registerRequest = ApiService.RegisterRequest(
+                    firstname,
+                    lastname,
+                    email,
+                    phone,
+                    password,
+                    confirmPassword
+                ) // Create request object
 
                 // Make the Retrofit call
                 val call = apiService.register(registerRequest)

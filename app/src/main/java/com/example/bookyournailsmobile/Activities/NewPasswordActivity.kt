@@ -7,10 +7,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.bookyournailsmobile.NetUtils.ApiService
-import com.example.bookyournailsmobile.NetUtils.ResetPasswordRequest
-import com.example.bookyournailsmobile.NetUtils.ResetPasswordResponse
-import com.example.bookyournailsmobile.NetUtils.RetrofitClient
+import com.example.bookyournailsmobile.NetUtils.*
 import com.example.bookyournailsmobile.R
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -19,7 +16,6 @@ import retrofit2.Response
 
 class NewPasswordActivity : AppCompatActivity() {
 
-    // Declare UI elements
     private lateinit var btnBack: FrameLayout
     private lateinit var etNewPassword: TextInputEditText
     private lateinit var etConfirmPassword: TextInputEditText
@@ -30,21 +26,17 @@ class NewPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_password) // Ensure correct layout file
+        setContentView(R.layout.activity_new_password)
 
-        // Initialize views
         etNewPassword = findViewById(R.id.etnewpass)
         etConfirmPassword = findViewById(R.id.etConfirm)
         btnResetPassword = findViewById(R.id.btnContinue)
         btnBack = findViewById(R.id.btnBack)
 
-        // Initialize Retrofit API Service
         apiService = RetrofitClient.create(this)
 
-        // Get password reset token from Intent
         passwordResetToken = intent.getStringExtra("PASSWORD_RESET_TOKEN")
 
-        // Check if token is missing
         if (passwordResetToken.isNullOrEmpty()) {
             showToast("Error: Invalid reset token")
             finish()
@@ -53,12 +45,10 @@ class NewPasswordActivity : AppCompatActivity() {
 
         Log.d("ResetPassword", "Token Received: $passwordResetToken")
 
-        // Reset password button click listener
         btnResetPassword.setOnClickListener {
             resetPassword()
         }
 
-        // Back button listener
         btnBack.setOnClickListener {
             onBackPressed()
         }
@@ -68,24 +58,32 @@ class NewPasswordActivity : AppCompatActivity() {
         val newPassword = etNewPassword.text.toString().trim()
         val confirmPassword = etConfirmPassword.text.toString().trim()
 
-        // Validate input fields
         if (!validatePassword(newPassword, confirmPassword)) return
 
-        val resetPasswordRequest = ResetPasswordRequest(newPassword, confirmPassword)
+        val resetPasswordRequest = ApiService.ResetPasswordRequest(newPassword, confirmPassword)
 
-        val headers = mapOf("Authorization" to "Bearer $passwordResetToken")
+        val headers = mutableMapOf<String, String>()
+        headers["Authorization"] = "Bearer $passwordResetToken"
+        headers["Content-Type"] = "application/json"
 
         Log.d("ResetPassword", "Sending Request: $resetPasswordRequest")
+        Log.d("ResetPassword", "Headers: $headers")
 
-        apiService.resetPassword(headers, resetPasswordRequest).enqueue(object : Callback<ResetPasswordResponse> {
-            override fun onResponse(call: Call<ResetPasswordResponse>, response: Response<ResetPasswordResponse>) {
+        apiService.resetPassword(headers, resetPasswordRequest).enqueue(object : Callback<ApiService.ResetPasswordResponse> {
+            override fun onResponse(call: Call<ApiService.ResetPasswordResponse>, response: Response<ApiService.ResetPasswordResponse>) {
+                Log.d("ResetPassword", "Response Code: ${response.code()}")
+
                 if (response.isSuccessful) {
                     val resetPasswordResponse = response.body()
+                    Log.d("ResetPassword", "Response Body: $resetPasswordResponse")
+
                     if (resetPasswordResponse?.status == "success") {
                         showToast("Password changed successfully!")
+                        Log.d("ResetPassword", "Navigating to LoginActivity...")
                         navigateToLogin()
                     } else {
                         showToast(resetPasswordResponse?.message ?: "Failed to reset password")
+                        Log.e("ResetPassword", "Error: ${resetPasswordResponse?.message}")
                     }
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Unknown error"
@@ -94,12 +92,13 @@ class NewPasswordActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<ResetPasswordResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiService.ResetPasswordResponse>, t: Throwable) {
                 showToast("Network error: ${t.message}")
-                Log.e("ResetPassword", "Network Failure: ${t.message}")
+                Log.e("ResetPassword", "Network Failure", t)
             }
         })
     }
+
 
     private fun validatePassword(password: String, confirmPassword: String): Boolean {
         if (password.length < 8) {
@@ -126,6 +125,7 @@ class NewPasswordActivity : AppCompatActivity() {
     }
 
     private fun navigateToLogin() {
+        Log.d("ResetPassword", "Starting LoginActivity...")
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

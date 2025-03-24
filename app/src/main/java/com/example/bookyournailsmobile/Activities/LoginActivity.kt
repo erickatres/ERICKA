@@ -18,8 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
-import com.example.bookyournailsmobile.NetUtils.LoginRequest
-import com.example.bookyournailsmobile.NetUtils.LoginResponse
+import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -35,6 +34,14 @@ fun Context.saveUserToPreferences(user: User) {
     val gson = Gson()
     val userJson = gson.toJson(user)
     editor.putString("user_data", userJson)
+    editor.apply()
+}
+
+// Save user ID to SharedPreferences
+fun Context.saveUserIdToPreferences(userId: String) {
+    val sharedPreferences = this.getSharedPreferences("user_session", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.putString("user_id", userId)
     editor.apply()
 }
 
@@ -87,25 +94,26 @@ class LoginActivity : AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 showValidationPopup("Email and Password are required")
             } else {
-                val loginRequest = LoginRequest(email, password)
-                val apiService = RetrofitClient.create(this) // Use the updated RetrofitClient
+                val loginRequest = ApiService.LoginRequest(email, password)
+                val apiService = RetrofitClient.create(this)
                 val call = apiService.login(loginRequest)
 
-                call.enqueue(object : Callback<LoginResponse> {
-                    override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                call.enqueue(object : Callback<ApiService.LoginResponse> {
+                    override fun onResponse(call: Call<ApiService.LoginResponse>, response: Response<ApiService.LoginResponse>) {
                         if (response.isSuccessful) {
                             val loginResponse = response.body()
                             if (loginResponse != null && loginResponse.user != null) {
                                 val user = loginResponse.user
-                                val sessionToken = loginResponse.session_token // Get the session token
+                                val sessionToken = loginResponse.session_token
 
                                 Log.d("LoginActivity", "User ID: ${user.getId()}")
                                 Log.d("LoginActivity", "Session Token: $sessionToken")
 
-                                // Save the session token and user ID
+                                // Save the session token and user ID using SessionManagement
                                 sessionManagement.saveSession(user.getId() ?: "", sessionToken)
+                                Log.d("LoginActivity", "User ID saved: ${user.getId()}")
 
-                                // Save user data to SharedPreferences
+                                // Save user data to SharedPreferences (if needed)
                                 saveUserToPreferences(user)
 
                                 Toast.makeText(
@@ -125,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<ApiService.LoginResponse>, t: Throwable) {
                         showValidationPopup("Error logging in. Please try again.")
                         Log.e("LoginActivity", "Login failed: ${t.message}")
                     }

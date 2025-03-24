@@ -9,9 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.R
-import com.example.bookyournailsmobile.NetUtils.ForgotPasswordRequest
-import com.example.bookyournailsmobile.NetUtils.ForgotPasswordResponse
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.TextInputEditText
@@ -83,14 +82,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     private fun sendOtpToEmail(email: String) {
         // Create the request body
-        val forgotPasswordRequest = ForgotPasswordRequest(email)
+        val forgotPasswordRequest = ApiService.ForgotPasswordRequest(email)
 
         // Get the Retrofit instance
         val apiService = RetrofitClient.create(this)
 
         // Make the API call
-        apiService.forgotPassword(forgotPasswordRequest).enqueue(object : Callback<ForgotPasswordResponse> {
-            override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
+        apiService.forgotPassword(forgotPasswordRequest).enqueue(object : Callback<ApiService.ForgotPasswordResponse> {
+            override fun onResponse(call: Call<ApiService.ForgotPasswordResponse>, response: Response<ApiService.ForgotPasswordResponse>) {
                 if (response.isSuccessful) {
                     val forgotPasswordResponse = response.body()
                     if (forgotPasswordResponse != null) {
@@ -118,7 +117,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiService.ForgotPasswordResponse>, t: Throwable) {
                 // Handle network failure
                 Toast.makeText(this@ForgotPasswordActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }

@@ -12,11 +12,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bookyournailsmobile.NetUtils.ApiService
-import com.example.bookyournailsmobile.NetUtils.ForgotPasswordRequest
-import com.example.bookyournailsmobile.NetUtils.ForgotPasswordResponse
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
-import com.example.bookyournailsmobile.NetUtils.VerifyResetCodeRequest
-import com.example.bookyournailsmobile.NetUtils.VerifyResetCodeResponse
 import com.example.bookyournailsmobile.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -113,14 +109,14 @@ class ForgotPassword2Activity : AppCompatActivity() {
     }
 
     private fun verifyResetCode(passwordResetToken: String, code: String) {
-        val verifyResetCodeRequest = VerifyResetCodeRequest(code)
+        val verifyResetCodeRequest = ApiService.VerifyResetCodeRequest(code)
 
         // Add the passwordResetToken to the headers
         val headers = HashMap<String, String>()
         headers["Authorization"] = passwordResetToken
 
-        apiService.verifyResetCode(headers, verifyResetCodeRequest).enqueue(object : Callback<VerifyResetCodeResponse> {
-            override fun onResponse(call: Call<VerifyResetCodeResponse>, response: Response<VerifyResetCodeResponse>) {
+        apiService.verifyResetCode(headers, verifyResetCodeRequest).enqueue(object : Callback<ApiService.VerifyResetCodeResponse> {
+            override fun onResponse(call: Call<ApiService.VerifyResetCodeResponse>, response: Response<ApiService.VerifyResetCodeResponse>) {
                 if (response.isSuccessful) {
                     val verifyResetCodeResponse = response.body()
                     if (verifyResetCodeResponse != null) {
@@ -145,7 +141,7 @@ class ForgotPassword2Activity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<VerifyResetCodeResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiService.VerifyResetCodeResponse>, t: Throwable) {
                 // Handle network error
                 Toast.makeText(this@ForgotPassword2Activity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
@@ -160,10 +156,10 @@ class ForgotPassword2Activity : AppCompatActivity() {
     }
 
     private fun resendOtp(email: String) {
-        val forgotPasswordRequest = ForgotPasswordRequest(email)
+        val forgotPasswordRequest = ApiService.ForgotPasswordRequest(email)
 
-        apiService.forgotPassword(forgotPasswordRequest).enqueue(object : Callback<ForgotPasswordResponse> {
-            override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
+        apiService.forgotPassword(forgotPasswordRequest).enqueue(object : Callback<ApiService.ForgotPasswordResponse> {
+            override fun onResponse(call: Call<ApiService.ForgotPasswordResponse>, response: Response<ApiService.ForgotPasswordResponse>) {
                 if (response.isSuccessful) {
                     val forgotPasswordResponse = response.body()
                     if (forgotPasswordResponse != null) {
@@ -182,7 +178,7 @@ class ForgotPassword2Activity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ApiService.ForgotPasswordResponse>, t: Throwable) {
                 Toast.makeText(this@ForgotPassword2Activity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
