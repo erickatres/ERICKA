@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.Models.TimeAvailabilityResponse
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.NetUtils.ApiService
@@ -173,6 +174,11 @@ class BookingSelectTimeFragment : Fragment() {
             else -> R.drawable.ic_time_notavailable_9am
         }
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
+    }
+
 
     private fun handleContinueButtonClick() {
         selectedTime?.let {

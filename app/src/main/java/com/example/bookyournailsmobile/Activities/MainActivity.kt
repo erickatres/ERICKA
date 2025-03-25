@@ -12,10 +12,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Fragments.AppointmentFragment
+import com.example.bookyournailsmobile.Fragments.BookingAttachImageFragment
 import com.example.bookyournailsmobile.Fragments.BookingFragment
+import com.example.bookyournailsmobile.Fragments.BookingSelectTimeFragment
 import com.example.bookyournailsmobile.Fragments.HomeFragment
 import com.example.bookyournailsmobile.Fragments.PricelistFragment
 import com.example.bookyournailsmobile.Fragments.ProfileFragment
+import com.example.bookyournailsmobile.Fragments.SummaryRegularPlainFragment
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
 
@@ -185,6 +189,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    fun setBottomNavVisibility(isVisible: Boolean) {
+        val bottomNav = findViewById<LinearLayout>(R.id.bottom_navigation_container) // Replace with actual bottom nav ID
+        bottomNav.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
 
     // Show the selected fragment
     private fun showFragment(fragment: Fragment) {
@@ -198,7 +207,14 @@ class MainActivity : AppCompatActivity() {
         } ?: transaction.add(R.id.fragment_container, fragment, tag)
 
         transaction.commit()
+
+        // Hide bottom navigation if AppointmentFragment is active
+        setBottomNavVisibility(fragment !is AppointmentFragment)
+        setBottomNavVisibility(fragment !is BookingSelectTimeFragment)
+        setBottomNavVisibility(fragment !is BookingAttachImageFragment)
+        setBottomNavVisibility(fragment !is SummaryRegularPlainFragment)
     }
+
 
     // Reset all tabs to their default state
     private fun resetTabs() {

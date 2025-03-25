@@ -1,5 +1,6 @@
 package com.example.bookyournailsmobile.Fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.R
 
 class BookingAttachImageFragment : Fragment() {
@@ -21,6 +23,7 @@ class BookingAttachImageFragment : Fragment() {
     private lateinit var subtitleTextView: TextView
     private lateinit var uploadImageView: ImageView
     private lateinit var continueBookingButton: Button
+    private lateinit var btnSelectImage: TextView // Fixed variable name
 
     private var serviceType: String? = null
     private var selectedTime: String? = null
@@ -38,20 +41,6 @@ class BookingAttachImageFragment : Fragment() {
         )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val displayMetrics = resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val imageSize = (screenWidth * 0.5).toInt()
-        val layoutParams = uploadImageView.layoutParams
-        layoutParams.width = imageSize
-        layoutParams.height = imageSize
-        uploadImageView.layoutParams = layoutParams
-
-        continueBookingButton.isEnabled = true
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,8 +51,12 @@ class BookingAttachImageFragment : Fragment() {
         subtitleTextView = view.findViewById(R.id.subtitle)
         uploadImageView = view.findViewById(R.id.upload_image)
         continueBookingButton = view.findViewById(R.id.continueBooking)
+        btnSelectImage = view.findViewById(R.id.btnSelectImage) // Fixed incorrect variable name
 
         uploadImageView.setOnClickListener {
+            openGallery()
+        }
+        btnSelectImage.setOnClickListener {
             openGallery()
         }
 
@@ -82,20 +75,37 @@ class BookingAttachImageFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == android.app.Activity.RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.data
             if (selectedImageUri != null) {
                 uploadImageView.setImageURI(selectedImageUri)
                 Toast.makeText(requireContext(), "Image selected successfully!", Toast.LENGTH_SHORT).show()
+
+                // Enable the button
                 continueBookingButton.isEnabled = true
+
+                // Change background to PNG
+                continueBookingButton.setBackgroundResource(R.drawable.continue_filled)
+
+                // Force redraw
+                continueBookingButton.invalidate()
+                continueBookingButton.requestLayout()
+
+                btnSelectImage.text = "Change Attachment"
             } else {
                 Toast.makeText(requireContext(), "Failed to load image!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
+    }
+
     private fun handleContinueButtonClick() {
-        if (uploadImageView.drawable != null) {
+        if (selectedImageUri != null) {
             Toast.makeText(requireContext(), "Proceeding to the next step...", Toast.LENGTH_SHORT).show()
             Log.d("BookingAttachImageFragment", "Proceeding with service: $serviceType, time: $selectedTime")
             navigateToSummaryRegularPlainFragment()

@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
@@ -125,6 +126,12 @@ class SummaryRegularPlainFragment : Fragment() {
 
         // Commit the transaction
         transaction.commit()
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        (activity as? MainActivity)?.setBottomNavVisibility(true) // Show bottom nav again when leaving
     }
 
     private fun uploadBookingToServer(user: User) {
