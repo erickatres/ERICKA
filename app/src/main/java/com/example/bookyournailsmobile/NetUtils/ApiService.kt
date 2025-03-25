@@ -1,6 +1,7 @@
 package com.example.bookyournailsmobile.NetUtils
 
 import com.example.bookyournailsmobile.Domain.User
+import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -32,6 +33,13 @@ interface ApiService {
         @Part("price") price: RequestBody,
         @Part referenceImg: MultipartBody.Part
     ): Call<Void>
+
+    @FormUrlEncoded
+    @POST("checkTimeAvailability") // This should match your backend endpoint
+    fun checkTimeAvailability(
+        @Field("date") date: String,
+        @Field("time") time: String
+    ): Call<TimeAvailabilityResponse>
 
     @PUT("resetpassword") // Ensure this matches the backend route
     fun resetPassword(
@@ -136,6 +144,11 @@ interface ApiService {
         val date_formatted: String,
         val date: String, // Optional, if needed
         val status: String // Optional, if needed
+    )
+    // Add this class to your models
+    data class TimeAvailabilityResponse(
+        @SerializedName("isAvailable") val isAvailable: Boolean,
+        @SerializedName("message") val message: String? = null
     )
 
 }

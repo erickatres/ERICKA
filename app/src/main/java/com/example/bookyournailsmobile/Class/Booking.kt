@@ -5,3 +5,7 @@ data class Booking(
     val date_formatted: String,
     val status: String // Add this field
 )
+data class TimeAvailabilityResponse(
+    val isAvailable: Boolean,
+    val message: String? = null
+)

@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.R
-import com.example.bookyournailsmobile.NetUtils.RetrofitClient // Add this import
+import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,12 +50,61 @@ class RegisterActivity : AppCompatActivity() {
         tilPassword.errorIconDrawable = null
         tilConfirmPassword.errorIconDrawable = null
 
+        // Set mobile number prefix to +63
+        tilMobileNumber.editText?.setText("+63")
+        // Set selection to end to allow user to continue typing
+        tilMobileNumber.editText?.setSelection(tilMobileNumber.editText?.text?.length ?: 0)
+
         val registerBtn = findViewById<Button>(R.id.button_signup)
         val loginBack = findViewById<TextView>(R.id.tv_loginback)
 
         loginBack.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
+
+        // Add space prevention text watchers to all fields
+        tilFirstname.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilFirstname))
+        tilLastname.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilLastname))
+        tilEmail.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilEmail))
+        tilMobileNumber.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilMobileNumber))
+        tilPassword.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilPassword))
+        tilConfirmPassword.editText?.addTextChangedListener(createSpacePreventionTextWatcher(tilConfirmPassword))
+        tilMobileNumber.editText?.setText("+63")
+        // Set selection to end to allow user to continue typing
+        tilMobileNumber.editText?.setSelection(tilMobileNumber.editText?.text?.length ?: 0)
+        tilMobileNumber.editText?.addTextChangedListener(object : TextWatcher {
+            private var isFormatting = false
+            private val prefix = "+63 "
+            private val prefixLength = prefix.length
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isFormatting || s == null) return
+
+                val currentText = s.toString()
+
+                // Prevent backspace from deleting the prefix
+                if (currentText.length < prefixLength) {
+                    isFormatting = true
+                    tilMobileNumber.editText?.setText(prefix)
+                    tilMobileNumber.editText?.setSelection(prefixLength)
+                    isFormatting = false
+                    return
+                }
+
+                // Ensure prefix is always there
+                if (!currentText.startsWith(prefix)) {
+                    isFormatting = true
+                    tilMobileNumber.editText?.setText(prefix + currentText.replace(" ", "").removePrefix("+63"))
+                    tilMobileNumber.editText?.setSelection(tilMobileNumber.editText!!.text.length)
+                    isFormatting = false
+                }
+            }
+        })
+
 
         // Real-time validation listeners for EditText inside TextInputLayout
         tilFirstname.editText?.addTextChangedListener(createTextWatcher { validateFirstname(it, tilFirstname) })
@@ -134,7 +183,7 @@ class RegisterActivity : AppCompatActivity() {
                 if (firstname.isEmpty()) tilFirstname.error = "First name is required"
                 if (lastname.isEmpty()) tilLastname.error = "Last name is required"
                 if (email.isEmpty()) tilEmail.error = "Email is required"
-                if (phone.isEmpty()) tilMobileNumber.error = "Mobile number is required"
+                if (phone.isEmpty() || phone == "+63") tilMobileNumber.error = "Mobile number is required"
                 if (password.isEmpty()) tilPassword.error = "Password is required"
                 if (confirmPassword.isEmpty()) tilConfirmPassword.error = "Confirm password is required"
             }
@@ -200,6 +249,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+
     // TextWatcher for real-time validation
     private fun createTextWatcher(validator: (String) -> Boolean): TextWatcher {
         return object : TextWatcher {
@@ -249,19 +299,23 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    // Mobile number validation
+    // Mobile number validation - updated for +63 format
     private fun validateMobileNumber(mobileNumber: String, tilMobileNumber: TextInputLayout): Boolean {
         return when {
-            mobileNumber.isEmpty() -> {
+            mobileNumber.isEmpty() || mobileNumber == "+63 " -> {
                 tilMobileNumber.error = "Mobile number is required"
                 false
             }
-            !mobileNumber.startsWith("09") -> {
-                tilMobileNumber.error = "Mobile number must start with 09"
+            !mobileNumber.startsWith("+63 ") -> {
+                tilMobileNumber.error = "Mobile number must start with +63 "
                 false
             }
-            mobileNumber.length != 11 -> {
-                tilMobileNumber.error = "Mobile number must be 11 digits"
+            mobileNumber.length != 14 -> { // +63 + space + 10 digits
+                tilMobileNumber.error = "Please enter 10 digits after +63 "
+                false
+            }
+            !mobileNumber.substring(4).matches(Regex("\\d{10}")) -> {
+                tilMobileNumber.error = "Must contain only digits after +63 "
                 false
             }
             else -> {
@@ -270,7 +324,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
-
+    // Space prevention TextWatcher
     private fun createSpacePreventionTextWatcher(textInputLayout: TextInputLayout): TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -279,6 +333,15 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 val text = s?.toString() ?: ""
+
+                // For mobile number field, don't allow modifying the +63 prefix
+                if (textInputLayout.id == R.id.tl_mobilenumber) {
+                    if (!text.startsWith("+63")) {
+                        textInputLayout.editText?.setText("+63")
+                        textInputLayout.editText?.setSelection(3)
+                        return
+                    }
+                }
 
                 // Prevent spaces when the field is empty
                 if (text.isNotEmpty() && text.trim().isEmpty()) {
