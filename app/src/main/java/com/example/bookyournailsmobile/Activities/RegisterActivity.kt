@@ -72,38 +72,53 @@ class RegisterActivity : AppCompatActivity() {
         tilMobileNumber.editText?.setText("+63")
         // Set selection to end to allow user to continue typing
         tilMobileNumber.editText?.setSelection(tilMobileNumber.editText?.text?.length ?: 0)
-        tilMobileNumber.editText?.addTextChangedListener(object : TextWatcher {
-            private var isFormatting = false
-            private val prefix = "+63 "
-            private val prefixLength = prefix.length
+        tilMobileNumber.editText?.apply {
+            setText("+63 ")
+            setSelection(text?.length ?: 0)
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            addTextChangedListener(object : TextWatcher {
+                private var isFormatting = false
+                private val prefix = "+63 "
+                private val prefixLength = prefix.length
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun afterTextChanged(s: Editable?) {
-                if (isFormatting || s == null) return
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
-                val currentText = s.toString()
+                override fun afterTextChanged(s: Editable?) {
+                    if (isFormatting || s == null) return
 
-                // Prevent backspace from deleting the prefix
-                if (currentText.length < prefixLength) {
-                    isFormatting = true
-                    tilMobileNumber.editText?.setText(prefix)
-                    tilMobileNumber.editText?.setSelection(prefixLength)
-                    isFormatting = false
-                    return
+                    val currentText = s.toString()
+
+                    // Prevent deletion of the prefix
+                    if (currentText.length < prefixLength) {
+                        isFormatting = true
+                        setText(prefix)
+                        setSelection(prefixLength)
+                        isFormatting = false
+                        return
+                    }
+
+                    // Ensure prefix is always there
+                    if (!currentText.startsWith(prefix)) {
+                        isFormatting = true
+                        setText(prefix + currentText.replace(" ", "").removePrefix("+63"))
+                        setSelection(text!!.length)
+                        isFormatting = false
+                        return
+                    }
+
+                    // Restrict total length to 13 characters (+63 + space + 10 digits)
+                    val numberOnly = currentText.removePrefix(prefix).replace(" ", "")
+                    if (numberOnly.length > 10) {
+                        isFormatting = true
+                        setText(prefix + numberOnly.substring(0, 10))
+                        setSelection(text!!.length)
+                        isFormatting = false
+                    }
                 }
-
-                // Ensure prefix is always there
-                if (!currentText.startsWith(prefix)) {
-                    isFormatting = true
-                    tilMobileNumber.editText?.setText(prefix + currentText.replace(" ", "").removePrefix("+63"))
-                    tilMobileNumber.editText?.setSelection(tilMobileNumber.editText!!.text.length)
-                    isFormatting = false
-                }
-            }
-        })
+            })
+        }
 
 
         // Real-time validation listeners for EditText inside TextInputLayout
@@ -301,21 +316,27 @@ class RegisterActivity : AppCompatActivity() {
 
     // Mobile number validation - updated for +63 format
     private fun validateMobileNumber(mobileNumber: String, tilMobileNumber: TextInputLayout): Boolean {
+        val numberOnly = mobileNumber.removePrefix("+63 ").trim()
+
         return when {
+            !numberOnly.startsWith("9") -> {  // Now we only validate, NOT force "9"
+                tilMobileNumber.error = "Mobile number must start with 9"
+                false
+            }
             mobileNumber.isEmpty() || mobileNumber == "+63 " -> {
                 tilMobileNumber.error = "Mobile number is required"
                 false
             }
-            !mobileNumber.startsWith("+63 ") -> {
-                tilMobileNumber.error = "Mobile number must start with +63 "
+            numberOnly.isEmpty() -> {
+                tilMobileNumber.error = "Please enter your mobile number"
                 false
             }
-            mobileNumber.length != 14 -> { // +63 + space + 10 digits
-                tilMobileNumber.error = "Please enter 10 digits after +63 "
+            numberOnly.length != 10 -> {
+                tilMobileNumber.error = "Mobile number must be exactly 13 digits"
                 false
             }
-            !mobileNumber.substring(4).matches(Regex("\\d{10}")) -> {
-                tilMobileNumber.error = "Must contain only digits after +63 "
+            !numberOnly.matches(Regex("\\d{10}")) -> {
+                tilMobileNumber.error = "Must contain only numbers"
                 false
             }
             else -> {
@@ -324,6 +345,8 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+
+
     // Space prevention TextWatcher
     private fun createSpacePreventionTextWatcher(textInputLayout: TextInputLayout): TextWatcher {
         return object : TextWatcher {
