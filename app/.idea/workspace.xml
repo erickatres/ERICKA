@@ -5,21 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c856fd44-8516-43b2-8d44-b0a967126afe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/AddOnsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/AddOnsFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/BookingFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/BookingFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/GelPolishFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/GelPolishFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/PricelistFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/PricelistFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/RegularFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/RegularFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/RemovalFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/RemovalFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/book_your_nails/SoftGelExtensionFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/book_your_nails/SoftGelExtensionFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_booking.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_booking.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_pricelist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_pricelist.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,9 +22,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2spjIlhYr7HBVT7RicCcpnhe0GB" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -48,7 +38,7 @@
     "android.gradle.sync.needed": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "Ericka1",
+    "git-widget-placeholder": "framework-testing2",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/erick/Desktop/BookYourNails/BookYourNailsAndroid"
   }

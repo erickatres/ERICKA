@@ -128,6 +128,11 @@ class SummaryRegularPlainFragment : Fragment() {
         transaction.commit()
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
+    }
+
 
     override fun onPause() {
         super.onPause()

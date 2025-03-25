@@ -5,7 +5,7 @@
     android:layout_height="70dp"
     android:orientation="vertical">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_Rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="15dp"
-        app:srcCompat="@drawable/rate_button" />
+        android:background="@drawable/rate_button" />
 
     <TextView
         android:id="@+id/service_type"

@@ -19,6 +19,7 @@ import com.example.bookyournailsmobile.Fragments.BookingSelectTimeFragment
 import com.example.bookyournailsmobile.Fragments.HomeFragment
 import com.example.bookyournailsmobile.Fragments.PricelistFragment
 import com.example.bookyournailsmobile.Fragments.ProfileFragment
+import com.example.bookyournailsmobile.Fragments.ReviewFormFragment
 import com.example.bookyournailsmobile.Fragments.SummaryRegularPlainFragment
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
@@ -213,6 +214,7 @@ class MainActivity : AppCompatActivity() {
         setBottomNavVisibility(fragment !is BookingSelectTimeFragment)
         setBottomNavVisibility(fragment !is BookingAttachImageFragment)
         setBottomNavVisibility(fragment !is SummaryRegularPlainFragment)
+        setBottomNavVisibility(fragment !is ReviewFormFragment)
     }
 
 
