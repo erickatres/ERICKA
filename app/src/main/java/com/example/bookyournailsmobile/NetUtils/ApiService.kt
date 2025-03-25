@@ -35,6 +35,17 @@ interface ApiService {
         @Part referenceImg: MultipartBody.Part
     ): Call<Void>
 
+    @FormUrlEncoded
+    @POST("newbooking") // Replace with your actual endpoint for bookings without an image
+    fun createBookingWithoutImage(
+        @Field("user_id") userId: String,
+        @Field("service_type") serviceType: String,
+        @Field("date") date: String,
+        @Field("time") time: String,
+        @Field("price") price: String
+    ): Call<Void>
+
+
     @POST("isTimeAlreadyBookedMobile")
     fun checkTimeAvailability(@Body request: TimeAvailabilityRequest): Call<TimeAvailabilityResponse>
 
@@ -126,10 +137,6 @@ interface ApiService {
         val message: String
     )
 
-    data class ChangePasswordResponse(
-        val status: String,
-        val message: String
-    )
 
     data class BookingHistoryResponse(
         val history: List<BookingHistory>, // Match the backend response

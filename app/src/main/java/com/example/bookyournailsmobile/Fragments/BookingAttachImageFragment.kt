@@ -34,12 +34,11 @@ class BookingAttachImageFragment : Fragment() {
         super.onCreate(savedInstanceState)
         serviceType = arguments?.getString("SERVICE_TYPE")
         selectedTime = arguments?.getString("SELECTED_TIME")
-        servicePrice = getServicePrice(serviceType)
-        Log.d(
-            "BookingAttachImageFragment",
-            "Service Type: $serviceType, Selected Time: $selectedTime, Service Price: $servicePrice"
+        servicePrice = arguments?.getString("SERVICE_PRICE") ?: getServicePrice(serviceType) // Use the passed price if available
+        Log.d("BookingAttachImageFragment", "Service Type: $serviceType, Selected Time: $selectedTime, Service Price: $servicePrice"
         )
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

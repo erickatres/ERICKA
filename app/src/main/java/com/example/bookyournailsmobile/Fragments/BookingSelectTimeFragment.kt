@@ -182,16 +182,58 @@ class BookingSelectTimeFragment : Fragment() {
 
     private fun handleContinueButtonClick() {
         selectedTime?.let {
-            navigateToBookingAttachImageFragment()
+            if (serviceType == "Removal") {
+                navigateToSummaryRegularPlainFragment()
+            } else {
+                navigateToBookingAttachImageFragment()
+            }
         } ?: showToast("Please select an available time")
     }
 
+    private fun getServicePrice(serviceType: String?): String {
+        return when (serviceType) {
+            "Regular Plain" -> "₱450"
+            "Gel Polish" -> "₱650"
+            "Removal" -> "₱250"
+            "Soft Gel X" -> "₱950"
+            else -> "null"
+        }
+    }
+
+    private fun navigateToSummaryRegularPlainFragment() {
+        val time = selectedTime ?: return
+        val price = getServicePrice(serviceType) // Get the service price
+
+        val fragment = SummaryRegularPlainFragment() // Replace with the actual constructor if needed
+        fragment.arguments = Bundle().apply {
+            putString("SELECTED_DATE", selectedDate)
+            putString("SERVICE_TYPE", serviceType)
+            putString("SELECTED_TIME", time)
+            putString("SERVICE_PRICE", price)
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+
+
     private fun navigateToBookingAttachImageFragment() {
         val time = selectedTime ?: return
+        val price = getServicePrice(serviceType) // Get the service price
+
         val fragment = BookingAttachImageFragment.newInstance(serviceType ?: "Unknown", time)
         fragment.arguments?.putString("SELECTED_DATE", selectedDate)
-        parentFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+        fragment.arguments?.putString("SERVICE_PRICE", price) // Pass service price to the next fragment
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
+
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
