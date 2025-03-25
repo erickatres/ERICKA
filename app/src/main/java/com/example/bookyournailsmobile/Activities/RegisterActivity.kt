@@ -320,7 +320,7 @@ class RegisterActivity : AppCompatActivity() {
 
         return when {
             !numberOnly.startsWith("9") -> {  // Now we only validate, NOT force "9"
-                tilMobileNumber.error = "Mobile number must start with 9"
+                tilMobileNumber.error = "Enter number with the country code"
                 false
             }
             mobileNumber.isEmpty() || mobileNumber == "+63 " -> {

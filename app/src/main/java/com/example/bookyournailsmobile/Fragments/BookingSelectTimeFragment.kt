@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Models.TimeAvailabilityResponse
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.R
@@ -57,10 +57,8 @@ class BookingSelectTimeFragment : Fragment() {
     }
 
     private fun setupUI() {
-        // Initialize all buttons to unselected state
         initializeTimeButtons()
 
-        // Set click listeners
         binding.timeButton1.setOnClickListener { handleTimeButtonClick(binding.timeButton1, "9:00:00 AM") }
         binding.timeButton2.setOnClickListener { handleTimeButtonClick(binding.timeButton2, "13:00:00 PM") }
         binding.timeButton3.setOnClickListener { handleTimeButtonClick(binding.timeButton3, "16:00:00 PM") }
@@ -70,9 +68,10 @@ class BookingSelectTimeFragment : Fragment() {
     }
 
     private fun initializeTimeButtons() {
-        binding.timeButton1.setImageResource(R.drawable.time_unselected_9am)
-        binding.timeButton2.setImageResource(R.drawable.time_unselected_1pm)
-        binding.timeButton3.setImageResource(R.drawable.time_unselected_4pm)
+        // Default to available state
+        binding.timeButton1.setImageResource(R.drawable.ic_time_available_9am)
+        binding.timeButton2.setImageResource(R.drawable.ic_time_available_1pm)
+        binding.timeButton3.setImageResource(R.drawable.ic_time_available_4pm)
 
         binding.timeButton1.isEnabled = false
         binding.timeButton2.isEnabled = false
@@ -88,76 +87,55 @@ class BookingSelectTimeFragment : Fragment() {
     }
 
     private fun checkTimeAvailability(date: String, time: String) {
-        apiService.checkTimeAvailability(date, time).enqueue(
-            object : Callback<ApiService.TimeAvailabilityResponse> {
-                // 1. Implement onResponse
-                override fun onResponse(
-                    call: Call<ApiService.TimeAvailabilityResponse>,
-                    response: Response<ApiService.TimeAvailabilityResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        response.body()?.let { availabilityResponse ->
-                            updateTimeButtonState(time, availabilityResponse.isAvailable)
-                        } ?: run {
-                            updateTimeButtonState(time, false)
-                            Log.e("API", "Response body is null")
-                        }
-                    } else {
+        val request = ApiService.TimeAvailabilityRequest(date, time)
+        apiService.checkTimeAvailability(request).enqueue(object : Callback<TimeAvailabilityResponse> {
+            override fun onResponse(call: Call<TimeAvailabilityResponse>, response: Response<TimeAvailabilityResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { availabilityResponse ->
+                        updateTimeButtonState(time, availabilityResponse.isAvailable)
+                    } ?: run {
                         updateTimeButtonState(time, false)
-                        Log.e("API", "Server responded with error: ${response.code()}")
+                        Log.e("API", "Response body is null")
                     }
-                }
-
-                // 2. Implement onFailure (this was missing)
-                override fun onFailure(
-                    call: Call<ApiService.TimeAvailabilityResponse>,
-                    t: Throwable
-                ) {
+                } else {
                     updateTimeButtonState(time, false)
-                    Log.e("API", "Network call failed", t)
-                    showToast("Network error. Please check your connection.")
+                    Log.e("API", "Server responded with error: ${response.code()}")
                 }
             }
-        )
+
+            override fun onFailure(call: Call<TimeAvailabilityResponse>, t: Throwable) {
+                updateTimeButtonState(time, false)
+                Log.e("API", "Network call failed", t)
+                showToast("Network error. Please check your connection.")
+            }
+        })
     }
 
     private fun updateTimeButtonState(time: String, isAvailable: Boolean) {
-        val (button, selectedRes, unselectedRes, unavailableRes) = when (time) {
-            "9:00:00 AM" -> Quadruple(
-                binding.timeButton1,
-                R.drawable.time_selected_9am,
-                R.drawable.time_unselected_9am,
-                R.drawable.ic_time_unavailable_9am
-            )
-            "13:00:00 PM" -> Quadruple(
-                binding.timeButton2,
-                R.drawable.time_selected_1pm,
-                R.drawable.time_unselected_1pm,
-                R.drawable.ic_time_unavailable_1pm
-            )
-            "16:00:00 PM" -> Quadruple(
-                binding.timeButton3,
-                R.drawable.time_selected_4pm,
-                R.drawable.time_unselected_4pm,
-                R.drawable.ic_time_unavailable_4pm
-            )
+        val button = when (time) {
+            "9:00:00 AM" -> binding.timeButton1
+            "13:00:00 PM" -> binding.timeButton2
+            "16:00:00 PM" -> binding.timeButton3
             else -> return
         }
 
-        button.isEnabled = isAvailable
-        button.setImageResource(
-            if (isAvailable) unselectedRes else unavailableRes
-        )
-        button.alpha = if (isAvailable) 1f else 0.6f
+        if (isAvailable) {
+            button.isEnabled = true
+            button.setImageResource(getAvailableImage(time))
+        } else {
+            button.isEnabled = false
+            button.setImageResource(getNotAvailableImage(time))
+            button.alpha = 0.6f
+        }
     }
 
     private fun handleTimeButtonClick(button: ImageView, time: String) {
         resetTimeButtons()
 
         when (time) {
-            "9:00:00 AM" -> button.setImageResource(R.drawable.time_selected_9am)
-            "13:00:00 PM" -> button.setImageResource(R.drawable.time_selected_1pm)
-            "16:00:00 PM" -> button.setImageResource(R.drawable.time_selected_4pm)
+            "9:00:00 AM" -> binding.timeButton1.setImageResource(R.drawable.ic_time_selected_9am)
+            "13:00:00 PM" -> binding.timeButton2.setImageResource(R.drawable.ic_time_selected_1pm)
+            "16:00:00 PM" -> binding.timeButton3.setImageResource(R.drawable.ic_time_selected_4pm)
         }
 
         selectedTime = time
@@ -166,18 +144,33 @@ class BookingSelectTimeFragment : Fragment() {
     }
 
     private fun resetTimeButtons() {
-        availableTimes.forEach { time ->
-            when (time) {
-                "9:00:00 AM" -> if (binding.timeButton1.isEnabled) {
-                    binding.timeButton1.setImageResource(R.drawable.time_unselected_9am)
-                }
-                "13:00:00 PM" -> if (binding.timeButton2.isEnabled) {
-                    binding.timeButton2.setImageResource(R.drawable.time_unselected_1pm)
-                }
-                "16:00:00 PM" -> if (binding.timeButton3.isEnabled) {
-                    binding.timeButton3.setImageResource(R.drawable.time_unselected_4pm)
-                }
-            }
+        // Reset all buttons to their "available" state unless they are not available
+        if (binding.timeButton1.isEnabled) {
+            binding.timeButton1.setImageResource(R.drawable.ic_time_available_9am)
+        }
+        if (binding.timeButton2.isEnabled) {
+            binding.timeButton2.setImageResource(R.drawable.ic_time_available_1pm)
+        }
+        if (binding.timeButton3.isEnabled) {
+            binding.timeButton3.setImageResource(R.drawable.ic_time_available_4pm)
+        }
+    }
+
+    private fun getAvailableImage(time: String): Int {
+        return when (time) {
+            "9:00:00 AM" -> R.drawable.ic_time_available_9am
+            "13:00:00 PM" -> R.drawable.ic_time_available_1pm
+            "16:00:00 PM" -> R.drawable.ic_time_available_4pm
+            else -> R.drawable.ic_time_available_9am
+        }
+    }
+
+    private fun getNotAvailableImage(time: String): Int {
+        return when (time) {
+            "9:00:00 AM" -> R.drawable.ic_time_notavailable_9am
+            "13:00:00 PM" -> R.drawable.ic_time_notavailable_1pm
+            "16:00:00 PM" -> R.drawable.ic_time_notavailable_4pm
+            else -> R.drawable.ic_time_notavailable_9am
         }
     }
 
@@ -189,23 +182,14 @@ class BookingSelectTimeFragment : Fragment() {
 
     private fun navigateToBookingAttachImageFragment() {
         val time = selectedTime ?: return
-        BookingAttachImageFragment.newInstance(
-            serviceType = serviceType ?: "Unknown",
-            selectedTime = time
-        ).apply {
-            arguments?.putString("SELECTED_DATE", selectedDate)
-        }.also { fragment ->
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
+        val fragment = BookingAttachImageFragment.newInstance(serviceType ?: "Unknown", time)
+        fragment.arguments?.putString("SELECTED_DATE", selectedDate)
+        parentFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
-
     companion object {
         @JvmStatic
         fun newInstance(serviceType: String, selectedDate: String) =
@@ -216,17 +200,4 @@ class BookingSelectTimeFragment : Fragment() {
                 }
             }
     }
-
-    private data class Quadruple<T>(
-        val first: T,
-        val second: Int,
-        val third: Int,
-        val fourth: Int
-    )
 }
-
-// Add to your ApiService interface:
-data class TimeAvailabilityResponse(
-    val isAvailable: Boolean,
-    val message: String? = null
-)
