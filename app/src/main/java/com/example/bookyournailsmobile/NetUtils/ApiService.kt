@@ -68,6 +68,17 @@ interface ApiService {
     @GET("historylist/{user_id}")
     fun getBookingHistoryByUserId(@Path("user_id") userId: String): Call<BookingHistoryResponse>
 
+    @POST("addreview")
+    fun submitReview(
+        @HeaderMap headers: Map<String, String>,
+        @Body reviewRequest: ReviewRequest
+    ): Call<Void>
+
+    @GET("reviewlist")
+    fun getReviewsByService(@Path("service_type") serviceType: String): Call<ReviewResponse>
+
+
+
     data class BookingRequest(
         val user_id: String,
         val service_type: String,
@@ -154,4 +165,27 @@ interface ApiService {
         val date: String,
         val time: String
     )
+    data class ReviewRequest(
+        val user_id: String,
+        val service: String,
+        val rating: Int,
+        val review_text: String
+    )
+    data class ReviewResponse(
+        val count: Int,
+        val average_rating: String,
+        val reviews: List<Review>
+    )
+
+    data class Review(
+        val id: Int,
+        val service: String,
+        val rating: Float,
+        val description: String,
+        val created_at: String,
+        val first_name: String,
+        val last_name: String,
+        val date_formatted: String
+    )
+
 }
