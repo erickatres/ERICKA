@@ -16,6 +16,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("login2")
@@ -74,8 +75,9 @@ interface ApiService {
         @Body reviewRequest: ReviewRequest
     ): Call<Void>
 
-    @GET("reviewlist")
-    fun getReviewsByService(@Path("service_type") serviceType: String): Call<ReviewResponse>
+    @GET("reviewlistmobile")
+    fun getReviewsByService(@Query("service_type") serviceType: String): Call<ReviewResponse>
+
 
 
 

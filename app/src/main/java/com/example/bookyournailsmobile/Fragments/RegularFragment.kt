@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
 import com.example.bookyournailsmobile.Adapters.ReviewAdapter
 import com.example.bookyournailsmobile.Fragments.AppointmentFragment
 import com.example.bookyournailsmobile.NetUtils.ApiService
@@ -20,10 +22,20 @@ import retrofit2.Response
 
 class RegularFragment : Fragment() {
 
+    private lateinit var viewPager: ViewPager2
     private lateinit var regularReviews: RecyclerView
     private lateinit var ratingTestimonials: TextView
     private lateinit var btnBack: FrameLayout
     private lateinit var btnBook: Button
+    private lateinit var tvImageCount: TextView
+
+    private val imageList = listOf(
+        R.drawable.regularplain1,
+        R.drawable.regularplain2,
+        R.drawable.regularplain3,
+        R.drawable.regularplain4,
+        R.drawable.regularplain5
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,11 +47,28 @@ class RegularFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize views
+        // Initialize Views
+        viewPager = view.findViewById(R.id.viewPagerRegular)
+        tvImageCount = view.findViewById(R.id.tvImageCountRegular)
         ratingTestimonials = view.findViewById(R.id.regular_rating_testimonials)
         regularReviews = view.findViewById(R.id.regular_review)
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.btn_book)
+
+        // Setup Image Slider Adapter
+        val adapter = ImageSliderAdapter(imageList)
+        viewPager.adapter = adapter
+
+        // Update image count display
+        tvImageCount.text = "1/${imageList.size}"
+
+        // Handle Page Change (Manual Sliding Only)
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                tvImageCount.text = "${position + 1}/${imageList.size}"
+            }
+        })
 
         // Set up RecyclerView
         regularReviews.layoutManager = LinearLayoutManager(requireContext())
@@ -56,6 +85,10 @@ class RegularFragment : Fragment() {
         btnBook.setOnClickListener {
             navigateToAppointmentFragment("Regular Plain")
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
     private fun fetchReviews(serviceType: String) {
@@ -86,7 +119,6 @@ class RegularFragment : Fragment() {
             }
         })
     }
-
 
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {
