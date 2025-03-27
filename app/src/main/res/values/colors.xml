@@ -18,5 +18,6 @@
     <color name="grey">#C4C4C4</color> <!-- Redefinition of grey -->
     <color name="star">#F8E431</color><!-- New color -->
     <color name="confirm">#82AEC0</color>
+    <color name="dark">#2F7889</color>
 
 </resources>

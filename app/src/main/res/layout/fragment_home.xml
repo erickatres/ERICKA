@@ -39,7 +39,7 @@
                 <TextView
                     android:id="@+id/greeting_text"
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="5dp"
                     android:text="Loopy!"
                     android:textColor="#2F7889"
@@ -52,7 +52,7 @@
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="70dp"
                     android:text="Hi,"
@@ -195,7 +195,7 @@
                             android:id="@+id/regular_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                            android:layout_margin="18dp"
+                           android:layout_marginLeft="16dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -213,15 +213,15 @@
                                 android:id="@+id/service_Regular"
                                 android:layout_width="145dp"
                                 android:layout_height="85dp"
-                                android:layout_marginStart="50dp"
-                                android:layout_marginTop="115dp"
+                                android:layout_marginStart="56dp"
+                                android:layout_marginTop="120dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/homepage_rectangle" />
 
                             <TextView
                                 android:layout_width="42dp"
                                 android:layout_height="15dp"
-                                android:layout_marginStart="120dp"
+                                android:layout_marginStart="124dp"
                                 android:layout_marginTop="153dp"
                                 android:background="@android:color/transparent"
                                 android:text="Regular"
@@ -236,6 +236,7 @@
                             android:layout_width="0dp"
                             android:layout_height="185dp"
                             android:layout_margin="16dp"
+                            android:layout_marginRight="16dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -253,15 +254,15 @@
                                 android:id="@+id/service_gelpolish"
                                 android:layout_width="145dp"
                                 android:layout_height="85dp"
-                                android:layout_marginStart="50dp"
-                                android:layout_marginTop="114dp"
+                                android:layout_marginStart="58dp"
+                                android:layout_marginTop="116dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/homepage_rectangle" />
 
                             <TextView
                                 android:layout_width="60dp"
                                 android:layout_height="15dp"
-                                android:layout_marginStart="112dp"
+                                android:layout_marginStart="124dp"
                                 android:layout_marginTop="152dp"
                                 android:background="@android:color/transparent"
                                 android:text="Gel Polish"
@@ -283,7 +284,7 @@
                             android:id="@+id/soft_gel_extension_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                            android:layout_margin="16dp"
+                            android:layout_marginLeft="16dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -301,15 +302,15 @@
                                 android:id="@+id/service_softgelextension"
                                 android:layout_width="145dp"
                                 android:layout_height="85dp"
-                                android:layout_marginStart="50dp"
-                                android:layout_marginTop="114dp"
+                                android:layout_marginStart="58dp"
+                                android:layout_marginTop="116dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/homepage_rectangle" />
 
                             <TextView
                                 android:layout_width="55dp"
                                 android:layout_height="30dp"
-                                android:layout_marginStart="115dp"
+                                android:layout_marginStart="125dp"
                                 android:layout_marginTop="148dp"
                                 android:background="@android:color/transparent"
                                 android:text="Soft Gel Extension"
@@ -325,6 +326,7 @@
                             android:layout_height="185dp"
                             android:layout_margin="16dp"
                             android:layout_weight="1"
+                            android:layout_marginRight="16dp"
                             android:background="@drawable/radius"
                             android:clickable="true"
                             android:clipToOutline="true"
@@ -340,7 +342,7 @@
                             <ImageView
                                 android:layout_width="145dp"
                                 android:layout_height="85dp"
-                                android:layout_marginStart="45dp"
+                                android:layout_marginStart="58dp"
                                 android:layout_marginTop="115dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/homepage_rectangle" />
@@ -348,7 +350,7 @@
                             <TextView
                                 android:layout_width="45dp"
                                 android:layout_height="15dp"
-                                android:layout_marginStart="118dp"
+                                android:layout_marginStart="128dp"
                                 android:layout_marginTop="152dp"
                                 android:background="@android:color/transparent"
                                 android:text="Removal"
