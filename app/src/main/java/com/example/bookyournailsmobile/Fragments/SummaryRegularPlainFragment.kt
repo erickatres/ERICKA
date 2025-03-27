@@ -98,10 +98,10 @@ class SummaryRegularPlainFragment : Fragment() {
 
         // Set the width and height of the dialog
         val width = (resources.displayMetrics.widthPixels * 0.85).toInt() // 85% of screen width
-        val height = (resources.displayMetrics.heightPixels * 0.3).toInt() // 50% of screen height
+        val height = (resources.displayMetrics.heightPixels * 0.4).toInt() // 50% of screen height
         dialog.window?.setLayout(width, height)
 
-        val btnOk = dialog.findViewById<Button>(R.id.btn_see_booking)
+        val btnOk = dialog.findViewById<TextView>(R.id.btn_see_booking)
         btnOk.setOnClickListener {
             dialog.dismiss()
             // Navigate to BookingFragment
