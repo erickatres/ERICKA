@@ -30,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Summary"
+                android:layout_marginTop="30dp"
                 android:textColor="#2A677C"
                 android:textSize="36sp"
                 android:textStyle="bold" />
@@ -39,7 +40,7 @@
                 android:id="@+id/tvServiceDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:text="Service Details"
                 android:textColor="#2F7889"
                 android:textSize="18sp"
@@ -54,6 +55,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:orientation="horizontal"
                         android:weightSum="2">
 
@@ -61,6 +63,7 @@
                             style="@style/LabelStyle"
                             android:layout_width="0dp"
                             android:layout_weight="1"
+                            android:textColor="@color/black"
                             android:text="Service" />
 
                         <TextView
@@ -82,6 +85,7 @@
                     <TextView
                         style="@style/LabelStyle"
                         android:layout_width="0dp"
+                        android:textColor="@color/black"
                         android:layout_weight="1"
                         android:text="Date" />
 
@@ -105,6 +109,7 @@
                         style="@style/LabelStyle"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:textColor="@color/black"
                         android:text="Time" />
 
                     <TextView
@@ -126,6 +131,7 @@
                         style="@style/LabelStyle"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:textColor="@color/black"
                         android:text="Mobile no." />
 
                     <TextView
@@ -146,17 +152,13 @@
                     android:text="Photo Reference:"
                     android:textSize="18sp"/>
 
-                <TextView
-                    style="@style/ValueStyle" />
-
-                <TextView
-                    style="@style/ValueStyle" />
-
-                <TextView
-                    style="@style/ValueStyle" />
-
-                <TextView
-                    style="@style/ValueStyle" />
+                <ImageView
+                    android:id="@+id/imgPhotoReference"
+                    android:layout_width="76dp"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/photoreference" />
             </LinearLayout>
 
             <!-- Price Details -->
@@ -187,6 +189,7 @@
                         style="@style/LabelStyle"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:textColor="@color/black"
                         android:text="Regular Plain" />
 
                     <TextView
@@ -247,26 +250,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp">
 
-        <Button
-            android:id="@+id/noaddons"
-            android:layout_width="175dp"
-            android:layout_height="70dp"
-            android:textSize="16dp"
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_width="178dp"
+            android:layout_height="68dp"
+            android:padding="18dp"
+            android:textAlignment="center"
             android:text="Cancel"
+            android:textSize="20sp"
             android:textColor="@color/grey"
-            android:background="@drawable/cancel_button"
-            android:enabled="false" />
+            android:background="@drawable/btn_cancel"
+            android:layout_marginEnd="10dp"/>
 
-        <Button
+        <TextView
             android:id="@+id/btnConfirm"
-            android:layout_width="175dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="178dp"
+            android:layout_height="68dp"
+            android:padding="18dp"
+            android:textAlignment="center"
             android:text="Confirm"
-            android:backgroundTint="@color/confirm"
+            android:textStyle="bold"
+            android:textSize="20sp"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            android:enabled="false"/>
+            android:background="@drawable/button_confirm"
+            android:layout_marginEnd="10dp"/>
 
     </LinearLayout>
 
