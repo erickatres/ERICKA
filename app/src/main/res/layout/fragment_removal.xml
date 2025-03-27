@@ -328,6 +328,7 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/removal_rating_testimonials"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ratings and testimonials"
@@ -336,20 +337,12 @@
                         android:textColor="#2F7889"
                         android:layout_weight="1"/>
 
-                    <ImageView
-                        android:id="@+id/moreRatings"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/morebutton"/>
                 </LinearLayout>
 
-                <TextView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/removal_review"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:gravity="center"
-                    android:text="No reviews yet"
-                    android:textSize="16sp"
-                    android:textColor="#CCCCCC" />
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:layout_width="wrap_content"

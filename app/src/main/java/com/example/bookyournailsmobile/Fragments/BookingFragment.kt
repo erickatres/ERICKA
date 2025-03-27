@@ -82,9 +82,25 @@ class BookingFragment : Fragment() {
 
                                 // Update the UI on the main thread
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    val adapter = BookingAdapter(requireContext(), bookings)
+                                    val adapter = BookingAdapter(requireContext(), bookings) { booking ->
+                                        // Transition to ReviewFormFragment when rateButton is clicked
+                                        val reviewFormFragment = ReviewFormFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putString("service_type", booking.service_type)
+                                                putString("service_date", booking.date_formatted)
+                                                putString("status", booking.status)
+                                            }
+                                        }
+
+                                        parentFragmentManager.beginTransaction()
+                                            .replace(R.id.fragment_container, reviewFormFragment) // Ensure the correct container ID
+                                            .addToBackStack(null) // Allow back navigation
+                                            .commit()
+                                    }
                                     bookingHistoryList.adapter = adapter
                                 }
+
+
                             } else {
                                 // Handle null response
                                 println("Booking history response is null")

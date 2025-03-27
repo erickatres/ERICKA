@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Activities.MainActivity
+import com.example.bookyournailsmobile.Class.DateValidatorNoPastAndNoSundays
 import com.example.bookyournailsmobile.R
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -71,18 +73,26 @@ class AppointmentFragment : Fragment() {
         parentFragmentManager.popBackStack()
     }
 
+    private var backendFormattedDate: String? = null // Store the date in "YYYY-MM-DD" format for backend
+
     private fun showMaterialDatePicker(textView: TextView) {
-        // Get the current date in UTC milliseconds
         val today = MaterialDatePicker.todayInUtcMilliseconds()
 
-        // Build constraints to disallow dates before today
+        // Calculate the maximum date (5 days ahead)
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        calendar.timeInMillis = today
+        calendar.add(Calendar.DAY_OF_MONTH, 5)
+        val maxDate = calendar.timeInMillis
+
+        // Build constraints: start from today, end after 5 days, exclude past dates & Sundays
         val constraintsBuilder = CalendarConstraints.Builder()
-            .setStart(today) // Set the start date to today
-            .setValidator(DateValidatorPointForward.from(today)) // Ensure no dates before today can be selected
+            .setStart(today) // Start from today (prevents past dates)
+            .setEnd(maxDate) // Allow only the next 5 days
+            .setValidator(DateValidatorNoPastAndNoSundays()) // Custom validator
 
         // Build MaterialDatePicker
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select Appointment Date") // Optional: Add a title
+            .setTitleText("Select Appointment Date")
             .setSelection(today) // Default to today's date
             .setCalendarConstraints(constraintsBuilder.build()) // Apply constraints
             .build()
@@ -90,43 +100,42 @@ class AppointmentFragment : Fragment() {
         // Show the picker
         datePicker.show(parentFragmentManager, "MATERIAL_DATE_PICKER")
 
-        // Remove the Confirm and Cancel buttons after the dialog is shown
-        datePicker.dialog?.setOnShowListener {
-            val dialog = datePicker.dialog as? android.app.Dialog
-            dialog?.window?.decorView?.let { decorView ->
-                // Find the Confirm and Cancel buttons by their IDs
-                val confirmButton = decorView.findViewById<Button>(com.google.android.material.R.id.confirm_button)
-                val cancelButton = decorView.findViewById<Button>(com.google.android.material.R.id.cancel_button)
-
-                // Hide the buttons
-                confirmButton?.visibility = View.GONE
-                cancelButton?.visibility = View.GONE
-            }
-        }
-
         // Handle the selected date
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedDate = Date(selection)
-            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val formattedDate = formatter.format(selectedDate)
-            textView.text = formattedDate // Show selected date in TextView
 
-            // Show the continue button once a date is selected
-            continue_button.visibility = View.VISIBLE
+            // Format for display: "March 29, 2025"
+            val displayFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+            val formattedDisplayDate = displayFormatter.format(selectedDate)
+
+            // Format for backend: "2025-03-29"
+            val backendFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            backendFormattedDate = backendFormatter.format(selectedDate)
+
+            textView.text = formattedDisplayDate // Show user-friendly format in TextView
+            continue_button.visibility = View.VISIBLE // Show continue button
         }
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
+    }
 
+    override fun onPause() {
+        super.onPause()
+        (activity as? MainActivity)?.setBottomNavVisibility(true) // Show bottom nav again when leaving
+    }
+
+
+    // Example: Send the backend format when navigating
     private fun navigateToBookingSelectTimeFragment(serviceType: String) {
-        // Get the selected date from the TextView
-        val selectedDate = textViewSD.text.toString()
+        val selectedDate = backendFormattedDate ?: return // Ensure a date is selected
 
-        // Create a new instance of BookingSelectTimeFragment and pass the service type and selected date
         val bookingSelectTimeFragment = BookingSelectTimeFragment.newInstance(serviceType, selectedDate)
 
-        // Replace the current fragment with BookingSelectTimeFragment
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, bookingSelectTimeFragment)
-            .addToBackStack(null) // Add the transaction to the back stack
+            .addToBackStack(null)
             .commit()
     }
 }

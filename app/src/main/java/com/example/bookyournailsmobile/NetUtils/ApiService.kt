@@ -1,6 +1,8 @@
 package com.example.bookyournailsmobile.NetUtils
 
 import com.example.bookyournailsmobile.Domain.User
+import com.example.bookyournailsmobile.Models.TimeAvailabilityResponse
+import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -14,6 +16,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("login2")
@@ -33,6 +36,20 @@ interface ApiService {
         @Part referenceImg: MultipartBody.Part
     ): Call<Void>
 
+    @FormUrlEncoded
+    @POST("newbooking") // Replace with your actual endpoint for bookings without an image
+    fun createBookingWithoutImage(
+        @Field("user_id") userId: String,
+        @Field("service_type") serviceType: String,
+        @Field("date") date: String,
+        @Field("time") time: String,
+        @Field("price") price: String
+    ): Call<Void>
+
+
+    @POST("isTimeAlreadyBookedMobile")
+    fun checkTimeAvailability(@Body request: TimeAvailabilityRequest): Call<TimeAvailabilityResponse>
+
     @PUT("resetpassword") // Ensure this matches the backend route
     fun resetPassword(
         @HeaderMap headers: Map<String, String>,
@@ -51,6 +68,18 @@ interface ApiService {
 
     @GET("historylist/{user_id}")
     fun getBookingHistoryByUserId(@Path("user_id") userId: String): Call<BookingHistoryResponse>
+
+    @POST("addreview")
+    fun submitReview(
+        @HeaderMap headers: Map<String, String>,
+        @Body reviewRequest: ReviewRequest
+    ): Call<Void>
+
+    @GET("reviewlistmobile")
+    fun getReviewsByService(@Query("service_type") serviceType: String): Call<ReviewResponse>
+
+
+
 
     data class BookingRequest(
         val user_id: String,
@@ -121,10 +150,6 @@ interface ApiService {
         val message: String
     )
 
-    data class ChangePasswordResponse(
-        val status: String,
-        val message: String
-    )
 
     data class BookingHistoryResponse(
         val history: List<BookingHistory>, // Match the backend response
@@ -136,6 +161,33 @@ interface ApiService {
         val date_formatted: String,
         val date: String, // Optional, if needed
         val status: String // Optional, if needed
+    )
+    // Add this class to your models
+    data class TimeAvailabilityRequest(
+        val date: String,
+        val time: String
+    )
+    data class ReviewRequest(
+        val user_id: String,
+        val service: String,
+        val rating: Int,
+        val review_text: String
+    )
+    data class ReviewResponse(
+        val count: Int,
+        val average_rating: String,
+        val reviews: List<Review>
+    )
+
+    data class Review(
+        val id: Int,
+        val service: String,
+        val rating: Float,
+        val description: String,
+        val created_at: String,
+        val first_name: String,
+        val last_name: String,
+        val date_formatted: String
     )
 
 }

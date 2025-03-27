@@ -29,7 +29,7 @@ class NewPasswordActivity : AppCompatActivity() {
         setContentView(R.layout.activity_new_password)
 
         etNewPassword = findViewById(R.id.etnewpass)
-        etConfirmPassword = findViewById(R.id.etConfirm)
+        etConfirmPassword = findViewById(R.id.cnfrmnewpass)
         btnResetPassword = findViewById(R.id.btnContinue)
         btnBack = findViewById(R.id.btnBack)
 

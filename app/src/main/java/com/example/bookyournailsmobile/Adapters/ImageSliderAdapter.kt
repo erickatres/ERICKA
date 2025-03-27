@@ -7,7 +7,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookyournailsmobile.R
 
-
 class ImageSliderAdapter(private val images: List<Int>) :
     RecyclerView.Adapter<ImageSliderAdapter.ViewHolder>() {
 

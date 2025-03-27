@@ -7,17 +7,35 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
+import com.example.bookyournailsmobile.Adapters.ReviewAdapter
 import com.example.bookyournailsmobile.Fragments.AppointmentFragment
+import com.example.bookyournailsmobile.NetUtils.ApiService
+import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegularFragment : Fragment() {
 
     private lateinit var viewPager: ViewPager2
-    private lateinit var tvImageCount: TextView
+    private lateinit var regularReviews: RecyclerView
+    private lateinit var ratingTestimonials: TextView
     private lateinit var btnBack: FrameLayout
     private lateinit var btnBook: Button
+    private lateinit var tvImageCount: TextView
+
+    private val imageList = listOf(
+        R.drawable.regularplain1,
+        R.drawable.regularplain2,
+        R.drawable.regularplain3,
+        R.drawable.regularplain4,
+        R.drawable.regularplain5
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,38 +47,22 @@ class RegularFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("RegularFragment", "Fragment created successfully")
-
-        // Hide bottom navigation
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
-        bottomNav?.visibility = View.GONE
-
-        // Initialize views
+        // Initialize Views
         viewPager = view.findViewById(R.id.viewPagerRegular)
         tvImageCount = view.findViewById(R.id.tvImageCountRegular)
+        ratingTestimonials = view.findViewById(R.id.regular_rating_testimonials)
+        regularReviews = view.findViewById(R.id.regular_review)
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.btn_book)
 
-        // Ensure btnBack is visible
-        btnBack.visibility = View.VISIBLE
-
-        // Image List
-        val imageList = listOf(
-            R.drawable.regularplain1,
-            R.drawable.regularplain2,
-            R.drawable.regularplain3,
-            R.drawable.regularplain4,
-            R.drawable.regularplain5
-        )
-
-        // Set Adapter
+        // Setup Image Slider Adapter
         val adapter = ImageSliderAdapter(imageList)
         viewPager.adapter = adapter
 
-        // Initial Page Indicator
+        // Update image count display
         tvImageCount.text = "1/${imageList.size}"
 
-        // Page Change Listener
+        // Handle Page Change (Manual Sliding Only)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -68,36 +70,65 @@ class RegularFragment : Fragment() {
             }
         })
 
+        // Set up RecyclerView
+        regularReviews.layoutManager = LinearLayoutManager(requireContext())
+
+        // Fetch reviews for Regular Plain service
+        fetchReviews("Regular Plain")
+
         // Back Button Click
         btnBack.setOnClickListener {
-            Log.d("RegularFragment", "Back button clicked")
             parentFragmentManager.popBackStack()
         }
 
         // Book Button Click
         btnBook.setOnClickListener {
-            Log.d("RegularFragment", "Book button clicked")
             navigateToAppointmentFragment("Regular Plain")
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    private fun fetchReviews(serviceType: String) {
+        val apiService = RetrofitClient.create(requireContext())
+
+        if (apiService == null) {
+            Log.e("RegularFragment", "RetrofitClient.create() returned null")
+            return
+        }
+
+        apiService.getReviewsByService(serviceType).enqueue(object : Callback<ApiService.ReviewResponse> {
+            override fun onResponse(call: Call<ApiService.ReviewResponse>, response: Response<ApiService.ReviewResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { reviewResponse ->
+                        if (reviewResponse.reviews.isNotEmpty()) {
+                            regularReviews.adapter = ReviewAdapter(reviewResponse.reviews)
+                        } else {
+                            Log.d("RegularFragment", "No reviews found for $serviceType")
+                        }
+                    }
+                } else {
+                    Log.e("RegularFragment", "Failed to fetch reviews: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiService.ReviewResponse>, t: Throwable) {
+                Log.e("RegularFragment", "Error fetching reviews", t)
+            }
+        })
     }
 
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {
             arguments = Bundle().apply {
-                putString("SERVICE_TYPE", serviceType) // Pass the service type to AppointmentFragment
+                putString("SERVICE_TYPE", serviceType)
             }
         }
-
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, appointmentFragment)
             .addToBackStack(null)
             .commit()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Show bottom navigation when leaving this fragment
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
-        bottomNav?.visibility = View.VISIBLE
     }
 }

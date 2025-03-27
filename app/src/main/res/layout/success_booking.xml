@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="240dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/dialog_background_login"> <!-- Add a custom background if needed -->
 
-    <!-- Title -->
 
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/heart_happy" />
 
     <TextView
         android:id="@+id/title"
@@ -37,7 +42,7 @@
         <!-- Yes Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_see_booking"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="55dp"
             android:layout_weight="1"
             android:text="See booking"
