@@ -162,15 +162,30 @@
                 app:layout_constraintTop_toBottomOf="@+id/TVAdditionalInfo"
                 app:layout_constraintVertical_bias="0.039" />
 
-            <ImageView
-                android:id="@+id/facebookLogo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/facebooklogo"
-                android:contentDescription="Facebook Logo"
-                android:clickable="true"
-                android:focusable="true"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/facebookLogo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/facebooklogo"
+                    android:contentDescription="Facebook Logo"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="NailScape"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"/>
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/InstagramLogo"
