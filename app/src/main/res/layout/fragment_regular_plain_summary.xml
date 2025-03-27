@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="15dp"
                     android:weightSum="2">
 
                     <TextView
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="15dp"
                     android:weightSum="2">
 
                     <TextView
@@ -124,7 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="15dp"
                     android:weightSum="2">
 
                     <TextView
@@ -148,7 +148,7 @@
                     style="@style/ValueStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="15dp"
                     android:text="Photo Reference:"
                     android:textSize="18sp"/>
 
@@ -166,7 +166,7 @@
                 android:id="@+id/tvPriceDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="15dp"
                 android:text="Price details"
                 android:textColor="#2A677C"
                 android:textSize="20sp"
@@ -212,7 +212,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
                     android:weightSum="2">
 
                     <TextView
