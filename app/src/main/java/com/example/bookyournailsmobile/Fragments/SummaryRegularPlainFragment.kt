@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -37,10 +38,11 @@ class SummaryRegularPlainFragment : Fragment() {
     private lateinit var tvDate: TextView
     private lateinit var tvTime: TextView
     private lateinit var tvMobile: TextView
-    private lateinit var tvServiceDetails: TextView
+    private lateinit var imgReference: ImageView
     private lateinit var tvServicePrice: TextView
     private lateinit var totalServicePrice: TextView
-    private lateinit var btnConfirm: Button
+    private lateinit var btnConfirm: TextView
+    private lateinit var tvServiceDetails: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,13 +68,14 @@ class SummaryRegularPlainFragment : Fragment() {
         tvTime = view.findViewById(R.id.tvTime)
         tvMobile = view.findViewById(R.id.tvMobile)
         tvServicePrice = view.findViewById(R.id.tvservicePrice)
-        totalServicePrice = view.findViewById(R.id.total_service_price)
+        totalServicePrice = view.findViewById(R.id.total_price)
         btnConfirm = view.findViewById(R.id.btnConfirm)
-        tvServiceDetails = view.findViewById(R.id.service_price_details)
+        imgReference = view.findViewById(R.id.imgPhotoReference)
+        tvServiceDetails = view.findViewById(R.id.tv_service_details)
 
-        val user = requireContext().getUserFromPreferences()
-        user?.let {
-            tvMobile.text = it.phone
+        val user = (activity as? MainActivity)?.getUserFromPreferences()
+        user?.let { u ->
+            tvMobile.text = u.phone
         }
 
         tvService.text = serviceType ?: "N/A"
@@ -83,15 +86,19 @@ class SummaryRegularPlainFragment : Fragment() {
         tvServiceDetails.text = serviceType ?: "Null"
 
         btnConfirm.setOnClickListener {
-            user?.let {
-                uploadBookingToServer(it)
+            user?.let { userObj ->  // Renaming 'it' to avoid confusion
+                uploadBookingToServer(userObj)
             } ?: run {
-                Toast.makeText(requireContext(), "User not found. Please log in.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "User not found. Please log in.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    private fun showSuccessPopup() {
+        private fun showSuccessPopup() {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.success_booking)
         dialog.setCancelable(false)
