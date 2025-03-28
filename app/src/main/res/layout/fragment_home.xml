@@ -181,13 +181,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/services_text">
 
-                    <!-- First Row of Images -->
-
-                    <!-- Second Row of Images -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="190dp"
-                        android:layout_marginBottom="18dp"
+                        android:layout_marginBottom="5dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -195,7 +192,7 @@
                             android:id="@+id/regular_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                           android:layout_marginLeft="16dp"
+                           android:layout_marginLeft="35dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -204,8 +201,8 @@
 
                             <ImageView
                                 android:id="@+id/Service_regular"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/first" />
 
@@ -236,7 +233,7 @@
                             android:layout_width="0dp"
                             android:layout_height="185dp"
                             android:layout_margin="16dp"
-                            android:layout_marginRight="16dp"
+                            android:layout_marginRight="35dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -284,7 +281,7 @@
                             android:id="@+id/soft_gel_extension_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                            android:layout_marginLeft="16dp"
+                            android:layout_marginLeft="35dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -326,7 +323,7 @@
                             android:layout_height="185dp"
                             android:layout_margin="16dp"
                             android:layout_weight="1"
-                            android:layout_marginRight="16dp"
+                            android:layout_marginRight="36dp"
                             android:background="@drawable/radius"
                             android:clickable="true"
                             android:clipToOutline="true"
