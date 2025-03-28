@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
         homeIcon = findViewById(R.id.btn_home)
         pricelistIcon = findViewById(R.id.btn_pricelist)
-        bookingIcon = findViewById(R.id.btn_booking)
+        bookingIcon = findViewById(R.id.btn_appointments)
         profileIcon = findViewById(R.id.btn_profile)
 
         homeText = findViewById(R.id.home_txt)
@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity() {
     // Get the corresponding fragment for a tab
     private fun getFragmentForTab(id: Int): Fragment = when (id) {
         R.id.btn_pricelist -> PricelistFragment()
-        R.id.btn_booking -> BookingFragment()
+        R.id.btn_appointments -> BookingFragment()
         R.id.btn_profile -> ProfileFragment()
         else -> HomeFragment()
     }
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity() {
     private fun getUnfilledIcon(id: Int) = when (id) {
         R.id.btn_home -> R.drawable.home_without_fill
         R.id.btn_pricelist -> R.drawable.pricelist_without_fill
-        R.id.btn_booking -> R.drawable.booking_without_fill
+        R.id.btn_appointments -> R.drawable.booking_without_fill
         R.id.btn_profile -> R.drawable.profile_without_fill
         else -> 0
     }
@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity() {
     private fun getFilledIcon(id: Int) = when (id) {
         R.id.btn_home -> R.drawable.home_vector
         R.id.btn_pricelist -> R.drawable.pricelist_vector
-        R.id.btn_booking -> R.drawable.booking_vector
+        R.id.btn_appointments -> R.drawable.booking_vector
         R.id.btn_profile -> R.drawable.profile_vector
         else -> 0
     }

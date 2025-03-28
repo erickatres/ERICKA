@@ -186,7 +186,9 @@
                     <!-- Second Row of Images -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginEnd="34dp"
                         android:layout_marginBottom="18dp"
                         android:gravity="center"
                         android:orientation="horizontal">
@@ -195,7 +197,7 @@
                             android:id="@+id/regular_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                            android:layout_margin="18dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -219,23 +221,23 @@
                                 android:src="@drawable/homepage_rectangle" />
 
                             <TextView
-                                android:layout_width="42dp"
-                                android:layout_height="15dp"
-                                android:layout_marginStart="120dp"
-                                android:layout_marginTop="153dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end|bottom"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="18dp"
                                 android:background="@android:color/transparent"
                                 android:text="Regular"
                                 android:textColor="#FFFFFF"
-                                android:textSize="11sp"
+                                android:textSize="10sp"
                                 android:textStyle="bold" />
                         </FrameLayout>
 
-                        <!-- Second Image with Overlay -->
                         <FrameLayout
                             android:id="@+id/gel_polish_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                            android:layout_margin="16dp"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -259,31 +261,33 @@
                                 android:src="@drawable/homepage_rectangle" />
 
                             <TextView
-                                android:layout_width="60dp"
-                                android:layout_height="15dp"
-                                android:layout_marginStart="112dp"
-                                android:layout_marginTop="152dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end|bottom"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="17dp"
                                 android:background="@android:color/transparent"
                                 android:text="Gel Polish"
                                 android:textColor="#FFFFFF"
-                                android:textSize="11sp"
+                                android:textSize="10sp"
                                 android:textStyle="bold" />
                         </FrameLayout>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginEnd="34dp"
                         android:layout_marginBottom="30dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <!-- Third Image with Overlay -->
                         <FrameLayout
                             android:id="@+id/soft_gel_extension_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                            android:layout_margin="16dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -307,23 +311,22 @@
                                 android:src="@drawable/homepage_rectangle" />
 
                             <TextView
-                                android:layout_width="55dp"
-                                android:layout_height="30dp"
-                                android:layout_marginStart="115dp"
-                                android:layout_marginTop="148dp"
+                                android:layout_width="53dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end|bottom"
+                                android:layout_marginBottom="10dp"
                                 android:background="@android:color/transparent"
                                 android:text="Soft Gel Extension"
                                 android:textColor="#FFFFFF"
-                                android:textSize="11sp"
+                                android:textSize="10sp"
                                 android:textStyle="bold" />
                         </FrameLayout>
 
-                        <!-- Fourth Image with Overlay -->
                         <FrameLayout
                             android:id="@+id/removal_frame"
                             android:layout_width="0dp"
                             android:layout_height="185dp"
-                            android:layout_margin="16dp"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/radius"
                             android:clickable="true"
@@ -340,23 +343,25 @@
                             <ImageView
                                 android:layout_width="145dp"
                                 android:layout_height="85dp"
-                                android:layout_marginStart="45dp"
+                                android:layout_marginStart="50dp"
                                 android:layout_marginTop="115dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/homepage_rectangle" />
 
                             <TextView
-                                android:layout_width="45dp"
-                                android:layout_height="15dp"
-                                android:layout_marginStart="118dp"
-                                android:layout_marginTop="152dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end|bottom"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="18dp"
                                 android:background="@android:color/transparent"
                                 android:text="Removal"
                                 android:textColor="#FFFFFF"
-                                android:textSize="11sp"
+                                android:textSize="10sp"
                                 android:textStyle="bold" />
                         </FrameLayout>
                     </LinearLayout>
+
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

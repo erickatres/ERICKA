@@ -44,6 +44,8 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
                     android:gravity="center"
                     android:text="Account info"
                     android:textAlignment="center"
@@ -212,18 +214,21 @@
                     app:layout_constraintStart_toStartOf="@+id/Mobilenumber_edittext"
                     app:layout_constraintTop_toTopOf="@+id/Mobilenumber_edittext" />
 
-                <Button
+                <TextView
                     android:id="@+id/saveChangesButton"
-                    android:layout_width="334dp"
-                    android:layout_height="68dp"
-                    android:layout_marginTop="130dp"
-                    android:backgroundTint="#82AEC0"
-                    android:text="Save Changes"
-                    android:textColor="@android:color/white"
-                    android:textSize="18dp"
-                    app:layout_constraintEnd_toEndOf="@+id/emailEditText"
-                    app:layout_constraintStart_toStartOf="@+id/emailEditText"
-                    app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+                    android:layout_width="335dp"
+                    android:layout_height="70dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/button_done_review"
+                    android:gravity="center"
+                    android:text="Save changes"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

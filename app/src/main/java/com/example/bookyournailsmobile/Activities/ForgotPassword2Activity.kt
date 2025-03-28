@@ -52,7 +52,7 @@ class ForgotPassword2Activity : AppCompatActivity() {
         etOtp4 = findViewById(R.id.etOtp4)
         tvDidntReceiveCode = findViewById(R.id.tvDidntReceiveCode)
         tvResendCode = findViewById(R.id.tvResendCode)
-        btnContinue = findViewById(R.id.btnContinue)
+        btnContinue = findViewById(R.id.btnVerify)
 
         // Initialize Retrofit
         apiService = RetrofitClient.create(this)

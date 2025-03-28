@@ -15,7 +15,7 @@ class AboutUsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_about_us, container, false)
+        val view = inflater.inflate(R.layout.fragment_contact_us, container, false)
 
         // Hide bottom navigation
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)

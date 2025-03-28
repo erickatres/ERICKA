@@ -30,7 +30,7 @@ class NewPasswordActivity : AppCompatActivity() {
 
         etNewPassword = findViewById(R.id.etnewpass)
         etConfirmPassword = findViewById(R.id.cnfrmnewpass)
-        btnResetPassword = findViewById(R.id.btnContinue)
+        btnResetPassword = findViewById(R.id.btnchangepassword)
         btnBack = findViewById(R.id.btnBack)
 
         apiService = RetrofitClient.create(this)
