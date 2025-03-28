@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.bumptech.glide.Glide
 import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
@@ -42,7 +43,9 @@ class SummaryRegularPlainFragment : Fragment() {
     private lateinit var tvServicePrice: TextView
     private lateinit var totalServicePrice: TextView
     private lateinit var btnConfirm: TextView
+    private lateinit var btnCancel: TextView
     private lateinit var tvServiceDetails: TextView
+    private lateinit var photoReference: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,12 +67,14 @@ class SummaryRegularPlainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tvService = view.findViewById(R.id.tvService)
+        btnCancel = view.findViewById(R.id.btnCancel)
         tvDate = view.findViewById(R.id.tvdate)
         tvTime = view.findViewById(R.id.tvTime)
         tvMobile = view.findViewById(R.id.tvMobile)
         tvServicePrice = view.findViewById(R.id.tvservicePrice)
         totalServicePrice = view.findViewById(R.id.total_price)
         btnConfirm = view.findViewById(R.id.btnConfirm)
+        photoReference = view.findViewById(R.id.tvPhotoReference)
         imgReference = view.findViewById(R.id.imgPhotoReference)
         tvServiceDetails = view.findViewById(R.id.tv_service_details)
 
@@ -85,8 +90,20 @@ class SummaryRegularPlainFragment : Fragment() {
         tvServicePrice.text = servicePrice ?: "N/A"
         tvServiceDetails.text = serviceType ?: "Null"
 
+        if (serviceType == "Removal") {
+            imgReference.visibility = View.GONE
+            photoReference.visibility = View.GONE
+        } else {
+            referenceImageUri?.let {
+                val uri = Uri.parse(it)
+                imgReference.visibility = View.VISIBLE
+                photoReference.visibility = View.VISIBLE
+                Glide.with(this).load(uri).into(imgReference)
+            }
+        }
+
         btnConfirm.setOnClickListener {
-            user?.let { userObj ->  // Renaming 'it' to avoid confusion
+            user?.let { userObj ->
                 uploadBookingToServer(userObj)
             } ?: run {
                 Toast.makeText(
@@ -96,9 +113,44 @@ class SummaryRegularPlainFragment : Fragment() {
                 ).show()
             }
         }
+
+        btnCancel.setOnClickListener {
+            showCancelPopup()
+        }
     }
 
-        private fun showSuccessPopup() {
+
+    private fun showCancelPopup() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.pop_up_cancel)
+        dialog.setCancelable(true)
+
+        val btnNo = dialog.findViewById<TextView>(R.id.btnNo)
+        val btnYes = dialog.findViewById<TextView>(R.id.btnYes)
+
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            dialog.dismiss()
+            navigateToHomeFragment()
+        }
+
+        dialog.show()
+    }
+
+    private fun navigateToHomeFragment() {
+        val homeFragment = HomeFragment()
+        val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, homeFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+
+
+    private fun showSuccessPopup() {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.success_booking)
         dialog.setCancelable(false)

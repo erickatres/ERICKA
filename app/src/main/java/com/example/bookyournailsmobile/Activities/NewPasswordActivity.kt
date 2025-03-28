@@ -29,7 +29,7 @@ class NewPasswordActivity : AppCompatActivity() {
         setContentView(R.layout.activity_new_password)
 
         etNewPassword = findViewById(R.id.etnewpass)
-        etConfirmPassword = findViewById(R.id.cnfrmnewpass)
+        etConfirmPassword = findViewById(R.id.etconfirmPassword)
         btnResetPassword = findViewById(R.id.btnContinue)
         btnBack = findViewById(R.id.btnBack)
 
@@ -39,8 +39,8 @@ class NewPasswordActivity : AppCompatActivity() {
 
         if (passwordResetToken.isNullOrEmpty()) {
             showToast("Error: Invalid reset token")
+            Log.e("NewPasswordActivity", "Received empty or null PASSWORD_RESET_TOKEN")
             finish()
-            return
         }
 
         Log.d("ResetPassword", "Token Received: $passwordResetToken")
@@ -66,7 +66,7 @@ class NewPasswordActivity : AppCompatActivity() {
         headers["Authorization"] = "Bearer $passwordResetToken"
         headers["Content-Type"] = "application/json"
 
-        Log.d("ResetPassword", "Sending Request: $resetPasswordRequest")
+        Log.d("ResetPassword", "Sending Request: ${resetPasswordRequest.password}, ${resetPasswordRequest.confirm_password}")
         Log.d("ResetPassword", "Headers: $headers")
 
         apiService.resetPassword(headers, resetPasswordRequest).enqueue(object : Callback<ApiService.ResetPasswordResponse> {
@@ -75,15 +75,15 @@ class NewPasswordActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val resetPasswordResponse = response.body()
-                    Log.d("ResetPassword", "Response Body: $resetPasswordResponse")
 
-                    if (resetPasswordResponse?.status == "success") {
+                    if (resetPasswordResponse?.message == "Password changed successfully") {
                         showToast("Password changed successfully!")
                         Log.d("ResetPassword", "Navigating to LoginActivity...")
                         navigateToLogin()
                     } else {
-                        showToast(resetPasswordResponse?.message ?: "Failed to reset password")
-                        Log.e("ResetPassword", "Error: ${resetPasswordResponse?.message}")
+                        val errorMsg = resetPasswordResponse?.message ?: "Failed to reset password"
+                        showToast(errorMsg)
+                        Log.e("ResetPassword", "Error: $errorMsg")
                     }
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Unknown error"
@@ -98,7 +98,6 @@ class NewPasswordActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun validatePassword(password: String, confirmPassword: String): Boolean {
         if (password.length < 8) {

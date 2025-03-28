@@ -60,6 +60,27 @@ class ProfileFragment : Fragment() {
             showLogoutConfirmationDialog()
         }
 
+        val TVAccount = view.findViewById<TextView>(R.id.TVAccount_profile)
+        TVAccount.setOnClickListener {
+            replaceFragment(AccountFragment())
+        }
+        val TVChangePassword = view.findViewById<TextView>(R.id.TVChangePassword)
+        TVChangePassword.setOnClickListener {
+            replaceFragment(ChangePasswordFragment())
+        }
+        val TVAboutUs = view.findViewById<TextView>(R.id.TVAboutUs)
+        TVAboutUs.setOnClickListener {
+            replaceFragment(AboutUsFragment())
+        }
+        val TVOurPolicies = view.findViewById<TextView>(R.id.TVOurPolicies)
+        TVOurPolicies.setOnClickListener {
+            replaceFragment(OurPoliciesFragment())
+        }
+        val TVFAQS = view.findViewById<TextView>(R.id.TVFAQS)
+        TVFAQS.setOnClickListener {
+            replaceFragment(FaqsFragment())
+        }
+
         val policiesButton = view.findViewById<ImageView>(R.id.btnOurPolicies)
         policiesButton.setOnClickListener {
             replaceFragment(OurPoliciesFragment())

@@ -2,21 +2,23 @@ package com.example.bookyournailsmobile.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Managers.SessionManagement
+import com.example.bookyournailsmobile.NetUtils.ApiService
+import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
-import com.vishnusivadas.advanced_httpurlconnection.PutData
-import com.example.bookyournailsmobile.NetUtils.Urls
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import android.text.Editable
+import android.text.TextWatcher
 
 class AccountFragment : Fragment() {
 
@@ -28,14 +30,19 @@ class AccountFragment : Fragment() {
     private lateinit var editLastnameTextView: TextView
     private lateinit var editEmailTextView: TextView
     private lateinit var editMobileNumberTextView: TextView
-    private lateinit var saveChangesButton: Button
+    private lateinit var saveChangesButton: TextView
     private lateinit var sessionManagement: SessionManagement
+    private lateinit var apiService: ApiService
+
+    private var originalFirstname: String? = null
+    private var originalLastname: String? = null
+    private var originalEmail: String? = null
+    private var originalMobileNumber: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_account, container, false)
 
         // Initialize views
@@ -47,84 +54,51 @@ class AccountFragment : Fragment() {
         editLastnameTextView = view.findViewById(R.id.editLastname)
         editEmailTextView = view.findViewById(R.id.editUsername)
         editMobileNumberTextView = view.findViewById(R.id.editUsername2)
-        saveChangesButton = view.findViewById(R.id.saveChangesButton)
+        saveChangesButton = view.findViewById(R.id.btnOkay)
 
+        saveChangesButton.visibility = View.GONE
         sessionManagement = SessionManagement(requireContext())
+        apiService = RetrofitClient.create(requireContext())
 
         // Retrieve user data from SharedPreferences
         val user = requireContext().getUserFromPreferences()
         user?.let {
+            originalFirstname = it.first_name
+            originalLastname = it.last_name
+            originalEmail = it.email
+            originalMobileNumber = it.phone
+
             firstnameEditText.hint = it.first_name
             lastnameEditText.hint = it.last_name
             emailEditText.hint = it.email
             mobileNumberEditText.hint = it.phone
         }
 
-        // Set underlined text for the "Edit" options
-        editFirstnameTextView.text = Html.fromHtml("<u>Edit</u>")
-        editLastnameTextView.text = Html.fromHtml("<u>Edit</u>")
-        editEmailTextView.text = Html.fromHtml("<u>Edit</u>")
-        editMobileNumberTextView.text = Html.fromHtml("<u>Edit</u>")
+        addTextWatcher(firstnameEditText)
+        addTextWatcher(lastnameEditText)
+        addTextWatcher(emailEditText)
+        addTextWatcher(mobileNumberEditText)
 
-        // Handle clicks to allow editing
-        editFirstnameTextView.setOnClickListener {
-            firstnameEditText.isFocusable = true
-            firstnameEditText.isFocusableInTouchMode = true
-            firstnameEditText.requestFocus()
-        }
+        // Set underlined text for the "Edit" labels
+        val underlinedText = "<u>Edit</u>"
+        editFirstnameTextView.text = Html.fromHtml(underlinedText)
+        editLastnameTextView.text = Html.fromHtml(underlinedText)
+        editEmailTextView.text = Html.fromHtml(underlinedText)
+        editMobileNumberTextView.text = Html.fromHtml(underlinedText)
 
-        editLastnameTextView.setOnClickListener {
-            lastnameEditText.isFocusable = true
-            lastnameEditText.isFocusableInTouchMode = true
-            lastnameEditText.requestFocus()
-        }
+        // Enable editing on click
+        editFirstnameTextView.setOnClickListener { enableEditing(firstnameEditText) }
+        editLastnameTextView.setOnClickListener { enableEditing(lastnameEditText) }
+        editEmailTextView.setOnClickListener { enableEditing(emailEditText) }
+        editMobileNumberTextView.setOnClickListener { enableEditing(mobileNumberEditText) }
 
-        editEmailTextView.setOnClickListener {
-            emailEditText.isFocusable = true
-            emailEditText.isFocusableInTouchMode = true
-            emailEditText.requestFocus()
-        }
-
-        editMobileNumberTextView.setOnClickListener {
-            mobileNumberEditText.isFocusable = true
-            mobileNumberEditText.isFocusableInTouchMode = true
-            mobileNumberEditText.requestFocus()
-        }
-
-        // Make EditTexts non-editable initially
-        firstnameEditText.isFocusable = false
-        lastnameEditText.isFocusable = false
-        emailEditText.isFocusable = false
-        mobileNumberEditText.isFocusable = false
-
-        // Save the changes
-        saveChangesButton.setOnClickListener {
-            val updatedFirstname = firstnameEditText.text.toString().trim()
-            val updatedLastname = lastnameEditText.text.toString().trim()
-            val updatedEmail = emailEditText.text.toString().trim()
-            val updatedMobileNumber = mobileNumberEditText.text.toString().trim()
-
-            // Check if at least one field is updated
-            if (updatedFirstname.isEmpty() && updatedLastname.isEmpty() && updatedEmail.isEmpty() && updatedMobileNumber.isEmpty()) {
-                Toast.makeText(requireContext(), "No changes detected.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // Retrieve the user ID from SessionManagement
-            val userId = sessionManagement.getUserId()
-            if (userId != null) {
-                // Update the database via API call
-                updateUserInDatabase(userId, updatedFirstname, updatedLastname, updatedEmail, updatedMobileNumber)
-            } else {
-                Toast.makeText(requireContext(), "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // Save changes
+        saveChangesButton.setOnClickListener { updateUserDetails() }
 
         // Hide bottom navigation
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
-        bottomNav?.visibility = View.GONE
+        activity?.findViewById<View>(R.id.bottom_navigation_container)?.visibility = View.GONE
 
-        // Set up back button functionality
+        // Back button
         view.findViewById<View>(R.id.btnBack).setOnClickListener {
             parentFragmentManager.popBackStack()
         }
@@ -132,88 +106,90 @@ class AccountFragment : Fragment() {
         return view
     }
 
+
+
     override fun onDestroyView() {
         super.onDestroyView()
-        // Show bottom navigation when leaving this fragment
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
-        bottomNav?.visibility = View.VISIBLE
+        activity?.findViewById<View>(R.id.bottom_navigation_container)?.visibility = View.VISIBLE
     }
 
-    private fun updateUserInDatabase(userId: String, firstname: String, lastname: String, email: String, mobileNumber: String) {
-        val handler = Handler(Looper.getMainLooper())
-        handler.post {
-            // Prepare fields and data arrays
-            val fields = mutableListOf<String>()
-            val data = mutableListOf<String>()
+    private fun enableEditing(editText: EditText) {
+        editText.isFocusable = true
+        editText.isFocusableInTouchMode = true
+        editText.requestFocus()
+    }
+    private fun toggleSaveButton() {
+        val isModified = firstnameEditText.text.toString() != originalFirstname ||
+                lastnameEditText.text.toString() != originalLastname ||
+                emailEditText.text.toString() != originalEmail ||
+                mobileNumberEditText.text.toString() != originalMobileNumber
 
-            // Add user_id to fields and data
-            fields.add("user_id")
-            data.add(userId)
+        saveChangesButton.visibility = if (isModified) View.VISIBLE else View.GONE
+    }
+    private fun addTextWatcher(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            // Add non-empty fields to the arrays
-            if (firstname.isNotEmpty()) {
-                fields.add("first_name")
-                data.add(firstname)
-            }
-            if (lastname.isNotEmpty()) {
-                fields.add("last_name")
-                data.add(lastname)
-            }
-            if (email.isNotEmpty()) {
-                fields.add("email")
-                data.add(email)
-            }
-            if (mobileNumber.isNotEmpty()) {
-                fields.add("phone")
-                data.add(mobileNumber)
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                toggleSaveButton()
             }
 
-            // Convert lists to arrays
-            val fieldArray = fields.toTypedArray()
-            val dataArray = data.toTypedArray()
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
 
-            // Replace with your API endpoint
-            val putData = PutData(
-                Urls.URL_CHANGE_ACCOUNT,
-                "POST",
-                fieldArray,
-                dataArray
+    private fun updateUserDetails() {
+        val updatedFirstname = firstnameEditText.text.toString().trim()
+        val updatedLastname = lastnameEditText.text.toString().trim()
+        val updatedEmail = emailEditText.text.toString().trim()
+        val updatedMobileNumber = mobileNumberEditText.text.toString().trim()
+        val userId = sessionManagement.getUserId()
+
+        if (updatedFirstname.isEmpty() && updatedLastname.isEmpty() && updatedEmail.isEmpty() && updatedMobileNumber.isEmpty()) {
+            Toast.makeText(requireContext(), "No changes detected.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (userId != null) {
+            val request = ApiService.UpdateUserRequest(
+                user_id = userId,
+                first_name = if (updatedFirstname.isNotEmpty()) updatedFirstname else null,
+                last_name = if (updatedLastname.isNotEmpty()) updatedLastname else null,
+                email = if (updatedEmail.isNotEmpty()) updatedEmail else null,
+                phone = if (updatedMobileNumber.isNotEmpty()) updatedMobileNumber else null
             )
 
-            if (putData.startPut()) {
-                if (putData.onComplete()) {
-                    val result = putData.result
-                    if (result == "Update Success") {
-                        // Update SharedPreferences with new data
-                        val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
-                        val editor = sharedPreferences.edit()
-
-                        if (firstname.isNotEmpty()) editor.putString("first_name", firstname)
-                        if (lastname.isNotEmpty()) editor.putString("last_name", lastname)
-                        if (email.isNotEmpty()) editor.putString("email", email)
-                        if (mobileNumber.isNotEmpty()) editor.putString("phone", mobileNumber)
-
-                        editor.apply()
-
-                        // Update the hintText of EditText fields
-                        activity?.runOnUiThread {
-                            if (firstname.isNotEmpty()) firstnameEditText.hint = firstname
-                            if (lastname.isNotEmpty()) lastnameEditText.hint = lastname
-                            if (email.isNotEmpty()) emailEditText.hint = email
-                            if (mobileNumber.isNotEmpty()) mobileNumberEditText.hint = mobileNumber
-
-                            // Navigate back to ProfileFragment
+            apiService.updateUser(request).enqueue(object : Callback<ApiService.UpdateUserResponse> {
+                override fun onResponse(call: Call<ApiService.UpdateUserResponse>, response: Response<ApiService.UpdateUserResponse>) {
+                    if (response.isSuccessful) {
+                        response.body()?.let {
+                            Toast.makeText(requireContext(), "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                            updateUserPreferences(updatedFirstname, updatedLastname, updatedEmail, updatedMobileNumber)
                             parentFragmentManager.popBackStack()
                         }
-
-                        // Show success message
-                        Toast.makeText(requireContext(), "Profile updated successfully!", Toast.LENGTH_SHORT).show()
                     } else {
-                        // Show error message
-                        Toast.makeText(requireContext(), "Failed to update profile: $result", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Failed to update profile.", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }
+
+                override fun onFailure(call: Call<ApiService.UpdateUserResponse>, t: Throwable) {
+                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "User ID not found. Please log in again.", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    private fun updateUserPreferences(firstname: String, lastname: String, email: String, phone: String) {
+        val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        if (firstname.isNotEmpty()) editor.putString("first_name", firstname)
+        if (lastname.isNotEmpty()) editor.putString("last_name", lastname)
+        if (email.isNotEmpty()) editor.putString("email", email)
+        if (phone.isNotEmpty()) editor.putString("phone", phone)
+        editor.apply()
+    }
+
 }

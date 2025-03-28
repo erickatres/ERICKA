@@ -1,4 +1,5 @@
 package com.example.bookyournailsmobile.Class
+
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.android.material.datepicker.CalendarConstraints
@@ -11,11 +12,15 @@ class DateValidatorNoPastAndNoSundays : CalendarConstraints.DateValidator {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
 
         val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        cal.timeInMillis = today
+        cal.add(Calendar.DAY_OF_MONTH, 10) // Calculate max allowed date (5 days ahead)
+        val maxDate = cal.timeInMillis
+
         cal.timeInMillis = date
         val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)
 
-        // Allow only future dates (today or later) and exclude Sundays
-        return date >= today && dayOfWeek != Calendar.SUNDAY
+        // Allow only future dates (today or later), exclude Sundays, and limit to 5 days ahead
+        return date in today..maxDate && dayOfWeek != Calendar.SUNDAY
     }
 
     override fun describeContents(): Int = 0
@@ -32,4 +37,3 @@ class DateValidatorNoPastAndNoSundays : CalendarConstraints.DateValidator {
         }
     }
 }
-

@@ -1,6 +1,9 @@
 package com.example.bookyournailsmobile.Fragments
 
+import GelPolishFragment
 import RegularFragment
+import RemovalFragment
+import SoftGelExtensionFragment
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.text.Editable
@@ -117,11 +120,12 @@ class ReviewFormFragment : Fragment() {
                     Toast.makeText(requireContext(), "Review submitted successfully!", Toast.LENGTH_SHORT).show()
                     resetForm()
 
-                    // Check if service is "Regular Plain", then navigate
-                    if (service == "Regular Plain") {
-                        navigateToRegularFragment()
-                    } else {
-                        parentFragmentManager.popBackStack() // Go back to previous fragment
+                    when (service) {
+                        "Regular Plain" -> navigateToRegularFragment()
+                        "Removal" -> navigateToRemovalFragment()
+                        "Gel Polish" -> navigateToGelPolishFragment()
+                        "Soft Gel X" -> navigateToSoftGelExtensionFragment()
+                        else -> parentFragmentManager.popBackStack()
                     }
                 } else {
                     Log.e("ReviewFormFragment", "Response Code: ${response.code()}")
@@ -136,6 +140,83 @@ class ReviewFormFragment : Fragment() {
             }
         })
     }
+
+    private fun navigateToSoftGelExtensionFragment() {
+        val SoftGelExtensionFragment = SoftGelExtensionFragment()
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, SoftGelExtensionFragment)
+            .addToBackStack(null)
+            .commit()
+
+        // Ensure transaction completes before scrolling
+        parentFragmentManager.executePendingTransactions()
+
+        SoftGelExtensionFragment.view?.post {
+            val scrollView = SoftGelExtensionFragment.view?.findViewById<NestedScrollView>(R.id.softgelx_scrollview)
+
+            scrollView?.postDelayed({
+                val y = scrollView.bottom
+                ObjectAnimator.ofInt(scrollView, "scrollY", y).apply {
+                    duration = 500
+                    interpolator = AccelerateDecelerateInterpolator()
+                    start()
+                }
+            }, 300)
+        }
+    }
+
+    private fun navigateToGelPolishFragment() {
+        val gelPolishFragment = GelPolishFragment()
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, gelPolishFragment)
+            .addToBackStack(null)
+            .commit()
+
+        // Ensure transaction completes before scrolling
+        parentFragmentManager.executePendingTransactions()
+
+        gelPolishFragment.view?.post {
+            val scrollView = gelPolishFragment.view?.findViewById<NestedScrollView>(R.id.gelpolish_scrollview)
+
+            scrollView?.postDelayed({
+                val y = scrollView.bottom
+                ObjectAnimator.ofInt(scrollView, "scrollY", y).apply {
+                    duration = 500
+                    interpolator = AccelerateDecelerateInterpolator()
+                    start()
+                }
+            }, 300)
+        }
+    }
+
+    private fun navigateToRemovalFragment() {
+        val removalFragment = RemovalFragment()
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, removalFragment)
+            .addToBackStack(null)
+            .commit()
+
+        // Ensure transaction completes before scrolling
+        parentFragmentManager.executePendingTransactions()
+
+        removalFragment.view?.post {
+            val scrollView = removalFragment.view?.findViewById<NestedScrollView>(R.id.removal_nested_scrollview)
+
+            scrollView?.postDelayed({
+                val y = scrollView.bottom
+                ObjectAnimator.ofInt(scrollView, "scrollY", y).apply {
+                    duration = 500
+                    interpolator = AccelerateDecelerateInterpolator()
+                    start()
+                }
+            }, 300)
+        }
+    }
+
+
 
     private fun navigateToRegularFragment() {
         val regularFragment = RegularFragment()

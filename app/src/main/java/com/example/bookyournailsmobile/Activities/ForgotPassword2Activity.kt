@@ -117,36 +117,36 @@ class ForgotPassword2Activity : AppCompatActivity() {
 
         apiService.verifyResetCode(headers, verifyResetCodeRequest).enqueue(object : Callback<ApiService.VerifyResetCodeResponse> {
             override fun onResponse(call: Call<ApiService.VerifyResetCodeResponse>, response: Response<ApiService.VerifyResetCodeResponse>) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful && response.body() != null) {
                     val verifyResetCodeResponse = response.body()
-                    if (verifyResetCodeResponse != null) {
-                        // Handle success
-                        Toast.makeText(this@ForgotPassword2Activity, verifyResetCodeResponse.message, Toast.LENGTH_SHORT).show()
 
-                        // Navigate to NewPasswordActivity
-                        navigateToNewPasswordActivity(passwordResetToken)
+                    // Check if the token returned is valid
+                    if (verifyResetCodeResponse?.code != null) {
+                        Toast.makeText(this@ForgotPassword2Activity, "Code verified successfully!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@ForgotPassword2Activity, NewPasswordActivity::class.java)
+                        intent.putExtra("PASSWORD_RESET_TOKEN", passwordResetToken)
+                        startActivity(intent)
+                        finish()
                     } else {
-                        // Handle failure
-                        Toast.makeText(this@ForgotPassword2Activity, "Failed to verify code: Invalid response", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ForgotPassword2Activity, "Invalid reset token received.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    // Handle HTTP error
                     val errorMessage = when (response.code()) {
-                        400 -> "Invalid request."
-                        404 -> "Token not found."
+                        400 -> "Invalid reset code. Please try again."
+                        404 -> "Token not found. Request a new one."
                         500 -> "Server error. Please try again later."
-                        else -> "Failed to verify code: ${response.message()}"
+                        else -> "Failed to verify reset code: ${response.message()}"
                     }
                     Toast.makeText(this@ForgotPassword2Activity, errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ApiService.VerifyResetCodeResponse>, t: Throwable) {
-                // Handle network error
                 Toast.makeText(this@ForgotPassword2Activity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     private fun navigateToNewPasswordActivity(passwordResetToken: String) {
         val intent = Intent(this, NewPasswordActivity::class.java)

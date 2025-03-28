@@ -46,6 +46,10 @@ interface ApiService {
         @Field("price") price: String
     ): Call<Void>
 
+    @PUT("updatepassword")
+    fun changePassword(
+        @Body request: ChangePasswordRequest
+    ): Call<ChangePasswordResponse>
 
     @POST("isTimeAlreadyBookedMobile")
     fun checkTimeAvailability(@Body request: TimeAvailabilityRequest): Call<TimeAvailabilityResponse>
@@ -55,6 +59,9 @@ interface ApiService {
         @HeaderMap headers: Map<String, String>,
         @Body resetPasswordRequest: ResetPasswordRequest
     ): Call<ResetPasswordResponse>
+
+    @POST("updateuser") // Update this with your actual API endpoint
+    fun updateUser(@Body request: UpdateUserRequest): Call<UpdateUserResponse>
 
     // Add this to your ApiService interface
     @POST("checkemail") // Replace with your actual endpoint
@@ -189,5 +196,24 @@ interface ApiService {
         val last_name: String,
         val date_formatted: String
     )
+    data class ChangePasswordRequest(
+        val old_password: String,
+        val password: String,
+        val confirm_password: String
+    )
 
+    data class ChangePasswordResponse(
+        val message: String?,
+        val error: String?
+    )
+    data class UpdateUserRequest(
+        val user_id: String,
+        val first_name: String?,
+        val last_name: String?,
+        val email: String?,
+        val phone: String?
+    )
+    data class UpdateUserResponse(
+        @SerializedName("message") val message: String
+    )
 }

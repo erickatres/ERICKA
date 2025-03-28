@@ -19,5 +19,6 @@
     <color name="star">#F8E431</color><!-- New color -->
     <color name="confirm">#82AEC0</color>
     <color name="dark">#2F7889</color>
+    <color name="starcolor">#FFFB86</color>
 
 </resources>
