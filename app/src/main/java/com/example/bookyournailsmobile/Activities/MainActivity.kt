@@ -1,5 +1,6 @@
 package com.example.bookyournailsmobile.Activities
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -12,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Domain.User
 import com.example.bookyournailsmobile.Fragments.AppointmentFragment
 import com.example.bookyournailsmobile.Fragments.BookingAttachImageFragment
 import com.example.bookyournailsmobile.Fragments.BookingFragment
@@ -23,6 +25,7 @@ import com.example.bookyournailsmobile.Fragments.ReviewFormFragment
 import com.example.bookyournailsmobile.Fragments.SummaryRegularPlainFragment
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Managers.SessionManagement
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+
 
         // Initialize views and set up the UI
         initViews()
@@ -100,6 +104,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    fun getUserFromPreferences(): User? {
+        val sharedPreferences = getSharedPreferences("UserPref", Context.MODE_PRIVATE)
+        val userJson = sharedPreferences.getString("user_data", null)
+        return userJson?.let { Gson().fromJson(it, User::class.java) }
+    }
+
 
     // Hide the system navigation bar
     private fun hideSystemNavigationBar() {

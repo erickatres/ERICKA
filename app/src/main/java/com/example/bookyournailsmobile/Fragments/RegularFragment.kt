@@ -55,6 +55,9 @@ class RegularFragment : Fragment() {
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.btn_book)
 
+        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
+        bottomNav?.visibility = View.GONE
+
         // Setup Image Slider Adapter
         val adapter = ImageSliderAdapter(imageList)
         viewPager.adapter = adapter
@@ -89,6 +92,10 @@ class RegularFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        // Show bottom navigation when leaving this fragment
+        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
+        bottomNav?.visibility = View.VISIBLE
     }
 
     private fun fetchReviews(serviceType: String) {
