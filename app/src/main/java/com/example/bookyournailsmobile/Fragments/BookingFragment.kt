@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Adapters.BookingAdapter
 import com.example.bookyournailsmobile.Managers.SessionManagement
@@ -23,6 +24,7 @@ import retrofit2.Response
 class BookingFragment : Fragment() {
 
     private lateinit var bookingHistoryList: ListView
+    private lateinit var bookingActive: CardView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +34,7 @@ class BookingFragment : Fragment() {
 
         // Initialize the ListView
         bookingHistoryList = view.findViewById(R.id.booking_history_list)
+        bookingActive = view.findViewById(R.id.activeBooking)
 
         // Fetch and display booking history for the current user
         fetchAndDisplayBookingHistory()
@@ -72,6 +75,7 @@ class BookingFragment : Fragment() {
                                     Booking(
                                         service_type = bookingHistory.service_type,
                                         date_formatted = bookingHistory.date_formatted,
+                                        time = bookingHistory.time,
                                         status = bookingHistory.status // Pass the status here
                                     )
                                 }
@@ -88,7 +92,9 @@ class BookingFragment : Fragment() {
                                             arguments = Bundle().apply {
                                                 putString("service_type", booking.service_type)
                                                 putString("service_date", booking.date_formatted)
+                                                putString("service_time", booking.time)
                                                 putString("status", booking.status)
+
                                             }
                                         }
 

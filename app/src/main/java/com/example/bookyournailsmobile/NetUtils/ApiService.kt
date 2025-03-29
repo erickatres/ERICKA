@@ -166,7 +166,8 @@ interface ApiService {
     data class BookingHistory(
         val service_type: String,
         val date_formatted: String,
-        val date: String, // Optional, if needed
+        val date: String,
+        val time: String, // ✅ Added this// Optional, if needed
         val status: String // Optional, if needed
     )
     // Add this class to your models

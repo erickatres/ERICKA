@@ -3,6 +3,7 @@ package com.example.bookyournailsmobile.Models
 data class Booking(
     val service_type: String,
     val date_formatted: String,
+    val time: String,
     val status: String // Add this field
 )
 data class TimeAvailabilityResponse(
