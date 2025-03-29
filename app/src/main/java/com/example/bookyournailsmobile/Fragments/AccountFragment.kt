@@ -166,11 +166,14 @@ class AccountFragment : Fragment() {
                             Toast.makeText(requireContext(), "Profile updated successfully!", Toast.LENGTH_SHORT).show()
                             updateUserPreferences(updatedFirstname, updatedLastname, updatedEmail, updatedMobileNumber)
                             parentFragmentManager.popBackStack()
+                            restartMainActivity()
                         }
                     } else {
-                        Toast.makeText(requireContext(), "Failed to update profile.", Toast.LENGTH_SHORT).show()
+                        val errorBody = response.errorBody()?.string()
+                        Toast.makeText(requireContext(), "Failed to update profile: $errorBody", Toast.LENGTH_LONG).show()
                     }
                 }
+
 
                 override fun onFailure(call: Call<ApiService.UpdateUserResponse>, t: Throwable) {
                     Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
@@ -191,5 +194,9 @@ class AccountFragment : Fragment() {
         if (phone.isNotEmpty()) editor.putString("phone", phone)
         editor.apply()
     }
-
+    private fun restartMainActivity() {
+        val intent = requireActivity().intent
+        requireActivity().finish()
+        requireActivity().startActivity(intent)
+    }
 }
