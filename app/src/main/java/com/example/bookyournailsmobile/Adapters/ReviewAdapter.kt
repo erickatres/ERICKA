@@ -29,6 +29,9 @@ class ReviewAdapter(private val reviews: List<ApiService.Review>) :
         holder.reviewerName.text = "${review.first_name} ${review.last_name}"
         holder.reviewText.text = review.description
         holder.ratingBar.rating = review.rating
+
+        holder.ratingBar.scaleX = 0.4f
+        holder.ratingBar.scaleY = 0.4f
     }
 
     override fun getItemCount() = reviews.size

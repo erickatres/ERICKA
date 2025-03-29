@@ -338,11 +338,6 @@
                         android:textColor="#2F7889"
                         android:layout_weight="1"/>
 
-                    <ImageView
-                        android:id="@+id/moreRatings"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/morebutton"/>
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
