@@ -96,7 +96,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:text="Settings"
                 android:textColor="#2F7889"
                 android:textSize="28sp"
@@ -108,7 +108,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -144,7 +144,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -180,7 +180,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:text="Support"
                 android:textColor="#2F7889"
                 android:textSize="28sp"
@@ -189,7 +189,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -219,7 +219,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -250,7 +250,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -277,7 +277,7 @@
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:textAlignment="center"
                 android:text="Logout"
                 android:textStyle="bold"
