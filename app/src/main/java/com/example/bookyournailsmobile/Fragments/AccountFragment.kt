@@ -68,10 +68,10 @@ class AccountFragment : Fragment() {
             originalEmail = it.email
             originalMobileNumber = it.phone
 
-            firstnameEditText.hint = it.first_name
-            lastnameEditText.hint = it.last_name
-            emailEditText.hint = it.email
-            mobileNumberEditText.hint = it.phone
+            firstnameEditText.setText(it.first_name)
+            lastnameEditText.setText(it.last_name)
+            emailEditText.setText(it.email)
+            mobileNumberEditText.setText(it.phone)
         }
 
         addTextWatcher(firstnameEditText)

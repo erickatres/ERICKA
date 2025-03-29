@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:text="Post-Removal Aftercare"
                     android:textColor="#2F7889"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -320,6 +320,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="70dp"
                 android:paddingHorizontal="20dp">
 
                 <LinearLayout
@@ -333,7 +334,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ratings and testimonials"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         android:textStyle="bold"
                         android:textColor="#2F7889"
                         android:layout_weight="1"/>
@@ -346,13 +347,14 @@
                     android:layout_height="match_parent" />
 
                 <TextView
+                    android:id="@+id/removal_see_all_reviews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="See all reviews"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#2F7889"
-                    android:layout_marginBottom="120dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_gravity="start"/>
             </LinearLayout>
 

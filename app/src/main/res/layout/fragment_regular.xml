@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:text="Nail Care Tips"
                     android:textColor="#2F7889"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -311,7 +311,6 @@
                     android:background="@android:color/darker_gray"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.493"
                     app:layout_constraintStart_toStartOf="parent" />
             </LinearLayout>
 
@@ -320,6 +319,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="70dp"
                 android:paddingHorizontal="20dp">
 
                 <LinearLayout
@@ -333,7 +333,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ratings and testimonials"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         android:textStyle="bold"
                         android:textColor="#2F7889"
                         android:layout_weight="1"/>
@@ -353,7 +353,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#2F7889"
-                    android:layout_marginBottom="100dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_gravity="start"/>
             </LinearLayout>
 

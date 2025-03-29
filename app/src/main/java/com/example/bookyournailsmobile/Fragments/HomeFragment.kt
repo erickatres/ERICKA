@@ -72,18 +72,19 @@ class HomeFragment : Fragment() {
         makeFullScreen()
         setupButtonListeners(view)
 
-
-
-
-
         // Retrieve user data and set the first name to the TextView
         val user = requireContext().getUserFromPreferences()
         user?.let {
-            firstNameTextView.text = "${it.first_name}!" // Add an exclamation mark
+            val firstName = it.first_name
+            val truncatedName = if (firstName.length > 10) {
+                "${firstName.take(10)}..."
+            } else {
+                firstName
+            }
+            firstNameTextView.text = "$truncatedName!" // Add an exclamation mark
         }
-
-        // Set up button click listeners after the delay
     }
+
 
 
     private fun makeFullScreen() {

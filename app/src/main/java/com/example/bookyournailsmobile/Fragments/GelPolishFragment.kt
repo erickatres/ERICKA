@@ -28,6 +28,7 @@ class GelPolishFragment : Fragment() {
     private lateinit var btnBook: Button
     private lateinit var gelPolishReviews: RecyclerView
     private lateinit var ratingTestimonials: TextView
+    private lateinit var seeallReviews: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +42,6 @@ class GelPolishFragment : Fragment() {
 
         Log.d("GelPolishFragment", "Fragment created successfully")
 
-        // Hide bottom navigation
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.GONE
 
@@ -52,11 +52,10 @@ class GelPolishFragment : Fragment() {
         btnBook = view.findViewById(R.id.btn_book)
         gelPolishReviews = view.findViewById(R.id.gelpolish_review)
         ratingTestimonials = view.findViewById(R.id.gelpolish_rating_testimonials)
+        seeallReviews = view.findViewById(R.id.gel_polish_seeallreviews)
 
-        // Ensure btnBack is visible
         btnBack.visibility = View.VISIBLE
 
-        // Image List
         val imageList = listOf(
             R.drawable.gelpolish1,
             R.drawable.gelpolish2,
@@ -65,14 +64,11 @@ class GelPolishFragment : Fragment() {
             R.drawable.gelpolish5
         )
 
-        // Set Adapter
         val adapter = ImageSliderAdapter(imageList)
         viewPager.adapter = adapter
 
-        // Initial Page Indicator
         tvImageCount.text = "1/${imageList.size}"
 
-        // Page Change Listener
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -80,19 +76,16 @@ class GelPolishFragment : Fragment() {
             }
         })
 
-        // Set up RecyclerView
         gelPolishReviews.layoutManager = LinearLayoutManager(requireContext())
 
         // Fetch reviews for Gel Polish service
         fetchReviews("Gel Polish")
 
-        // Back Button Click
         btnBack.setOnClickListener {
             Log.d("GelPolishFragment", "Back button clicked")
             parentFragmentManager.popBackStack()
         }
 
-        // Book Button Click
         btnBook.setOnClickListener {
             Log.d("GelPolishFragment", "Book button clicked")
             navigateToAppointmentFragment("Gel Polish")
@@ -111,10 +104,26 @@ class GelPolishFragment : Fragment() {
             override fun onResponse(call: Call<ApiService.ReviewResponse>, response: Response<ApiService.ReviewResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { reviewResponse ->
-                        if (reviewResponse.reviews.isNotEmpty()) {
-                            gelPolishReviews.adapter = ReviewAdapter(reviewResponse.reviews)
+                        val allReviews = reviewResponse.reviews
+                        if (allReviews.isNotEmpty()) {
+                            val limitedReviews = allReviews.take(3) // Show only 3 reviews initially
+                            gelPolishReviews.adapter = ReviewAdapter(limitedReviews)
+
+                            // Show "See All Reviews" if there are more than 3 reviews
+                            if (allReviews.size > 3) {
+                                seeallReviews.visibility = View.VISIBLE
+                            } else {
+                                seeallReviews.visibility = View.GONE
+                            }
+
+                            // Expand reviews when "See All Reviews" is clicked
+                            seeallReviews.setOnClickListener {
+                                gelPolishReviews.adapter = ReviewAdapter(allReviews) // Show all reviews
+                                seeallReviews.visibility = View.GONE // Hide button after expanding
+                            }
                         } else {
                             Log.d("GelPolishFragment", "No reviews found for $serviceType")
+                            seeallReviews.visibility = View.GONE
                         }
                     }
                 } else {

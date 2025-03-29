@@ -47,7 +47,13 @@ class ProfileFragment : Fragment() {
 
         val user = requireContext().getUserFromPreferences()
         user?.let {
-            TVUser.text = it.first_name
+            val firstName = it.first_name
+            val truncatedName = if (firstName.length > 10) {
+                "${firstName.take(10)}..."
+            } else {
+                firstName
+            }
+            TVUser.text = truncatedName
         }
 
         // Click listener to open the gallery

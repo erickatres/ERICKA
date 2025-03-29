@@ -28,6 +28,7 @@ class RegularFragment : Fragment() {
     private lateinit var btnBack: FrameLayout
     private lateinit var btnBook: Button
     private lateinit var tvImageCount: TextView
+    private lateinit var seeallReviews: TextView
 
     private val imageList = listOf(
         R.drawable.regularplain1,
@@ -54,6 +55,7 @@ class RegularFragment : Fragment() {
         regularReviews = view.findViewById(R.id.regular_review)
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.btn_book)
+        seeallReviews = view.findViewById(R.id.regular_see_all_reviews)
 
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.GONE
@@ -110,10 +112,20 @@ class RegularFragment : Fragment() {
             override fun onResponse(call: Call<ApiService.ReviewResponse>, response: Response<ApiService.ReviewResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { reviewResponse ->
-                        if (reviewResponse.reviews.isNotEmpty()) {
-                            regularReviews.adapter = ReviewAdapter(reviewResponse.reviews)
+                        val allReviews = reviewResponse.reviews
+                        if (allReviews.isNotEmpty()) {
+                            val limitedReviews = allReviews.take(3) // Take only first 3 reviews
+                            regularReviews.adapter = ReviewAdapter(limitedReviews)
+
+                            // Show "See All Reviews" if there are more than 3 reviews
+                            if (allReviews.size > 3) {
+                                seeallReviews.visibility = View.VISIBLE
+                            } else {
+                                seeallReviews.visibility = View.GONE
+                            }
                         } else {
                             Log.d("RegularFragment", "No reviews found for $serviceType")
+                            seeallReviews.visibility = View.GONE
                         }
                     }
                 } else {
@@ -126,6 +138,7 @@ class RegularFragment : Fragment() {
             }
         })
     }
+
 
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {

@@ -28,6 +28,7 @@ class RemovalFragment : Fragment() {
     private lateinit var btnBook: Button
     private lateinit var removalReviews: RecyclerView
     private lateinit var ratingTestimonials: TextView
+    private lateinit var seeAllReviews: TextView
 
     private val imageList = listOf(
         R.drawable.removal1,
@@ -49,26 +50,21 @@ class RemovalFragment : Fragment() {
 
         Log.d("RemovalFragment", "Fragment created successfully")
 
-        // Initialize views
         viewPager = view.findViewById(R.id.viewPagerRemoval)
         tvImageCount = view.findViewById(R.id.tvImageCountRemoval)
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.btn_book)
         removalReviews = view.findViewById(R.id.removal_review)
         ratingTestimonials = view.findViewById(R.id.removal_rating_testimonials)
+        seeAllReviews = view.findViewById(R.id.removal_see_all_reviews)
 
-        // Hide bottom navigation
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.GONE
 
-        // Set ViewPager Adapter
         val adapter = ImageSliderAdapter(imageList)
         viewPager.adapter = adapter
-
-        // Update Image Count Display
         tvImageCount.text = "1/${imageList.size}"
 
-        // Handle manual image sliding
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -76,19 +72,15 @@ class RemovalFragment : Fragment() {
             }
         })
 
-        // Set up RecyclerView for reviews
         removalReviews.layoutManager = LinearLayoutManager(requireContext())
 
-        // Fetch reviews dynamically
         fetchReviews("Removal")
 
-        // Back Button Click
         btnBack.setOnClickListener {
             Log.d("RemovalFragment", "Back button clicked")
             parentFragmentManager.popBackStack()
         }
 
-        // Book Button Click
         btnBook.setOnClickListener {
             Log.d("RemovalFragment", "Book button clicked")
             navigateToAppointmentFragment("Removal")
@@ -97,8 +89,6 @@ class RemovalFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        // Show bottom navigation when leaving this fragment
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.VISIBLE
     }
@@ -115,10 +105,24 @@ class RemovalFragment : Fragment() {
             override fun onResponse(call: Call<ApiService.ReviewResponse>, response: Response<ApiService.ReviewResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { reviewResponse ->
-                        if (reviewResponse.reviews.isNotEmpty()) {
-                            removalReviews.adapter = ReviewAdapter(reviewResponse.reviews)
+                        val allReviews = reviewResponse.reviews
+                        if (allReviews.isNotEmpty()) {
+                            val limitedReviews = allReviews.take(3)
+                            removalReviews.adapter = ReviewAdapter(limitedReviews)
+
+                            if (allReviews.size > 3) {
+                                seeAllReviews.visibility = View.VISIBLE
+                            } else {
+                                seeAllReviews.visibility = View.GONE
+                            }
+
+                            seeAllReviews.setOnClickListener {
+                                removalReviews.adapter = ReviewAdapter(allReviews)
+                                seeAllReviews.visibility = View.GONE
+                            }
                         } else {
                             Log.d("RemovalFragment", "No reviews found for $serviceType")
+                            seeAllReviews.visibility = View.GONE
                         }
                     }
                 } else {
@@ -131,6 +135,7 @@ class RemovalFragment : Fragment() {
             }
         })
     }
+
 
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {
