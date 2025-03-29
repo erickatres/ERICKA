@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:padding="24dp"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/fragment_container"
@@ -24,12 +24,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="45dp"
-                android:layout_marginStart="30dp"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!-- Back Button -->
                 <FrameLayout
                     android:id="@+id/btnBack"
                     android:layout_width="48dp"
@@ -40,7 +38,6 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_marginBottom="4dp"
                         android:layout_gravity="center"
                         android:scaleType="fitCenter"
                         android:src="@drawable/back_arrorw" />
@@ -50,16 +47,15 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="Our Policy"
+                    android:text="Our Policies"
+                    android:layout_gravity="center"
                     android:textColor="#2F7889"
-                    android:textSize="28sp"
+                    android:textSize="32sp"
                     android:textStyle="bold"/>
             </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Salon Policy"
                 android:textColor="#2F7889"
@@ -71,12 +67,12 @@
 
             <TextView
                 android:id="@+id/TVAdditionalInfo"
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
-                android:text="At Book Your Nails, we are committed to providing an exceptional experience with every appointment. To maintain the highest standards of service and ensure a seamless booking process, we kindly ask that you review and adhere to our salon policies."
+                android:text="
+At Nailscape, we are committed to providing an exceptional experience with every appointment. To maintain the highest standards of service and ensure a seamless booking process, we kindly ask that you review and adhere to our salon policies."
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +82,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Appointments"
                 android:textColor="#2F7889"
@@ -97,12 +92,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
-                android:text="• Booking: All appointments must be booked through the Book Your Nails app. This allows for real-time availability and easy scheduling."
+                android:text="• Booking: All appointments must be booked through the Nail Scape app. This allows for real-time availability and easy scheduling."
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -110,9 +104,8 @@
                 app:layout_constraintTop_toBottomOf="@id/TVaboutus" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• Punctuality: We kindly ask that you arrive on time for your appointment. If you’re more than 10 minutes late, we may need to adjust your service or reschedule to avoid impacting other clients."
@@ -123,9 +116,8 @@
                 app:layout_constraintTop_toBottomOf="@id/TVaboutus" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• No-Shows: Clients who miss an appointment without notice will be marked as a no-show and may be required to pay a fee or prepay for future bookings."
@@ -138,7 +130,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Service Guarantee"
                 android:textColor="#2F7889"
@@ -149,9 +140,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• We take pride in the quality of our work. If you experience any issues with your nails within 3 days of your appointment, please contact us so we can arrange a complimentary fix."
@@ -162,7 +152,7 @@
                 app:layout_constraintTop_toBottomOf="@id/TVaboutus" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/note_text"
                 android:textSize="15sp"
@@ -170,15 +160,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
-                android:text="Clieant Etiquette"
+                android:text="Client Etiquette"
                 android:textColor="#2F7889"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -187,9 +175,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• Hygiene: For the comfort of all clients, please ensure your hands are clean before your appointment."
@@ -200,9 +187,8 @@
                 app:layout_constraintTop_toBottomOf="@id/TVaboutus" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• Respect: We strive to create a peaceful environment. Kindly keep noise levels low and respect other clients’ space."
@@ -213,9 +199,8 @@
                 app:layout_constraintTop_toBottomOf="@id/TVaboutus" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• Health &amp; Safety: If you’re feeling unwell, we kindly ask that you reschedule your appointment to ensure the safety of our staff and clients."
@@ -228,7 +213,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Salon Environment"
                 android:textColor="#2F7889"
@@ -239,9 +223,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• No Pets: For hygiene and safety reasons, pets are not allowed inside the salon (service animals are exempt)."
@@ -252,9 +235,8 @@
                 app:layout_constraintTop_toBottomOf="@id/TVaboutus" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="• Children Policy: To maintain a serene atmosphere, we kindly request that young children are not brought to appointments unless they are receiving a service."
@@ -267,7 +249,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:text="Privacy Policy"
                 android:textColor="#2F7889"
@@ -278,9 +259,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
-                android:layout_width="352dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="Your personal information is secure with us. We collect only the data necessary to manage appointments and provide the best possible service. We never share your information with third parties without your consent."

@@ -2,5 +2,5 @@
 <resources>
     <!-- Other dimensions -->
     <dimen name="popup_width">350dp</dimen>
-    <dimen name="popup_height">200dp</dimen>
+    <dimen name="popup_height">220dp</dimen>
 </resources>

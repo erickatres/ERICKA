@@ -125,6 +125,14 @@ class SummaryRegularPlainFragment : Fragment() {
         dialog.setContentView(R.layout.pop_up_cancel)
         dialog.setCancelable(true)
 
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Set the width of the dialog when it is shown
+        dialog.setOnShowListener {
+            val window = dialog.window
+            window?.setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT) // Adjust width here
+        }
+
         val btnNo = dialog.findViewById<TextView>(R.id.btnNo)
         val btnYes = dialog.findViewById<TextView>(R.id.btnYes)
 
@@ -139,6 +147,8 @@ class SummaryRegularPlainFragment : Fragment() {
 
         dialog.show()
     }
+
+
 
     private fun navigateToHomeFragment() {
         val homeFragment = HomeFragment()
@@ -155,20 +165,23 @@ class SummaryRegularPlainFragment : Fragment() {
         dialog.setContentView(R.layout.success_booking)
         dialog.setCancelable(false)
 
-        // Set the width and height of the dialog
-        val width = (resources.displayMetrics.widthPixels * 0.85).toInt() // 85% of screen width
-        val height = (resources.displayMetrics.heightPixels * 0.4).toInt() // 50% of screen height
-        dialog.window?.setLayout(width, height)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Set the width of the dialog when it is shown
+        dialog.setOnShowListener {
+            val window = dialog.window
+            window?.setLayout(900, ViewGroup.LayoutParams.WRAP_CONTENT) // Adjust width here
+        }
 
         val btnOk = dialog.findViewById<TextView>(R.id.btn_see_booking)
         btnOk.setOnClickListener {
             dialog.dismiss()
-            // Navigate to BookingFragment
             navigateToBookingFragment()
         }
 
         dialog.show()
     }
+
 
     private fun navigateToBookingFragment() {
         // Create an instance of BookingFragment

@@ -1,8 +1,12 @@
 package com.example.bookyournailsmobile.Activities
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -79,7 +83,7 @@ class NewPasswordActivity : AppCompatActivity() {
                     if (resetPasswordResponse?.message == "Password changed successfully") {
                         showToast("Password changed successfully!")
                         Log.d("ResetPassword", "Navigating to LoginActivity...")
-                        navigateToLogin()
+                        showSuccessPopup()
                     } else {
                         val errorMsg = resetPasswordResponse?.message ?: "Failed to reset password"
                         showToast(errorMsg)
@@ -130,4 +134,21 @@ class NewPasswordActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    private fun showSuccessPopup() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.success_popup_change_password)
+        dialog.setCancelable(false)
+
+        val btnOk = dialog.findViewById<Button>(R.id.btn_back_to_login) // Ensure your XML has a button with this ID
+        btnOk.setOnClickListener {
+            dialog.dismiss()
+            navigateToLogin()
+        }
+
+        dialog.window?.setLayout(900, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialog.show()
+    }
+
 }

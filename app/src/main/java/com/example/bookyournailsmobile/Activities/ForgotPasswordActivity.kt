@@ -42,7 +42,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         tvEmailDescription = findViewById(R.id.tvEmailDescription)
         textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail)
         etEmail = findViewById(R.id.etEmail)
-        btnContinue = findViewById(R.id.btnContinue)
+        btnContinue = findViewById(R.id.btn_Continue)
 
         // Back button listener
         btnBack.setOnClickListener {

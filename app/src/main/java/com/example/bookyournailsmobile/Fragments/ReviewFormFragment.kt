@@ -5,6 +5,7 @@ import RegularFragment
 import RemovalFragment
 import SoftGelExtensionFragment
 import android.animation.ObjectAnimator
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -118,6 +119,7 @@ class ReviewFormFragment : Fragment() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Review submitted successfully!", Toast.LENGTH_SHORT).show()
+                    showFeedbackPopup()
                     resetForm()
 
                     when (service) {
@@ -262,4 +264,26 @@ class ReviewFormFragment : Fragment() {
         reviewInput.text.clear()
         submitButton.isEnabled = false
     }
+    private fun showFeedbackPopup() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.popup_feedback)
+        dialog.setCancelable(false)
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Set the width of the dialog when it is shown
+        dialog.setOnShowListener {
+            val window = dialog.window
+            window?.setLayout(900, ViewGroup.LayoutParams.WRAP_CONTENT) // Adjust width here
+        }
+
+        val btnOk = dialog.findViewById<TextView>(R.id.btnOkay)
+        btnOk.setOnClickListener {
+            dialog.dismiss()
+            parentFragmentManager.popBackStack() // Go back after feedback
+        }
+
+        dialog.show()
+    }
+
 }

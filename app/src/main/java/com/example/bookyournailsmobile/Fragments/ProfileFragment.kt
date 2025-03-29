@@ -137,15 +137,20 @@ class ProfileFragment : Fragment() {
 
         val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
-            .setCancelable(true)
+            .setCancelable(true) // Allows dismissing by tapping outside
             .create()
+
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog.setOnShowListener {
+            val window = alertDialog.window
+            window?.setLayout(900, ViewGroup.LayoutParams.WRAP_CONTENT) // Adjust width here
+        }
 
         val btnNo = dialogView.findViewById<Button>(R.id.btn_no)
         val btnYes = dialogView.findViewById<Button>(R.id.btn_yes)
 
         btnNo.setOnClickListener {
-            blurView.visibility = View.GONE
-            alertDialog.dismiss()
+            alertDialog.dismiss() // Close dialog
         }
 
         btnYes.setOnClickListener {
@@ -155,8 +160,14 @@ class ProfileFragment : Fragment() {
             activity?.finish()
         }
 
+        // Hide blurView when dialog is dismissed (including clicking outside)
+        alertDialog.setOnDismissListener {
+            blurView.visibility = View.GONE
+        }
+
         alertDialog.show()
     }
+
 
     // Open the gallery to select an image
     private fun openGallery() {
