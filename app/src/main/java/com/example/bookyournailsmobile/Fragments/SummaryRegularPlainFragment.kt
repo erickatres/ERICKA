@@ -320,6 +320,8 @@ class SummaryRegularPlainFragment : Fragment() {
             selectedDate: String,
             selectedTime: String,
             servicePrice: String,
+            selectedShape: String, // ✅ Add this
+            selectedLength: String, // ✅ Add this
             imageUri: String
         ) = SummaryRegularPlainFragment().apply {
             arguments = Bundle().apply {
@@ -327,8 +329,11 @@ class SummaryRegularPlainFragment : Fragment() {
                 putString("SELECTED_DATE", selectedDate)
                 putString("SELECTED_TIME", selectedTime)
                 putString("SERVICE_PRICE", servicePrice)
-                putString("REFERENCE_IMAGE_URI", imageUri)
+                putString("SELECTED_SHAPE", selectedShape) // ✅ Store shape
+                putString("SELECTED_LENGTH", selectedLength) // ✅ Store length
+                putString("IMAGE_URI", imageUri)
             }
         }
     }
+
 }

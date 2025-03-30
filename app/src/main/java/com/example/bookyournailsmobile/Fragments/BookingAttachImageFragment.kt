@@ -23,22 +23,29 @@ class BookingAttachImageFragment : Fragment() {
     private lateinit var subtitleTextView: TextView
     private lateinit var uploadImageView: ImageView
     private lateinit var continueBookingButton: Button
-    private lateinit var btnSelectImage: TextView // Fixed variable name
+    private lateinit var btnSelectImage: TextView
 
     private var serviceType: String? = null
+    private var selectedDate: String? = null
     private var selectedTime: String? = null
     private var servicePrice: String? = null
+    private var selectedShape: String? = null
+    private var selectedLength: String? = null // ✅ Added selected length
     private var selectedImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        serviceType = arguments?.getString("SERVICE_TYPE")
-        selectedTime = arguments?.getString("SELECTED_TIME")
-        servicePrice = arguments?.getString("SERVICE_PRICE") ?: getServicePrice(serviceType) // Use the passed price if available
-        Log.d("BookingAttachImageFragment", "Service Type: $serviceType, Selected Time: $selectedTime, Service Price: $servicePrice"
-        )
-    }
+        arguments?.let {
+            serviceType = it.getString("SERVICE_TYPE")
+            selectedDate = it.getString("SELECTED_DATE")
+            selectedTime = it.getString("SELECTED_TIME")
+            servicePrice = it.getString("SERVICE_PRICE") ?: getServicePrice(serviceType)
+            selectedShape = it.getString("SELECTED_SHAPE")
+            selectedLength = it.getString("SELECTED_LENGTH") // ✅ Retrieve selected length
+        }
 
+        Log.d("BookingAttachImageFragment", "Service Type: $serviceType, Date: $selectedDate, Time: $selectedTime, Price: $servicePrice, Shape: $selectedShape, Length: $selectedLength")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,18 +57,12 @@ class BookingAttachImageFragment : Fragment() {
         subtitleTextView = view.findViewById(R.id.subtitle)
         uploadImageView = view.findViewById(R.id.upload_image)
         continueBookingButton = view.findViewById(R.id.continueBooking)
-        btnSelectImage = view.findViewById(R.id.btnSelectImage) // Fixed incorrect variable name
+        btnSelectImage = view.findViewById(R.id.btnSelectImage)
 
-        uploadImageView.setOnClickListener {
-            openGallery()
-        }
-        btnSelectImage.setOnClickListener {
-            openGallery()
-        }
+        uploadImageView.setOnClickListener { openGallery() }
+        btnSelectImage.setOnClickListener { openGallery() }
 
-        continueBookingButton.setOnClickListener {
-            handleContinueButtonClick()
-        }
+        continueBookingButton.setOnClickListener { handleContinueButtonClick() }
 
         return view
     }
@@ -80,13 +81,8 @@ class BookingAttachImageFragment : Fragment() {
                 uploadImageView.setImageURI(selectedImageUri)
                 Toast.makeText(requireContext(), "Image selected successfully!", Toast.LENGTH_SHORT).show()
 
-                // Enable the button
                 continueBookingButton.isEnabled = true
-
-                // Change background to PNG
                 continueBookingButton.setBackgroundResource(R.drawable.continue_filled)
-
-                // Force redraw
                 continueBookingButton.invalidate()
                 continueBookingButton.requestLayout()
 
@@ -97,10 +93,9 @@ class BookingAttachImageFragment : Fragment() {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
-        (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
+        (activity as? MainActivity)?.setBottomNavVisibility(false)
     }
 
     private fun handleContinueButtonClick() {
@@ -114,22 +109,20 @@ class BookingAttachImageFragment : Fragment() {
     }
 
     private fun navigateToSummaryRegularPlainFragment() {
-        val time = selectedTime ?: "Unknown"
-        val date = arguments?.getString("SELECTED_DATE") ?: "Unknown"
-        val price = servicePrice ?: "₱350"
-
         val summaryFragment = SummaryRegularPlainFragment.newInstance(
             serviceType ?: "Unknown",
-            date,
-            time,
-            price,
+            selectedDate ?: "Unknown",
+            selectedTime ?: "Unknown",
+            servicePrice ?: "₱350",
+            selectedShape ?: "Unknown",
+            selectedLength ?: "Unknown", // ✅ Pass selected length
             selectedImageUri.toString()
         )
 
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, summaryFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, summaryFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun getServicePrice(serviceType: String?): String {

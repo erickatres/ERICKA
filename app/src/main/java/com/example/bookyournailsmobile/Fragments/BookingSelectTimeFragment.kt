@@ -182,13 +182,14 @@ class BookingSelectTimeFragment : Fragment() {
 
     private fun handleContinueButtonClick() {
         selectedTime?.let {
-            if (serviceType == "Removal") {
-                navigateToSummaryRegularPlainFragment()
-            } else {
-                navigateToBookingAttachImageFragment()
+            when (serviceType) {
+                "Removal" -> navigateToSummaryRegularPlainFragment()
+                "Soft Gel X" -> navigateToBookingSelectShapeFragment() // Navigate to shape selection
+                else -> navigateToBookingAttachImageFragment()
             }
         } ?: showToast("Please select an available time")
     }
+
 
     private fun getServicePrice(serviceType: String?): String {
         return when (serviceType) {
@@ -199,6 +200,24 @@ class BookingSelectTimeFragment : Fragment() {
             else -> "null"
         }
     }
+    private fun navigateToBookingSelectShapeFragment() {
+        val time = selectedTime ?: return
+        val price = getServicePrice(serviceType) // Get the service price
+
+        val fragment = BookingSelectShapeFragment()
+        fragment.arguments = Bundle().apply {
+            putString("SELECTED_DATE", selectedDate)
+            putString("SERVICE_TYPE", serviceType)
+            putString("SELECTED_TIME", time)
+            putString("SERVICE_PRICE", price)
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
 
     private fun navigateToSummaryRegularPlainFragment() {
         val time = selectedTime ?: return

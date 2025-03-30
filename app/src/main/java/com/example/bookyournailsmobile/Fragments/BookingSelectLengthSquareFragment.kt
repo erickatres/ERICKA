@@ -1,59 +1,100 @@
 package com.example.bookyournailsmobile.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.R
+import com.example.bookyournailsmobile.databinding.BookingSelectLengthSquareBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [BookingSelectLengthSquareFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BookingSelectLengthSquareFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: BookingSelectLengthSquareBinding? = null
+    private val binding get() = _binding!!
+
+    private var serviceType: String? = null
+    private var selectedDate: String? = null
+    private var selectedTime: String? = null
+    private var servicePrice: String? = null
+    private var selectedShape: String? = null
+    private var selectedLength: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            serviceType = it.getString("SERVICE_TYPE")
+            selectedDate = it.getString("SELECTED_DATE")
+            selectedTime = it.getString("SELECTED_TIME")
+            servicePrice = it.getString("SERVICE_PRICE")
+            selectedShape = it.getString("SELECTED_SHAPE")
+            selectedLength = it.getString("SELECTED_LENGTH")
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.booking_select_length_square, container, false)
+    ): View {
+        _binding = BookingSelectLengthSquareBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Set title
+        binding.title.text = serviceType ?: "Soft Gel Extension"
+        binding.textView16.text = "Choose Length"
+
+        // Set click listeners for selecting length
+        binding.squareShape1.setOnClickListener { selectLength("Small") }
+        binding.squareShape2.setOnClickListener { selectLength("Medium") }
+        binding.squareShape3.setOnClickListener { selectLength("Long") }
+
+        // Disable continue button initially
+        binding.squareContinueBooking.isEnabled = false
+
+        // Navigate to BookingAttachImageFragment when continue button is clicked
+        binding.squareContinueBooking.setOnClickListener {
+            val fragment = BookingAttachImageFragment().apply {
+                arguments = Bundle().apply {
+                    putString("SERVICE_TYPE", serviceType)
+                    putString("SELECTED_DATE", selectedDate)
+                    putString("SELECTED_TIME", selectedTime)
+                    putString("SERVICE_PRICE", servicePrice)
+                    putString("SELECTED_SHAPE", selectedShape)
+                    putString("SELECTED_LENGTH", selectedLength) // Pass selected length
+                }
+            }
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment) // Replace with actual container ID
+                .addToBackStack(null) // Allows back navigation
+                .commit()
+        }
+    }
+
+    private fun selectLength(length: String) {
+        selectedLength = length
+        binding.squareContinueBooking.isEnabled = true // Enable continue button
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BookingSelectLengthSquareFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(serviceType: String, selectedDate: String, selectedTime: String, servicePrice: String, selectedShape: String, selectedLength: String) =
             BookingSelectLengthSquareFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString("SERVICE_TYPE", serviceType)
+                    putString("SELECTED_DATE", selectedDate)
+                    putString("SELECTED_TIME", selectedTime)
+                    putString("SERVICE_PRICE", servicePrice)
+                    putString("SELECTED_SHAPE", selectedShape)
+                    putString("SELECTED_LENGTH", selectedLength)
                 }
             }
     }
