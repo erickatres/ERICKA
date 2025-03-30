@@ -41,7 +41,7 @@
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/bottom_boarder"
                 android:orientation="horizontal"
-                android:padding="12dp">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -63,7 +63,7 @@
                         android:layout_marginTop="20dp"
                         android:text="Regular Plain"
                         android:textColor="@color/black"
-                        android:textSize="26sp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -73,7 +73,7 @@
                         android:layout_marginStart="10dp"
                         android:text="₱450"
                         android:textColor="@color/black"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -87,7 +87,7 @@
                 android:orientation="horizontal"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="12dp">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -111,7 +111,7 @@
                         android:text="Gel Polish"
                         android:layout_marginTop="20dp"
                         android:textColor="@color/black"
-                        android:textSize="26sp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -122,7 +122,7 @@
                         android:text="₱650"
                         android:layout_marginStart="10dp"
                         android:textColor="@color/black"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -136,7 +136,7 @@
                 android:orientation="horizontal"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="12dp">
+                android:padding="10dp">
 
 
                 <ImageView
@@ -161,7 +161,7 @@
                         android:gravity="center_vertical"
                         android:text="Soft Gel Extension"
                         android:textColor="@color/black"
-                        android:textSize="26sp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -172,7 +172,7 @@
                         android:text="₱950"
                         android:layout_marginStart="10dp"
                         android:textColor="@color/black"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_boarder"
                 android:orientation="horizontal"
-                android:padding="12dp">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/imageView6"
@@ -206,7 +206,7 @@
                         android:gravity="center_vertical"
                         android:text="Removal"
                         android:textColor="@color/black"
-                        android:textSize="26sp"
+                        android:textSize="24sp"
                         android:clickable="true"
                         android:focusable="true"
                         android:textStyle="bold" />
@@ -219,7 +219,7 @@
                         android:text="₱250"
                         android:layout_marginStart="10dp"
                         android:textColor="@color/black"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

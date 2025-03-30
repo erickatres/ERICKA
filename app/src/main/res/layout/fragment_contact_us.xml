@@ -54,7 +54,7 @@
                     android:layout_gravity="center"
                     android:text="Contact us"
                     android:textColor="#2F7889"
-                    android:textSize="32sp"
+                    android:textSize="28sp"
                     android:textStyle="bold"/>
             </LinearLayout>
 
@@ -66,7 +66,7 @@
                 android:textStyle="bold"
                 android:text="📍 Our Location"
                 android:textColor="#2F7889"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +80,7 @@
                 android:lineSpacingExtra="4dp"
                 android:text="154 Buenlag Binmaley Pangasinan"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/TVaboutus" />
@@ -93,7 +93,7 @@
                 android:text="📞 Call Us"
                 android:textColor="#2F7889"
                 android:textStyle="bold"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -109,7 +109,7 @@
                 android:lineSpacingExtra="4dp"
                 android:text="0976 058 7522"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -124,7 +124,7 @@
                 android:text="📧 Email Us"
                 android:textColor="#2F7889"
                 android:textStyle="bold"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -139,7 +139,7 @@
                 android:lineSpacingExtra="4dp"
                 android:text="Nailscape@gmail.com"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -154,7 +154,7 @@
                 android:text="Social Media"
                 android:textColor="#2F7889"
                 android:textStyle="bold"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -171,8 +171,8 @@
 
                 <ImageView
                     android:id="@+id/facebookLogo"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@drawable/facebooklogo"
                     android:contentDescription="Facebook Logo"
                     android:clickable="true"
@@ -184,13 +184,13 @@
                     android:layout_marginStart="10dp"
                     android:text="NailScape"
                     android:textColor="@color/black"
-                    android:textSize="24sp"/>
+                    android:textSize="20sp"/>
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/InstagramLogo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="30dp"
                 android:src="@drawable/iglogo"
                 android:contentDescription="Facebook Logo"
@@ -199,8 +199,8 @@
 
             <ImageView
                 android:id="@+id/TiktokLogo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="30dp"
                 android:src="@drawable/tiktok"
                 android:contentDescription="Facebook Logo"
@@ -214,7 +214,7 @@
                 android:text="📅 Business Hours"
                 android:textColor="#2F7889"
                 android:textStyle="bold"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -229,7 +229,7 @@
                 android:lineSpacingExtra="4dp"
                 android:text="Monday-Saturday 9AM-6PM"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

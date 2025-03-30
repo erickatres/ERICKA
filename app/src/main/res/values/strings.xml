@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">NailSacape</string>
+    <string name="app_name">NailScape</string>
     <string name="button">Continue</string>
-    <string name="NailSacpe">NailSacpe</string>
+    <string name="NailScape">NailScape</string>
     <string name="_20_per_piece">₱20    (per piece)</string>
     <string name="_30_per_nail">₱30     (per nail)</string>
     <string name="note_text"><font color="#2F7889">Note:</font> This guarantee does not cover damage caused by improper aftercare or external factors.</string>
