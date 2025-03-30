@@ -1,6 +1,7 @@
 package com.example.bookyournailsmobile.Models
 
 data class Booking(
+    val booking_id: Int,
     val service_type: String,
     val date_formatted: String,
     val time: String,

@@ -5,7 +5,7 @@
     android:layout_height="70dp"
     android:orientation="vertical">
 
-    <ImageButton
+    <TextView
         android:id="@+id/btn_Rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -97,20 +97,21 @@ interface ApiService {
         @Body reviewRequest: ReviewRequest
     ): Call<Void>
 
+    @POST("cancelbooking")
+    fun cancelBooking(@Body request: CancelBookingRequest): Call<CancelBookingResponse>
+
+
     @GET("reviewlistmobile")
     fun getReviewsByService(@Query("service_type") serviceType: String): Call<ReviewResponse>
 
+    data class CancelBookingRequest(
+        val booking_id: Int,
+        val user_id: Int
+    )
 
-
-
-    data class BookingRequest(
-        val user_id: String,
-        val service_type: String,
-        val status: String,
-        val reference_img: String,
-        val price: String,
-        val date: String,
-        val time: String
+    data class CancelBookingResponse(
+        val success: Boolean,
+        val message: String
     )
 
     data class ForgotPasswordRequest(
@@ -120,17 +121,6 @@ interface ApiService {
     data class ForgotPasswordResponse(
         val message: String,
         val password_reset_token: String? = null // Optional, depending on your backend response
-    )
-
-    data class VerifyOtpRequest(
-        val email: String,
-        val otp: String,
-        val password_reset_token: String
-    )
-
-    data class VerifyOtpResponse(
-        val status: String,
-        val message: String
     )
 
     data class LoginResponse(
@@ -174,15 +164,17 @@ interface ApiService {
 
 
     data class BookingHistoryResponse(
-        val history: List<BookingHistory>, // Match the backend response
+        val history: List<BookingHistory>,
+        val approved_time: String?,// Match the backend response
         val count: Int // Optional, if you need the count
     )
 
     data class BookingHistory(
+        val booking_id: Int,
         val service_type: String,
         val date_formatted: String,
         val date: String,
-        val time: String, // ✅ Added this// Optional, if needed
+        val time: String?, // ✅ Added this// Optional, if needed
         val status: String // Optional, if needed
     )
     // Add this class to your models

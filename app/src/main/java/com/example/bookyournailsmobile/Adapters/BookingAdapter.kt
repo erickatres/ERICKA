@@ -24,7 +24,7 @@ class BookingAdapter(
 
         val serviceType = view.findViewById<TextView>(R.id.service_type)
         val serviceDate = view.findViewById<TextView>(R.id.service_date)
-        val rateButton = view.findViewById<ImageButton>(R.id.btn_Rate)
+        val rateButton = view.findViewById<TextView>(R.id.btn_Rate)
 
         serviceType.text = booking?.service_type
         serviceDate.text = booking?.date_formatted
