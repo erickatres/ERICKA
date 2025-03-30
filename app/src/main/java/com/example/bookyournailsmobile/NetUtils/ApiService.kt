@@ -46,6 +46,21 @@ interface ApiService {
         @Field("price") price: String
     ): Call<Void>
 
+    @Multipart
+    @POST("newbooking")
+    fun createSoftGelXBooking(
+        @Part("user_id") userId: RequestBody,
+        @Part("service_type") serviceType: RequestBody,
+        @Part("date") date: RequestBody,
+        @Part("time") time: RequestBody,
+        @Part("price") price: RequestBody,
+        @Part("shape") shape: RequestBody,
+        @Part("length") length: RequestBody,
+        @Part referenceImg: MultipartBody.Part?
+    ): Call<Void>
+
+
+
     @PUT("updatepassword")
     fun changePassword(
         @Body request: ChangePasswordRequest

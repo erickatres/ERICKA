@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -33,7 +34,9 @@ class SummaryRegularPlainFragment : Fragment() {
     private var selectedDate: String? = null
     private var selectedTime: String? = null
     private var servicePrice: String? = null
-    private var referenceImageUri: String? = null
+    private var selectedShape: String? = null  // ✅ Added missing variable
+    private var selectedLength: String? = null // ✅ Added missing variable
+    private var imageUri: String? = null
 
     private lateinit var tvService: TextView
     private lateinit var tvDate: TextView
@@ -46,14 +49,22 @@ class SummaryRegularPlainFragment : Fragment() {
     private lateinit var btnCancel: TextView
     private lateinit var tvServiceDetails: TextView
     private lateinit var photoReference: TextView
+    private lateinit var tvShape: TextView
+    private lateinit var tvLength: TextView
+    private lateinit var tvDetailsShape: LinearLayout
+    private lateinit var tvDetailsLength: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        serviceType = arguments?.getString("SERVICE_TYPE")
-        selectedDate = arguments?.getString("SELECTED_DATE")
-        selectedTime = arguments?.getString("SELECTED_TIME")
-        servicePrice = arguments?.getString("SERVICE_PRICE")
-        referenceImageUri = arguments?.getString("REFERENCE_IMAGE_URI")
+        arguments?.let {
+            serviceType = it.getString("SERVICE_TYPE")
+            selectedDate = it.getString("SELECTED_DATE")
+            selectedTime = it.getString("SELECTED_TIME")
+            servicePrice = it.getString("SERVICE_PRICE")
+            selectedShape = it.getString("SELECTED_SHAPE") // ✅ Read shape
+            selectedLength = it.getString("SELECTED_LENGTH") // ✅ Read length
+            imageUri = it.getString("IMAGE_URI")
+        }
     }
 
     override fun onCreateView(
@@ -77,29 +88,47 @@ class SummaryRegularPlainFragment : Fragment() {
         photoReference = view.findViewById(R.id.tvPhotoReference)
         imgReference = view.findViewById(R.id.imgPhotoReference)
         tvServiceDetails = view.findViewById(R.id.tv_service_details)
+        tvShape = view.findViewById(R.id.tvShape)
+        tvLength = view.findViewById(R.id.tvLength)
+        tvDetailsLength = view.findViewById(R.id.details_length)
+        tvDetailsShape = view.findViewById(R.id.details_shape)
 
         val user = (activity as? MainActivity)?.getUserFromPreferences()
         user?.let { u ->
             tvMobile.text = u.phone
         }
-
         tvService.text = serviceType ?: "N/A"
         tvDate.text = selectedDate ?: "N/A"
         tvTime.text = selectedTime ?: "N/A"
         totalServicePrice.text = servicePrice ?: "N/A"
         tvServicePrice.text = servicePrice ?: "N/A"
         tvServiceDetails.text = serviceType ?: "Null"
+        tvShape.text = selectedShape ?: "Null"
+        tvLength.text = selectedLength ?: "Null"
 
         if (serviceType == "Removal") {
             imgReference.visibility = View.GONE
             photoReference.visibility = View.GONE
         } else {
-            referenceImageUri?.let {
+            imageUri?.let {
                 val uri = Uri.parse(it)
                 imgReference.visibility = View.VISIBLE
                 photoReference.visibility = View.VISIBLE
                 Glide.with(this).load(uri).into(imgReference)
             }
+        }
+        if (serviceType == "Soft Gel X") {
+            tvShape.visibility = View.VISIBLE
+            tvLength.visibility = View.VISIBLE
+            tvDetailsShape.visibility = View.VISIBLE
+            tvDetailsLength.visibility = View.VISIBLE
+            tvShape.text = selectedShape ?: "N/A"
+            tvLength.text = selectedLength ?: "N/A"
+        } else {
+            tvShape.visibility = View.GONE
+            tvLength.visibility = View.GONE
+            tvDetailsShape.visibility = View.GONE
+            tvDetailsLength.visibility = View.GONE
         }
 
         btnConfirm.setOnClickListener {
@@ -212,105 +241,139 @@ class SummaryRegularPlainFragment : Fragment() {
     }
 
     private fun uploadBookingToServer(user: User) {
+        val context = requireContext()
+
         // Ensure all required fields are present
         val userId = user.getId() ?: run {
-            Toast.makeText(requireContext(), "User ID is missing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "User ID is missing", Toast.LENGTH_SHORT).show()
             return
         }
         val serviceType = serviceType ?: run {
-            Toast.makeText(requireContext(), "Service type is missing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Service type is missing", Toast.LENGTH_SHORT).show()
             return
         }
         val selectedDate = selectedDate ?: run {
-            Toast.makeText(requireContext(), "Date is missing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Date is missing", Toast.LENGTH_SHORT).show()
             return
         }
         val selectedTime = selectedTime ?: run {
-            Toast.makeText(requireContext(), "Time is missing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Time is missing", Toast.LENGTH_SHORT).show()
             return
         }
         val servicePrice = servicePrice ?: run {
-            Toast.makeText(requireContext(), "Price is missing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Price is missing", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val apiService = RetrofitClient.create(requireContext())
+        val apiService = RetrofitClient.create(context)
 
-        if (serviceType == "Removal") {
-            // Call API without image for "Removal"
-            val call = apiService.createBookingWithoutImage(
-                userId,
-                serviceType,
-                selectedDate,
-                selectedTime,
-                servicePrice
-            )
-
-            call.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        showSuccessPopup()
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to create booking: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(requireContext(), "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            // Ensure reference image is available for non-Removal services
-            val referenceImageUri = referenceImageUri ?: run {
-                Toast.makeText(requireContext(), "Reference image is missing", Toast.LENGTH_SHORT).show()
+        // ✅ Ensure imagePart is always non-null
+        val imagePart = if (imageUri != null) {
+            val uri = Uri.parse(imageUri)
+            val inputStream = context.contentResolver.openInputStream(uri) ?: run {
+                Toast.makeText(context, "Failed to open image file", Toast.LENGTH_SHORT).show()
                 return
             }
 
-            // Convert the URI to a file
-            val uri = Uri.parse(referenceImageUri)
-            val inputStream = requireContext().contentResolver.openInputStream(uri) ?: run {
-                Toast.makeText(requireContext(), "Failed to open image file", Toast.LENGTH_SHORT).show()
-                return
-            }
-
-            val tempFile = File.createTempFile("temp_image", ".jpg", requireContext().cacheDir)
-            tempFile.outputStream().use { outputStream ->
-                inputStream.copyTo(outputStream)
-            }
+            val tempFile = File.createTempFile("temp_image", ".jpg", context.cacheDir)
+            tempFile.outputStream().use { outputStream -> inputStream.copyTo(outputStream) }
 
             val requestFile = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
-            val imagePart = MultipartBody.Part.createFormData("reference_img", tempFile.name, requestFile)
+            MultipartBody.Part.createFormData("reference_img", tempFile.name, requestFile)
+        } else {
+            // ✅ If no image is provided, send an empty file
+            val emptyFile = File.createTempFile("empty", ".jpg", context.cacheDir)
+            val emptyRequestFile = emptyFile.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("reference_img", emptyFile.name, emptyRequestFile)
+        }
 
-            val userIdPart = userId.toRequestBody("text/plain".toMediaTypeOrNull())
-            val serviceTypePart = serviceType.toRequestBody("text/plain".toMediaTypeOrNull())
-            val datePart = selectedDate.toRequestBody("text/plain".toMediaTypeOrNull())
-            val timePart = selectedTime.toRequestBody("text/plain".toMediaTypeOrNull())
-            val pricePart = servicePrice.toRequestBody("text/plain".toMediaTypeOrNull())
+        when (serviceType) {
+            "Soft Gel X" -> {
+                val selectedShape = selectedShape ?: run {
+                    Toast.makeText(context, "Shape is missing", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                val selectedLength = selectedLength ?: run {
+                    Toast.makeText(context, "Length is missing", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                val userIdPart = userId.toRequestBody("text/plain".toMediaTypeOrNull())
+                val serviceTypePart = serviceType.toRequestBody("text/plain".toMediaTypeOrNull())
+                val datePart = selectedDate.toRequestBody("text/plain".toMediaTypeOrNull())
+                val timePart = selectedTime.toRequestBody("text/plain".toMediaTypeOrNull())
+                val pricePart = servicePrice.toRequestBody("text/plain".toMediaTypeOrNull())
+                val shapePart = selectedShape.toRequestBody("text/plain".toMediaTypeOrNull())
+                val lengthPart = selectedLength.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            val call = apiService.createBooking(
-                userIdPart,
-                serviceTypePart,
-                datePart,
-                timePart,
-                pricePart,
-                imagePart
-            )
 
-            call.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        showSuccessPopup()
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to create booking: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                val call = apiService.createSoftGelXBooking(
+                    userIdPart, serviceTypePart, datePart, timePart, pricePart, shapePart, lengthPart, imagePart
+                )
+
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            showSuccessPopup()
+                        } else {
+                            Toast.makeText(context, "Failed to create booking: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(requireContext(), "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast.makeText(context, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+            "Removal" -> {
+                val call = apiService.createBookingWithoutImage(
+                    userId, serviceType, selectedDate, selectedTime, servicePrice
+                )
+
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            showSuccessPopup()
+                        } else {
+                            Toast.makeText(context, "Failed to create booking: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast.makeText(context, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+            else -> {
+                val userIdPart = userId.toRequestBody("text/plain".toMediaTypeOrNull())
+                val serviceTypePart = serviceType.toRequestBody("text/plain".toMediaTypeOrNull())
+                val datePart = selectedDate.toRequestBody("text/plain".toMediaTypeOrNull())
+                val timePart = selectedTime.toRequestBody("text/plain".toMediaTypeOrNull())
+                val pricePart = servicePrice.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val call = apiService.createBooking(
+                    userIdPart, serviceTypePart, datePart, timePart, pricePart, imagePart
+                )
+
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            showSuccessPopup()
+                        } else {
+                            Toast.makeText(context, "Failed to create booking: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast.makeText(context, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
         }
     }
+
+
 
 
     companion object {
@@ -335,5 +398,4 @@ class SummaryRegularPlainFragment : Fragment() {
             }
         }
     }
-
 }

@@ -120,7 +120,33 @@
                         android:gravity="end"
                         android:text="9:00 AM" />
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/details_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Shape"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tvShape"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Almond" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/details_length"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -132,7 +158,30 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:textColor="@color/black"
-                        android:text="Mobile no." />
+                        android:text="Length" />
+
+                    <TextView
+                        android:id="@+id/tvLength"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="long" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Mobile no."
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tvMobile"

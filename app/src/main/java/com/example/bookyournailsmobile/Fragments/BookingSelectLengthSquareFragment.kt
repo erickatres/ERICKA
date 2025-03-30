@@ -42,7 +42,6 @@ class BookingSelectLengthSquareFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set title
         binding.title.text = serviceType ?: "Soft Gel Extension"
         binding.textView16.text = "Choose Length"
 
@@ -76,7 +75,21 @@ class BookingSelectLengthSquareFragment : Fragment() {
 
     private fun selectLength(length: String) {
         selectedLength = length
-        binding.squareContinueBooking.isEnabled = true // Enable continue button
+
+        // Reset all buttons to default unselected state
+        binding.squareShape1.setImageResource(R.drawable.small_square_unfilled)
+        binding.squareShape2.setImageResource(R.drawable.medium_square_unfilled)
+        binding.squareShape3.setImageResource(R.drawable.long_square_unfilled)
+
+        // Apply selected state to the clicked button
+        when (length) {
+            "Small" -> binding.squareShape1.setImageResource(R.drawable.small_square_filled)
+            "Medium" -> binding.squareShape2.setImageResource(R.drawable.medium_square_filled)
+            "Long" -> binding.squareShape3.setImageResource(R.drawable.long_square_filled)
+        }
+
+        // Enable continue button after selection
+        binding.squareContinueBooking.isEnabled = true
     }
 
     override fun onDestroyView() {
