@@ -75,7 +75,7 @@
                     android:layout_marginEnd="239dp"
                     android:layout_marginBottom="45dp"
                     android:text="Firstname"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/firstnameEditText"
                     app:layout_constraintStart_toStartOf="@+id/firstnameEditText"
                     app:layout_constraintTop_toTopOf="@+id/firstnameEditText" />
@@ -101,7 +101,7 @@
                     android:layout_marginEnd="239dp"
                     android:layout_marginBottom="45dp"
                     android:text="Lastname"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/lastnameEditText"
                     app:layout_constraintStart_toStartOf="@+id/lastnameEditText"
                     app:layout_constraintTop_toTopOf="@+id/lastnameEditText" />
@@ -155,7 +155,7 @@
                     android:layout_marginEnd="239dp"
                     android:layout_marginBottom="45dp"
                     android:text="Email"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/emailEditText"
                     app:layout_constraintStart_toStartOf="@+id/emailEditText"
                     app:layout_constraintTop_toTopOf="@+id/emailEditText" />
@@ -208,7 +208,7 @@
                     android:layout_marginEnd="239dp"
                     android:layout_marginBottom="45dp"
                     android:text="Mobile no."
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/Mobilenumber_edittext"
                     app:layout_constraintStart_toStartOf="@+id/Mobilenumber_edittext"
                     app:layout_constraintTop_toTopOf="@+id/Mobilenumber_edittext" />
