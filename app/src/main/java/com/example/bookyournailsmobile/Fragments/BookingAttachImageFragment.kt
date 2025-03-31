@@ -127,10 +127,10 @@ class BookingAttachImageFragment : Fragment() {
 
     private fun getServicePrice(serviceType: String?): String {
         return when (serviceType) {
-            "Regular Plain" -> "₱450"
-            "Gel Polish" -> "₱650"
-            "Removal" -> "₱250"
-            "Soft Gel X" -> "₱950"
+            "Regular Plain" -> "450"
+            "Gel Polish" -> "650"
+            "Removal" -> "250"
+            "Soft Gel X" -> "950"
             else -> "null"
         }
     }

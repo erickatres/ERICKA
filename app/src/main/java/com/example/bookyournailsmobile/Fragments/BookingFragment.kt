@@ -1,6 +1,5 @@
 package com.example.bookyournailsmobile.Fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,7 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class BookingFragment : Fragment() {
 
@@ -40,7 +39,7 @@ class BookingFragment : Fragment() {
     private lateinit var tvActiveTime: TextView
     private lateinit var tvActiveDate: TextView
 
-    private var approvedBooking: Booking? = null // Holds the active approved booking
+    private var approvedBookingId: Int? = null // Holds the active booking ID
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,16 +61,18 @@ class BookingFragment : Fragment() {
         tvActiveDate = view.findViewById(R.id.tvActiveDate)
 
         cancelButton.setOnClickListener {
-            Log.d("BookingFragment", "Cancel button clicked. Booking ID: ${approvedBooking?.booking_id}")
+            Log.d("BookingFragment", "Cancel button clicked. Booking ID: $approvedBookingId")
 
-            approvedBooking?.let { booking ->
-                if (canCancelBooking(booking.date_formatted)) {
-                    cancelBooking(booking.booking_id)
+            approvedBookingId?.let {
+                if (it > 0) {
+                    cancelBooking(it)
                 } else {
-                    showUnableToCancelPopup()
+                    Toast.makeText(requireContext(), "Invalid Booking ID", Toast.LENGTH_SHORT).show()
                 }
             } ?: Toast.makeText(requireContext(), "No active booking to cancel", Toast.LENGTH_SHORT).show()
         }
+
+
 
         // Fetch and display booking history for the current user
         fetchAndDisplayBookingHistory()
@@ -114,6 +115,7 @@ class BookingFragment : Fragment() {
         })
     }
 
+
     private fun fetchAndDisplayBookingHistory() {
         val userId = getCurrentUserId()
         Log.d("BookingFragment", "Current User ID: $userId")
@@ -140,7 +142,7 @@ class BookingFragment : Fragment() {
                             if (bookingHistoryResponse != null) {
                                 val bookings = bookingHistoryResponse.history.map { bookingHistory ->
                                     Booking(
-                                        booking_id = bookingHistory.booking_id,
+                                        booking_id = bookingHistory.booking_id, // Ensure booking_id is included
                                         service_type = bookingHistory.service_type,
                                         date_formatted = bookingHistory.date_formatted,
                                         time = bookingHistory.time ?: "Not Available",
@@ -148,14 +150,20 @@ class BookingFragment : Fragment() {
                                     )
                                 }
 
-                                approvedBooking = bookings.find { it.status == "Approved" }
+                                Log.d("BookingFragment", "Mapped Bookings: $bookings")
+
+                                val approvedBooking = bookings.find { it.status == "Approved" }
+                                approvedBookingId = approvedBooking?.booking_id ?: 0
+                                Log.d("BookingFragment", "Approved Booking ID: $approvedBookingId")// Store the ID for cancellation
+
+                                val approvedTimeFormatted = formatTimeTo12Hour(approvedBooking?.time)
 
                                 CoroutineScope(Dispatchers.Main).launch {
                                     if (approvedBooking != null) {
-                                        tvActiveService.text = approvedBooking!!.service_type
-                                        tvDate.text = approvedBooking!!.date_formatted
-                                        tvTime.text = formatTimeTo12Hour(approvedBooking!!.time)
-                                        activeServiceStatus.text = approvedBooking!!.status
+                                        tvActiveService.text = approvedBooking.service_type
+                                        tvDate.text = approvedBooking.date_formatted
+                                        tvTime.text = approvedTimeFormatted
+                                        activeServiceStatus.text = approvedBooking.status
 
                                         backgroundNoBookings.visibility = View.GONE
                                     } else {
@@ -170,7 +178,22 @@ class BookingFragment : Fragment() {
                                         backgroundNoBookings.visibility = View.VISIBLE
                                     }
 
-                                    val adapter = BookingAdapter(requireContext(), bookings) { booking -> }
+                                    // Set adapter for booking history list
+                                    val adapter = BookingAdapter(requireContext(), bookings) { booking ->
+                                        val reviewFormFragment = ReviewFormFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putString("service_type", booking.service_type)
+                                                putString("service_date", booking.date_formatted)
+                                                putString("service_time", booking.time)
+                                                putString("status", booking.status)
+                                            }
+                                        }
+
+                                        parentFragmentManager.beginTransaction()
+                                            .replace(R.id.fragment_container, reviewFormFragment)
+                                            .addToBackStack(null)
+                                            .commit()
+                                    }
                                     bookingHistoryList.adapter = adapter
                                 }
                             } else {
@@ -190,10 +213,11 @@ class BookingFragment : Fragment() {
             }
         }
     }
+
     private fun formatTimeTo12Hour(time: String?): String {
         return try {
             val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("h a", Locale.getDefault())
             val date = inputFormat.parse(time ?: "00:00:00")
             outputFormat.format(date ?: "").uppercase(Locale.getDefault())
         } catch (e: Exception) {
@@ -201,34 +225,10 @@ class BookingFragment : Fragment() {
         }
     }
 
-
-    private fun canCancelBooking(bookingDate: String): Boolean {
-        return try {
-            val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()) // Example: March 30, 2025
-            val bookingTime = dateFormat.parse(bookingDate)
-            val currentTime = Date()
-
-            if (bookingTime != null) {
-                val diff = currentTime.time - bookingTime.time
-                val hoursDifference = diff / (1000 * 60 * 60)
-                return hoursDifference < 24
-            }
-            false
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    private fun showUnableToCancelPopup() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Unable to Cancel")
-            .setMessage("You can only cancel a booking within 24 hours after approval.")
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .show()
-    }
-
     private fun getCurrentUserId(): String {
         val sessionManagement = SessionManagement(requireContext())
-        return sessionManagement.getUserId() ?: ""
+        val userId = sessionManagement.getUserId() ?: ""
+        Log.d("BookingFragment", "Retrieved User ID: $userId")
+        return userId
     }
 }
