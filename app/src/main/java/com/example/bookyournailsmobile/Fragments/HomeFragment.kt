@@ -15,10 +15,17 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Domain.User
+import com.example.bookyournailsmobile.NetUtils.ApiService
+import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 fun Context.getUserFromPreferences(): User? {
     val sharedPreferences = this.getSharedPreferences("UserPref", Context.MODE_PRIVATE)
@@ -42,6 +49,7 @@ class HomeFragment : Fragment() {
     private lateinit var promoImage2: ImageView
     private lateinit var text_on_image_1: TextView
     private lateinit var Home_points_text: TextView
+    private lateinit var apiService: ApiService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +60,6 @@ class HomeFragment : Fragment() {
 
         // Initialize ProgressBars
 
-
         // Initialize Service ImageViews
         Home_points_text = view.findViewById(R.id.Home_points_text)
         serviceRegular = view.findViewById(R.id.Service_regular)
@@ -60,9 +67,7 @@ class HomeFragment : Fragment() {
         serviceRemoval = view.findViewById(R.id.Service_removal)
         serviceGelPolish = view.findViewById(R.id.Service_gelpolish)
 
-
-
-
+        apiService = RetrofitClient.create(requireContext())
 
         return view
     }
@@ -81,10 +86,33 @@ class HomeFragment : Fragment() {
             } else {
                 firstName
             }
+            fetchLoyaltyPoints(it.getId())  // ✅ Uses the getter method correctly
             firstNameTextView.text = "$truncatedName!" // Add an exclamation mark
         }
     }
 
+    private fun fetchLoyaltyPoints(userId: String) {
+        apiService.getLoyaltyPoints(userId).enqueue(object : Callback<ApiService.LoyaltyPointsResponse> {
+            override fun onResponse(call: Call<ApiService.LoyaltyPointsResponse>, response: Response<ApiService.LoyaltyPointsResponse>) {
+                if (response.isSuccessful) {
+                    val rawResponse = response.body()
+                    val points = rawResponse?.loyaltyPoints ?: 0
+                    Home_points_text.text = "$points points"
+
+                    // Save to SharedPreferences
+                    val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
+                    sharedPreferences.edit().putInt("loyalty_points", points).apply()
+                } else {
+                    Home_points_text.text = "0 points"
+                }
+            }
+
+            override fun onFailure(call: Call<ApiService.LoyaltyPointsResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Failed to fetch points", Toast.LENGTH_SHORT).show()
+                Home_points_text.text = "0 points"
+            }
+        })
+    }
 
 
     private fun makeFullScreen() {
@@ -124,13 +152,6 @@ class HomeFragment : Fragment() {
         serviceGelPolish.visibility = View.VISIBLE
     }
 
-    private fun showPromoImages() {
-        // Make Promo ImageViews visible after the delay
-        promoImage1.visibility = View.VISIBLE
-        promoImage2.visibility = View.VISIBLE
-    }
-
-
     private fun replaceFragment(fragment: Fragment) {
         val fragmentName = fragment::class.java.simpleName
         println("Replacing fragment with: $fragmentName") // Log the fragment name
@@ -141,5 +162,4 @@ class HomeFragment : Fragment() {
             commitAllowingStateLoss() // Safer than commit() in some cases
         }
     }
-
 }

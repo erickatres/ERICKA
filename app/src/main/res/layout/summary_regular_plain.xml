@@ -224,7 +224,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="-10dp"
                 android:paddingTop="12dp"
                 android:orientation="vertical">
 
@@ -239,8 +239,8 @@
                         style="@style/LabelStyle"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:textColor="@color/black"
-                        android:text="Regular Plain" />
+                        android:text="Regular Plain"
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tvservicePrice"
@@ -251,17 +251,46 @@
                         android:text="₱450" />
                 </LinearLayout>
 
-                <!-- Divider -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-1dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/discount_loyalty_points"
+                        style="@style/LabelStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:textSize="10sp"
+                        android:text="Loyalty Points Discount"
+                        android:textColor="@color/grey2" />
+
+                    <TextView
+                        android:id="@+id/discount_30_percent_off"
+                        style="@style/ValueStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/grey2"
+                        android:textSize="10sp"
+                        android:text="30% OFF applied" />
+                </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
                     android:background="#BDBDBD" />
 
+                <!-- Divider -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
                     android:weightSum="2">
 
                     <TextView

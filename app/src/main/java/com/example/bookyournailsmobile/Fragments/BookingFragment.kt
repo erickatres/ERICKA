@@ -1,5 +1,7 @@
 package com.example.bookyournailsmobile.Fragments
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Adapters.BookingAdapter
 import com.example.bookyournailsmobile.Managers.SessionManagement
@@ -47,6 +50,9 @@ class BookingFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_booking, container, false)
 
+        val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
+        val points = sharedPreferences.getInt("loyalty_points", 0)
+
         // Initialize views
         bookingHistoryList = view.findViewById(R.id.booking_history_list)
         bookingActive = view.findViewById(R.id.activeBooking)
@@ -71,8 +77,6 @@ class BookingFragment : Fragment() {
                 }
             } ?: Toast.makeText(requireContext(), "No active booking to cancel", Toast.LENGTH_SHORT).show()
         }
-
-
 
         // Fetch and display booking history for the current user
         fetchAndDisplayBookingHistory()
@@ -115,7 +119,6 @@ class BookingFragment : Fragment() {
         })
     }
 
-
     private fun fetchAndDisplayBookingHistory() {
         val userId = getCurrentUserId()
         Log.d("BookingFragment", "Current User ID: $userId")
@@ -142,7 +145,7 @@ class BookingFragment : Fragment() {
                             if (bookingHistoryResponse != null) {
                                 val bookings = bookingHistoryResponse.history.map { bookingHistory ->
                                     Booking(
-                                        booking_id = bookingHistory.booking_id, // Ensure booking_id is included
+                                        booking_id = bookingHistory.booking_id,
                                         service_type = bookingHistory.service_type,
                                         date_formatted = bookingHistory.date_formatted,
                                         time = bookingHistory.time ?: "Not Available",
@@ -152,18 +155,49 @@ class BookingFragment : Fragment() {
 
                                 Log.d("BookingFragment", "Mapped Bookings: $bookings")
 
-                                val approvedBooking = bookings.find { it.status == "Approved" }
+                                val completedBookings = bookings.filter { it.status == "Completed" || it.status == "Rejected" || it.status == "Cancelled"}
+                                val approvedBooking = bookings.find { it.status == "Approved" || it.status == "Pending" }
                                 approvedBookingId = approvedBooking?.booking_id ?: 0
-                                Log.d("BookingFragment", "Approved Booking ID: $approvedBookingId")// Store the ID for cancellation
+                                Log.d("BookingFragment", "Approved Booking ID: $approvedBookingId") // Store the ID for cancellation
 
                                 val approvedTimeFormatted = formatTimeTo12Hour(approvedBooking?.time)
 
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    if (completedBookings.isNotEmpty()) {
+                                        // Set the adapter for the ListView to show completed bookings
+                                        val adapter = BookingAdapter(requireContext(), completedBookings) { booking ->
+                                            val reviewFormFragment = ReviewFormFragment().apply {
+                                                arguments = Bundle().apply {
+                                                    putString("service_type", booking.service_type)
+                                                    putString("service_date", booking.date_formatted)
+                                                    putString("service_time", booking.time)
+                                                    putString("status", booking.status)
+                                                }
+                                            }
+
+                                            parentFragmentManager.beginTransaction()
+                                                .replace(R.id.fragment_container, reviewFormFragment)
+                                                .addToBackStack(null)
+                                                .commit()
+                                        }
+                                        bookingHistoryList.adapter = adapter
+                                        backgroundNoBookings.visibility = View.GONE
+                                    } else {
+                                        backgroundNoBookings.visibility = View.VISIBLE
+                                    }
+
                                     if (approvedBooking != null) {
                                         tvActiveService.text = approvedBooking.service_type
                                         tvDate.text = approvedBooking.date_formatted
                                         tvTime.text = approvedTimeFormatted
                                         activeServiceStatus.text = approvedBooking.status
+
+                                        // Set text color based on status
+                                        if (approvedBooking.status == "Pending") {
+                                            activeServiceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.pendingcolor))
+                                        } else {
+                                            activeServiceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.approvedcolor)) // Default color
+                                        }
 
                                         backgroundNoBookings.visibility = View.GONE
                                     } else {
@@ -177,24 +211,6 @@ class BookingFragment : Fragment() {
                                         cancelButton.visibility = View.GONE
                                         backgroundNoBookings.visibility = View.VISIBLE
                                     }
-
-                                    // Set adapter for booking history list
-                                    val adapter = BookingAdapter(requireContext(), bookings) { booking ->
-                                        val reviewFormFragment = ReviewFormFragment().apply {
-                                            arguments = Bundle().apply {
-                                                putString("service_type", booking.service_type)
-                                                putString("service_date", booking.date_formatted)
-                                                putString("service_time", booking.time)
-                                                putString("status", booking.status)
-                                            }
-                                        }
-
-                                        parentFragmentManager.beginTransaction()
-                                            .replace(R.id.fragment_container, reviewFormFragment)
-                                            .addToBackStack(null)
-                                            .commit()
-                                    }
-                                    bookingHistoryList.adapter = adapter
                                 }
                             } else {
                                 Log.e("BookingFragment", "Booking history response is null")

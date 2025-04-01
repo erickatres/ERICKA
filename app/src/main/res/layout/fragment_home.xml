@@ -93,7 +93,7 @@
 
                     <TextView
                         android:id="@+id/Home_points_text"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
@@ -101,29 +101,13 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginStart="40dp"
                         android:layout_marginTop="30dp"
-                        android:layout_marginEnd="295dp"
-                        android:layout_marginBottom="70dp"
-                        android:text="0"
+                        android:layout_marginEnd="100dp"
+                        android:layout_marginBottom="60dp"
+                        android:text="01"
                         android:textColor="#2F7889"
-                        android:textSize="24dp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="60dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginEnd="210dp"
-                        android:layout_marginBottom="60dp"
-                        android:text="points"
-                        android:textColor="#2F7889"
-                        android:textSize="24dp"
-                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView9"

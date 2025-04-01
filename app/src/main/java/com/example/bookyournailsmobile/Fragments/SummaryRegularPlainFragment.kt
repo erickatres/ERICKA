@@ -53,6 +53,8 @@ class SummaryRegularPlainFragment : Fragment() {
     private lateinit var tvLength: TextView
     private lateinit var tvDetailsShape: LinearLayout
     private lateinit var tvDetailsLength: LinearLayout
+    private lateinit var tvLoyaltyPoints: TextView
+    private lateinit var tvLoyaltyPoints30: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +79,11 @@ class SummaryRegularPlainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
+        val points = sharedPreferences.getInt("loyalty_points", 0)
+
+        tvLoyaltyPoints = view.findViewById(R.id.discount_loyalty_points)
+        tvLoyaltyPoints30 = view.findViewById(R.id.discount_30_percent_off)
         tvService = view.findViewById(R.id.tvService)
         btnCancel = view.findViewById(R.id.btnCancel)
         tvDate = view.findViewById(R.id.tvdate)
@@ -93,6 +100,7 @@ class SummaryRegularPlainFragment : Fragment() {
         tvDetailsLength = view.findViewById(R.id.details_length)
         tvDetailsShape = view.findViewById(R.id.details_shape)
 
+        val originalPrice = servicePrice?.toDoubleOrNull()?.toInt() ?: 0
         val user = (activity as? MainActivity)?.getUserFromPreferences()
         user?.let { u ->
             tvMobile.text = u.phone
@@ -105,6 +113,23 @@ class SummaryRegularPlainFragment : Fragment() {
         tvServiceDetails.text = serviceType ?: "Null"
         tvShape.text = selectedShape ?: "Null"
         tvLength.text = selectedLength ?: "Null"
+
+        if (points >= 100) {
+            // Apply 30% discount and convert to integer
+            val discountedPrice = (originalPrice * 0.7).toInt()
+            totalServicePrice.text = "₱$discountedPrice"
+
+            // Show discount labels
+            tvLoyaltyPoints.visibility = View.VISIBLE
+            tvLoyaltyPoints30.visibility = View.VISIBLE
+        } else {
+            // Keep the original price as an integer
+            totalServicePrice.text = "₱$originalPrice"
+
+            // Hide discount labels
+            tvLoyaltyPoints.visibility = View.GONE
+            tvLoyaltyPoints30.visibility = View.GONE
+        }
 
         if (serviceType == "Removal") {
             imgReference.visibility = View.GONE

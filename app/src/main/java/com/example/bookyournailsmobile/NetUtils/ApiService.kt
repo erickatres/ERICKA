@@ -59,8 +59,6 @@ interface ApiService {
         @Part referenceImg: MultipartBody.Part?
     ): Call<Void>
 
-
-
     @PUT("updatepassword")
     fun changePassword(
         @Body request: ChangePasswordRequest
@@ -104,6 +102,15 @@ interface ApiService {
     @GET("reviewlistmobile")
     fun getReviewsByService(@Query("service_type") serviceType: String): Call<ReviewResponse>
 
+    @GET("getloyaltypoints")
+    fun getLoyaltyPoints(@Query("user_id") userId: String): Call<LoyaltyPointsResponse>
+
+
+
+
+    data class LoyaltyPointsResponse(
+        @SerializedName("loyalty_points") val loyaltyPoints: Int
+    )
     data class CancelBookingRequest(
         val booking_id: Int,
         val user_id: Int
