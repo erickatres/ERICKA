@@ -86,7 +86,7 @@ interface ApiService {
         @Body verifyResetCodeRequest: VerifyResetCodeRequest
     ): Call<VerifyResetCodeResponse>
 
-    @GET("historylist/{user_id}")
+    @GET("historylistmobile/{user_id}")
     fun getBookingHistoryByUserId(@Path("user_id") userId: String): Call<BookingHistoryResponse>
 
     @POST("addreview")
@@ -104,8 +104,6 @@ interface ApiService {
 
     @GET("getloyaltypoints")
     fun getLoyaltyPoints(@Query("user_id") userId: String): Call<LoyaltyPointsResponse>
-
-
 
 
     data class LoyaltyPointsResponse(
@@ -193,8 +191,10 @@ interface ApiService {
         val user_id: String,
         val service: String,
         val rating: Int,
-        val review_text: String
+        val review_text: String,
+        val booking_id: Int // ✅ Added booking_id
     )
+
     data class ReviewResponse(
         val count: Int,
         val average_rating: String,

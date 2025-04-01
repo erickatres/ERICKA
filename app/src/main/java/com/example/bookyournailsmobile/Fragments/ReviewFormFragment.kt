@@ -17,12 +17,13 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import com.example.bookyournailsmobile.Activities.MainActivity
+import androidx.fragment.app.setFragmentResult
 import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,7 +57,9 @@ class ReviewFormFragment : Fragment() {
             view.findViewById(R.id.star5)
         )
 
-        // Get service type from arguments
+        // Get bookingId and serviceType from arguments
+        val bookingId = arguments?.getInt("booking_id") ?: -1
+        Log.d("ReviewFormFragment", "Received Booking ID: $bookingId")
         val serviceType = arguments?.getString("service_type") ?: "Unknown"
         serviceTypeTextView.text = serviceType
 
@@ -92,7 +95,7 @@ class ReviewFormFragment : Fragment() {
             val reviewText = reviewInput.text.toString().trim()
 
             if (userId != null && authToken != null) {
-                submitReview(userId, serviceType, selectedRating, reviewText, authToken)
+                submitReview(userId, serviceType, selectedRating, reviewText, authToken, bookingId)
             } else {
                 Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
             }
@@ -111,27 +114,50 @@ class ReviewFormFragment : Fragment() {
         submitButton.isEnabled = selectedRating > 0 && reviewInput.text.toString().trim().isNotEmpty()
     }
 
-    private fun submitReview(userId: String, service: String, rating: Int, reviewText: String, authToken: String) {
-        val reviewRequest = ApiService.ReviewRequest(userId, service, rating, reviewText)
+    private fun submitReview(userId: String, service: String, rating: Int, reviewText: String, authToken: String, bookingId: Int) {
+        // Construct the ReviewRequest object with all necessary fields
+        val reviewRequest = ApiService.ReviewRequest(
+            user_id = userId,
+            service = service,
+            rating = rating,
+            review_text = reviewText,
+            booking_id = bookingId // Include bookingId
+        )
+
         val headers = mapOf("Authorization" to authToken)
 
-        apiService.submitReview(headers, reviewRequest).enqueue(object : Callback<Void> {
+        // Make the API call
+        apiService.submitReview(headers, reviewRequest).enqueue(object : Callback<Void> { // Changed ResponseBody to Void
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "Review submitted successfully!", Toast.LENGTH_SHORT).show()
-                    showFeedbackPopup()
-                    resetForm()
+                    try {
+                        // You can handle a successful response here, even if there's no body
+                        Toast.makeText(requireContext(), "Review submitted successfully", Toast.LENGTH_SHORT).show()
 
-                    when (service) {
-                        "Regular Plain" -> navigateToRegularFragment()
-                        "Removal" -> navigateToRemovalFragment()
-                        "Gel Polish" -> navigateToGelPolishFragment()
-                        "Soft Gel X" -> navigateToSoftGelExtensionFragment()
-                        else -> parentFragmentManager.popBackStack()
+                        showFeedbackPopup()
+                        resetForm()
+
+                        // Send result back
+                        val resultBundle = Bundle().apply {
+                            putBoolean("success", true)
+                            putString("service_type", service)
+                        }
+                        setFragmentResult("reviewSubmission", resultBundle)
+
+                        // Navigate based on service type
+                        when (service) {
+                            "Regular Plain" -> navigateToRegularFragment()
+                            "Removal" -> navigateToRemovalFragment()
+                            "Gel Polish" -> navigateToGelPolishFragment()
+                            "Soft Gel X" -> navigateToSoftGelExtensionFragment()
+                            else -> parentFragmentManager.popBackStack()
+                        }
+                    } catch (e: Exception) {
+                        Log.e("ReviewFormFragment", "Error processing response: ${e.message}")
                     }
                 } else {
-                    Log.e("ReviewFormFragment", "Response Code: ${response.code()}")
-                    Log.e("ReviewFormFragment", "Error Body: ${response.errorBody()?.string()}")
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("ReviewFormFragment", "Error Response: $errorBody")
                     Toast.makeText(requireContext(), "Failed to submit review", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -143,120 +169,38 @@ class ReviewFormFragment : Fragment() {
         })
     }
 
-    private fun navigateToSoftGelExtensionFragment() {
-        val SoftGelExtensionFragment = SoftGelExtensionFragment()
 
+    private fun navigateToSoftGelExtensionFragment() {
+        val fragment = SoftGelExtensionFragment()
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, SoftGelExtensionFragment)
+            .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
-
-        // Ensure transaction completes before scrolling
-        parentFragmentManager.executePendingTransactions()
-
-        SoftGelExtensionFragment.view?.post {
-            val scrollView = SoftGelExtensionFragment.view?.findViewById<NestedScrollView>(R.id.softgelx_scrollview)
-
-            scrollView?.postDelayed({
-                val y = scrollView.bottom
-                ObjectAnimator.ofInt(scrollView, "scrollY", y).apply {
-                    duration = 500
-                    interpolator = AccelerateDecelerateInterpolator()
-                    start()
-                }
-            }, 300)
-        }
     }
 
     private fun navigateToGelPolishFragment() {
-        val gelPolishFragment = GelPolishFragment()
-
+        val fragment = GelPolishFragment()
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, gelPolishFragment)
+            .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
-
-        // Ensure transaction completes before scrolling
-        parentFragmentManager.executePendingTransactions()
-
-        gelPolishFragment.view?.post {
-            val scrollView = gelPolishFragment.view?.findViewById<NestedScrollView>(R.id.gelpolish_scrollview)
-
-            scrollView?.postDelayed({
-                val y = scrollView.bottom
-                ObjectAnimator.ofInt(scrollView, "scrollY", y).apply {
-                    duration = 500
-                    interpolator = AccelerateDecelerateInterpolator()
-                    start()
-                }
-            }, 300)
-        }
     }
 
     private fun navigateToRemovalFragment() {
-        val removalFragment = RemovalFragment()
-
+        val fragment = RemovalFragment()
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, removalFragment)
+            .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
-
-        // Ensure transaction completes before scrolling
-        parentFragmentManager.executePendingTransactions()
-
-        removalFragment.view?.post {
-            val scrollView = removalFragment.view?.findViewById<NestedScrollView>(R.id.removal_nested_scrollview)
-
-            scrollView?.postDelayed({
-                val y = scrollView.bottom
-                ObjectAnimator.ofInt(scrollView, "scrollY", y).apply {
-                    duration = 500
-                    interpolator = AccelerateDecelerateInterpolator()
-                    start()
-                }
-            }, 300)
-        }
     }
-
-
 
     private fun navigateToRegularFragment() {
-        val regularFragment = RegularFragment()
-
+        val fragment = RegularFragment()
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, regularFragment)
+            .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
-
-        // Ensure transaction completes before trying to scroll
-        parentFragmentManager.executePendingTransactions()
-
-        regularFragment.view?.post {
-            val scrollView = regularFragment.view?.findViewById<NestedScrollView>(R.id.nested_scroll_view)
-
-            scrollView?.postDelayed({
-                val y = scrollView.bottom // Get the bottom position
-                ObjectAnimator.ofInt(scrollView, "scrollY", y).apply {
-                    duration = 500 // Adjust duration for speed (milliseconds)
-                    interpolator = AccelerateDecelerateInterpolator() // Smooth transition
-                    start()
-                }
-            }, 300) // Small delay to ensure UI is fully drawn before scrolling
-        }
     }
-
-
-
-    override fun onResume() {
-        super.onResume()
-        (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
-    }
-
-    override fun onPause() {
-        super.onPause()
-        (activity as? MainActivity)?.setBottomNavVisibility(true) // Show bottom nav again when leaving
-    }
-
 
     private fun resetForm() {
         selectedRating = 0
@@ -264,17 +208,16 @@ class ReviewFormFragment : Fragment() {
         reviewInput.text.clear()
         submitButton.isEnabled = false
     }
+
     private fun showFeedbackPopup() {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.popup_feedback)
         dialog.setCancelable(false)
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        // Set the width of the dialog when it is shown
         dialog.setOnShowListener {
             val window = dialog.window
-            window?.setLayout(900, ViewGroup.LayoutParams.WRAP_CONTENT) // Adjust width here
+            window?.setLayout(900, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
 
         val btnOk = dialog.findViewById<TextView>(R.id.btnOkay)
@@ -285,5 +228,4 @@ class ReviewFormFragment : Fragment() {
 
         dialog.show()
     }
-
 }

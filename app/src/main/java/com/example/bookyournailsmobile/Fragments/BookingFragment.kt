@@ -42,7 +42,21 @@ class BookingFragment : Fragment() {
     private lateinit var tvActiveTime: TextView
     private lateinit var tvActiveDate: TextView
 
-    private var approvedBookingId: Int? = null // Holds the active booking ID
+    private var approvedBookingId: Int? = null
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        parentFragmentManager.setFragmentResultListener("reviewSubmission", this) { _, bundle ->
+            val success = bundle.getBoolean("success")
+            val serviceType = bundle.getString("service_type")
+
+            if (success) {
+                Toast.makeText(requireContext(), "Review for $serviceType submitted!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,8 +64,10 @@ class BookingFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_booking, container, false)
 
+
         val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
         val points = sharedPreferences.getInt("loyalty_points", 0)
+
 
         // Initialize views
         bookingHistoryList = view.findViewById(R.id.booking_history_list)
@@ -78,8 +94,10 @@ class BookingFragment : Fragment() {
             } ?: Toast.makeText(requireContext(), "No active booking to cancel", Toast.LENGTH_SHORT).show()
         }
 
-        // Fetch and display booking history for the current user
+
         fetchAndDisplayBookingHistory()
+
+
 
         return view
     }
@@ -149,7 +167,7 @@ class BookingFragment : Fragment() {
                                         service_type = bookingHistory.service_type,
                                         date_formatted = bookingHistory.date_formatted,
                                         time = bookingHistory.time ?: "Not Available",
-                                        status = bookingHistory.status
+                                        status = bookingHistory.status,
                                     )
                                 }
 
@@ -168,6 +186,7 @@ class BookingFragment : Fragment() {
                                         val adapter = BookingAdapter(requireContext(), completedBookings) { booking ->
                                             val reviewFormFragment = ReviewFormFragment().apply {
                                                 arguments = Bundle().apply {
+                                                    putInt("booking_id", booking.booking_id)
                                                     putString("service_type", booking.service_type)
                                                     putString("service_date", booking.date_formatted)
                                                     putString("service_time", booking.time)
