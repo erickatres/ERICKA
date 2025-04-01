@@ -36,6 +36,7 @@ class ReviewFormFragment : Fragment() {
     private lateinit var submitButton: Button
     private lateinit var reviewInput: EditText
     private lateinit var stars: List<ImageView>
+    private var serviceType: String = "Unknown"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +61,7 @@ class ReviewFormFragment : Fragment() {
         // Get bookingId and serviceType from arguments
         val bookingId = arguments?.getInt("booking_id") ?: -1
         Log.d("ReviewFormFragment", "Received Booking ID: $bookingId")
-        val serviceType = arguments?.getString("service_type") ?: "Unknown"
+        serviceType = arguments?.getString("service_type") ?: "Unknown"
         serviceTypeTextView.text = serviceType
 
         // Initialize API Service and Session Management
@@ -69,6 +70,7 @@ class ReviewFormFragment : Fragment() {
 
         // Disable submit button initially
         submitButton.isEnabled = false
+        submitButton.setBackgroundResource(R.drawable.button_reviewform_disabled) // Set initial disabled state
 
         // Handle star rating selection
         for (i in stars.indices) {
@@ -79,7 +81,7 @@ class ReviewFormFragment : Fragment() {
             }
         }
 
-        // Enable submit button only when review input is not empty
+        // Enable submit button only when review input is not empty and rating is selected
         reviewInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 checkSubmitButtonState()
@@ -111,7 +113,17 @@ class ReviewFormFragment : Fragment() {
     }
 
     private fun checkSubmitButtonState() {
-        submitButton.isEnabled = selectedRating > 0 && reviewInput.text.toString().trim().isNotEmpty()
+        val isReviewNotEmpty = reviewInput.text.toString().trim().isNotEmpty()
+        val isRatingSelected = selectedRating > 0
+
+        submitButton.isEnabled = isReviewNotEmpty && isRatingSelected
+
+        // Update button background based on state
+        if (submitButton.isEnabled) {
+            submitButton.setBackgroundResource(R.drawable.button_reviewform)
+        } else {
+            submitButton.setBackgroundResource(R.drawable.button_reviewform_disabled)
+        }
     }
 
     private fun submitReview(userId: String, service: String, rating: Int, reviewText: String, authToken: String, bookingId: Int) {
@@ -127,15 +139,12 @@ class ReviewFormFragment : Fragment() {
         val headers = mapOf("Authorization" to authToken)
 
         // Make the API call
-        apiService.submitReview(headers, reviewRequest).enqueue(object : Callback<Void> { // Changed ResponseBody to Void
+        apiService.submitReview(headers, reviewRequest).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     try {
                         // You can handle a successful response here, even if there's no body
                         Toast.makeText(requireContext(), "Review submitted successfully", Toast.LENGTH_SHORT).show()
-
-                        showFeedbackPopup()
-                        resetForm()
 
                         // Send result back
                         val resultBundle = Bundle().apply {
@@ -144,14 +153,10 @@ class ReviewFormFragment : Fragment() {
                         }
                         setFragmentResult("reviewSubmission", resultBundle)
 
-                        // Navigate based on service type
-                        when (service) {
-                            "Regular Plain" -> navigateToRegularFragment()
-                            "Removal" -> navigateToRemovalFragment()
-                            "Gel Polish" -> navigateToGelPolishFragment()
-                            "Soft Gel X" -> navigateToSoftGelExtensionFragment()
-                            else -> parentFragmentManager.popBackStack()
-                        }
+                        // Show feedback popup first
+                        showFeedbackPopup(service)
+                        resetForm()
+
                     } catch (e: Exception) {
                         Log.e("ReviewFormFragment", "Error processing response: ${e.message}")
                     }
@@ -168,7 +173,6 @@ class ReviewFormFragment : Fragment() {
             }
         })
     }
-
 
     private fun navigateToSoftGelExtensionFragment() {
         val fragment = SoftGelExtensionFragment()
@@ -207,9 +211,10 @@ class ReviewFormFragment : Fragment() {
         updateStarUI(selectedRating)
         reviewInput.text.clear()
         submitButton.isEnabled = false
+        submitButton.setBackgroundResource(R.drawable.button_reviewform_disabled)
     }
 
-    private fun showFeedbackPopup() {
+    private fun showFeedbackPopup(service: String) {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.popup_feedback)
         dialog.setCancelable(false)
@@ -223,7 +228,14 @@ class ReviewFormFragment : Fragment() {
         val btnOk = dialog.findViewById<TextView>(R.id.btnOkay)
         btnOk.setOnClickListener {
             dialog.dismiss()
-            parentFragmentManager.popBackStack() // Go back after feedback
+            // Navigate based on service type only after user clicks Okay
+            when (service) {
+                "Regular Plain" -> navigateToRegularFragment()
+                "Removal" -> navigateToRemovalFragment()
+                "Gel Polish" -> navigateToGelPolishFragment()
+                "Soft Gel X" -> navigateToSoftGelExtensionFragment()
+                else -> parentFragmentManager.popBackStack()
+            }
         }
 
         dialog.show()

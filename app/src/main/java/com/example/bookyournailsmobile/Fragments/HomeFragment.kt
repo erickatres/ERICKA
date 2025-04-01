@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -50,6 +51,7 @@ class HomeFragment : Fragment() {
     private lateinit var text_on_image_1: TextView
     private lateinit var Home_points_text: TextView
     private lateinit var apiService: ApiService
+    private lateinit var loyaltyPointsBox: RelativeLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +68,7 @@ class HomeFragment : Fragment() {
         serviceSoftGelExtension = view.findViewById(R.id.Service_soft_gel_extension)
         serviceRemoval = view.findViewById(R.id.Service_removal)
         serviceGelPolish = view.findViewById(R.id.Service_gelpolish)
+        loyaltyPointsBox = view.findViewById(R.id.relativeLayout)
 
         apiService = RetrofitClient.create(requireContext())
 
@@ -133,6 +136,9 @@ class HomeFragment : Fragment() {
         // Service Soft Gel Extension Button
         serviceSoftGelExtension.setOnClickListener {
             replaceFragment(SoftGelExtensionFragment())
+        }
+        loyaltyPointsBox.setOnClickListener{
+            replaceFragment(LoyaltyProgramHelp())
         }
 
         // Service Removal Button

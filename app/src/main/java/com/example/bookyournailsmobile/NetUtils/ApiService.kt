@@ -180,7 +180,8 @@ interface ApiService {
         val date_formatted: String,
         val date: String,
         val time: String?, // ✅ Added this// Optional, if needed
-        val status: String // Optional, if needed
+        val status: String,
+        val is_reviewed: Int // Optional, if needed
     )
     // Add this class to your models
     data class TimeAvailabilityRequest(

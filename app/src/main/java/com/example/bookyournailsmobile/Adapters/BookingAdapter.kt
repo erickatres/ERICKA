@@ -13,7 +13,7 @@ import com.example.bookyournailsmobile.R
 class BookingAdapter(
     context: Context,
     private val bookings: List<Booking>,
-    private val onRateClick: (Booking) -> Unit // Callback for button clicks
+    private val onRateClick: (Booking) -> Unit
 ) : ArrayAdapter<Booking>(context, R.layout.booking_listview, bookings) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -25,43 +25,44 @@ class BookingAdapter(
 
         val booking = getItem(position)
 
-        // Ensure `booking` is not null before accessing its properties
         booking?.let {
             serviceType.text = it.service_type
             serviceDate.text = it.date_formatted
 
-            // Change button background based on booking status
-            when (it.status) {
-                "Cancelled" -> {
-                    rateButton.background = ContextCompat.getDrawable(context, R.drawable.cancelled_button)
-                    rateButton.isEnabled = false
-                }
-                "Reviewed" -> {
-                    rateButton.background = ContextCompat.getDrawable(context, R.drawable.myrating_button)
-                    rateButton.isEnabled = false
-                }
-                "Rejected" -> {
-                    rateButton.background = ContextCompat.getDrawable(context, R.drawable.rejected_button)
-                    rateButton.isEnabled = false
-                }
-                "Completed" -> {
-                    rateButton.background = ContextCompat.getDrawable(context, R.drawable.rate_button)
-                    rateButton.isEnabled = true
-                }
-                else -> {
-                    rateButton.setBackgroundResource(android.R.color.transparent)
-                    rateButton.isEnabled = false
+            // First check if the booking has been reviewed
+            if (it.is_reviewed == 1) {
+                rateButton.background = ContextCompat.getDrawable(context, R.drawable.myrating_button) // Optional: Change text to "My Rating"
+                rateButton.isEnabled = true
+            } else {
+                // If not reviewed, then check the status
+                when (it.status) {
+                    "Cancelled" -> {
+                        rateButton.background = ContextCompat.getDrawable(context, R.drawable.cancelled_button)
+                        rateButton.isEnabled = false
+                    }
+                    "Rejected" -> {
+                        rateButton.background = ContextCompat.getDrawable(context, R.drawable.rejected_button)
+                        rateButton.isEnabled = false
+                    }
+                    "Completed" -> {
+                        rateButton.background = ContextCompat.getDrawable(context, R.drawable.rate_button) // Ensure text is "Rate"
+                        rateButton.isEnabled = true
+                    }
+                    else -> {
+                        rateButton.setBackgroundResource(android.R.color.transparent)
+                        rateButton.isEnabled = false
+                    }
                 }
             }
 
-            // Make rateButton clickable only if it's enabled
-            if (rateButton.isEnabled) {
-                rateButton.setOnClickListener { onRateClick(booking) }
-            } else {
-                rateButton.setOnClickListener(null) // Remove click listener if not enabled
+            // Set click listener only if the button is enabled and booking is completed but not reviewed
+            rateButton.setOnClickListener {
+                if (rateButton.isEnabled && booking.status == "Completed" && booking.is_reviewed != 1) {
+                    onRateClick(booking)
+                }
             }
         } ?: run {
-            // Handle the case when `booking` is null
+            // Handle null booking case
             serviceType.text = "Unknown Service"
             serviceDate.text = "Unknown Date"
             rateButton.setBackgroundResource(android.R.color.transparent)

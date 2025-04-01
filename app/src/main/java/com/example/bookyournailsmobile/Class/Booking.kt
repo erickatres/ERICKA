@@ -7,7 +7,8 @@ data class Booking(
     val service_type: String,
     val date_formatted: String,
     val time: String,
-    val status: String
+    val status: String,
+    val is_reviewed: Int = 0
 
     // Add this field
 )
