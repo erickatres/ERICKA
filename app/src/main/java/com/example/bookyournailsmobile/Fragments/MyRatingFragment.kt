@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.R
 
 class MyRatingFragment : Fragment() {
@@ -31,6 +32,11 @@ class MyRatingFragment : Fragment() {
             // Retrieve arguments if needed
         }
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +60,6 @@ class MyRatingFragment : Fragment() {
         testimonial = view.findViewById(R.id.Testimonal)
 
 
-        val bookingId = arguments?.getString(ARG_PARAM1) ?: ""
-        val serviceType = arguments?.getString(ARG_PARAM2) ?: ""
 
         // You can add click listeners or other view manipulations here
         backButton.setOnClickListener {

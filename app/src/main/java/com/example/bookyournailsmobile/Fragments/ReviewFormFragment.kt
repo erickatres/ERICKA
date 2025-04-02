@@ -15,9 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
@@ -112,6 +114,27 @@ class ReviewFormFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) { // 'true' means enabled
+                override fun handleOnBackPressed() {
+                    // Navigate directly to HomeFragment when back is pressed
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment())
+                        .commit()
+                }
+            }
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as? MainActivity)?.setBottomNavVisibility(true)
+    }
+
     private fun updateStarUI(rating: Int) {
         for (i in stars.indices) {
             stars[i].setImageResource(if (i < rating) R.drawable.star_filled else R.drawable.star_empty)
@@ -180,38 +203,6 @@ class ReviewFormFragment : Fragment() {
         })
     }
 
-    private fun navigateToSoftGelExtensionFragment() {
-        val fragment = SoftGelExtensionFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun navigateToGelPolishFragment() {
-        val fragment = GelPolishFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun navigateToRemovalFragment() {
-        val fragment = RemovalFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun navigateToRegularFragment() {
-        val fragment = RegularFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
     private fun resetForm() {
         selectedRating = 0
         updateStarUI(selectedRating)
@@ -234,16 +225,14 @@ class ReviewFormFragment : Fragment() {
         val btnOk = dialog.findViewById<TextView>(R.id.btnOkay)
         btnOk.setOnClickListener {
             dialog.dismiss()
-            // Navigate based on service type only after user clicks Okay
-            when (service) {
-                "Regular Plain" -> navigateToRegularFragment()
-                "Removal" -> navigateToRemovalFragment()
-                "Gel Polish" -> navigateToGelPolishFragment()
-                "Soft Gel X" -> navigateToSoftGelExtensionFragment()
-                else -> parentFragmentManager.popBackStack()
-            }
+            // Navigate to BookingFragment instead of service-specific fragments
+            val fragment = BookingFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
         }
 
         dialog.show()
     }
+
 }

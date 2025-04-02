@@ -17,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.Domain.User
@@ -125,6 +126,17 @@ class HomeFragment : Fragment() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+    }
+    override fun onResume() {
+        super.onResume()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Do nothing to disable back press
+                }
+            }
+        )
     }
 
     private fun setupButtonListeners(view: View) {

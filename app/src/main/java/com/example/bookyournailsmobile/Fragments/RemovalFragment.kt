@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
 import com.example.bookyournailsmobile.Adapters.ReviewAdapter
 import com.example.bookyournailsmobile.Fragments.AppointmentFragment
+import com.example.bookyournailsmobile.Fragments.HomeFragment
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
@@ -78,14 +80,31 @@ class RemovalFragment : Fragment() {
 
         btnBack.setOnClickListener {
             Log.d("RemovalFragment", "Back button clicked")
-            parentFragmentManager.popBackStack()
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment()) // Replace with HomeFragment
+                .commit()
         }
+
 
         btnBook.setOnClickListener {
             Log.d("RemovalFragment", "Book button clicked")
             navigateToAppointmentFragment("Removal")
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Do nothing to disable back press
+                }
+            }
+        )
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

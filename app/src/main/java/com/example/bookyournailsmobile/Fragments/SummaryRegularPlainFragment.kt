@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
@@ -174,6 +175,7 @@ class SummaryRegularPlainFragment : Fragment() {
     }
 
 
+
     private fun showCancelPopup() {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.pop_up_cancel)
@@ -256,7 +258,15 @@ class SummaryRegularPlainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
+
+        // Disable back button
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do nothing to disable back button
+            }
+        })
     }
 
 
