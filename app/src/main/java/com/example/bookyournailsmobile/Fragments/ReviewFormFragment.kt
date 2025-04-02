@@ -37,6 +37,7 @@ class ReviewFormFragment : Fragment() {
     private lateinit var reviewInput: EditText
     private lateinit var stars: List<ImageView>
     private var serviceType: String = "Unknown"
+    private lateinit var EditTextCounter: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +49,7 @@ class ReviewFormFragment : Fragment() {
         val serviceTypeTextView = view.findViewById<TextView>(R.id.serviceName)
         reviewInput = view.findViewById(R.id.reviewInput)
         submitButton = view.findViewById(R.id.submitButton)
+        EditTextCounter = view.findViewById(R.id.charCounter)
 
         // Star Rating
         stars = listOf(
@@ -85,10 +87,14 @@ class ReviewFormFragment : Fragment() {
         reviewInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 checkSubmitButtonState()
+                EditTextCounter.text = "${s?.length ?: 0}/100" // Assuming max 500 characters
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
 
         // Handle submit button click
         submitButton.setOnClickListener {

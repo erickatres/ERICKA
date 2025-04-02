@@ -1,5 +1,6 @@
 package com.example.bookyournailsmobile.Fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,13 +9,18 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.Class.DateValidatorNoPastAndNoSundays
+import com.example.bookyournailsmobile.NetUtils.ApiService
+import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
 import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,8 +28,16 @@ class AppointmentFragment : Fragment() {
 
     private lateinit var appointment_backBTN: FrameLayout
     private lateinit var continue_button: Button
-    private lateinit var textViewSD: TextView // TextView to display the selected date
-    private var serviceType: String? = null // To store the service type (Regular or Gel Polish)
+    private lateinit var textViewSD: TextView
+    private var serviceType: String? = null
+    private lateinit var apiService: ApiService
+    private var backendFormattedDate: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Initialize API service with context
+        apiService = RetrofitClient.create(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,107 +49,155 @@ class AppointmentFragment : Fragment() {
         serviceType = arguments?.getString("SERVICE_TYPE")
         Log.d("AppointmentFragment", "Service Type: $serviceType")
 
-        // Initialize the back button
+        // Initialize views
         appointment_backBTN = view.findViewById(R.id.appointment_backBTN)
-
-        // Initialize the continue button
         continue_button = view.findViewById(R.id.btn_continue)
-        continue_button.visibility = View.GONE // Hide the button initially
-
-        // Initialize the TextView for displaying the selected date
+        continue_button.visibility = View.GONE
         textViewSD = view.findViewById(R.id.textViewSD)
 
-        // Set an OnClickListener on the back button
-        appointment_backBTN.setOnClickListener {
-            // Navigate back to the previous fragment
-            navigateBackToPreviousFragment()
-        }
-
-        // Set an OnClickListener on the TextView to allow reselecting the date
-        textViewSD.setOnClickListener {
-            showMaterialDatePicker(textViewSD)
-        }
-
-        // Show MaterialDatePicker when AppointmentFragment is opened
-        showMaterialDatePicker(textViewSD)
-
-        // Set an OnClickListener on the continue button
+        // Set click listeners
+        appointment_backBTN.setOnClickListener { navigateBackToPreviousFragment() }
+        textViewSD.setOnClickListener { showMaterialDatePicker(textViewSD) }
         continue_button.setOnClickListener {
-            // Navigate to BookingSelectTimeFragment with the selected service type
-            navigateToBookingSelectTimeFragment(serviceType ?: "Unknown")
+            backendFormattedDate?.let { date ->
+                checkDateAvailability(date)
+            }
         }
+
+        // Show date picker when fragment is opened
+        showMaterialDatePicker(textViewSD)
 
         return view
     }
 
-    private fun navigateBackToPreviousFragment() {
-        // Use FragmentManager to navigate back to the previous fragment
-        parentFragmentManager.popBackStack()
+    private fun checkDateAvailability(date: String) {
+        continue_button.isEnabled = false
+
+        apiService.checkDateAvailability(date).enqueue(object : Callback<ApiService.DateAvailabilityResponse> {
+            override fun onResponse(
+                call: Call<ApiService.DateAvailabilityResponse>,
+                response: Response<ApiService.DateAvailabilityResponse>
+            ) {
+                continue_button.isEnabled = true
+
+                if (response.isSuccessful) {
+                    val isFull = response.body()?.fullyBooked ?: false
+                    if (isFull) {
+                        showFullyBookedDialog()
+                    } else {
+                        navigateToBookingSelectTimeFragment(serviceType ?: "Unknown")
+                    }
+                } else {
+                    showErrorToast("Error checking date availability")
+                }
+            }
+
+            override fun onFailure(
+                call: Call<ApiService.DateAvailabilityResponse>,
+                t: Throwable
+            ) {
+                continue_button.isEnabled = true
+                showErrorToast("Network error: ${t.message}")
+            }
+        })
     }
 
-    private var backendFormattedDate: String? = null // Store the date in "YYYY-MM-DD" format for backend
+    private fun showFullyBookedDialog() {
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Fully Booked")
+            .setMessage("The selected date is fully booked. Please choose another date.")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+                showMaterialDatePicker(textViewSD)
+            }
+            .setCancelable(false)
+            .create()
+            .show()
+    }
 
     private fun showMaterialDatePicker(textView: TextView) {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
+        val maxDate = getLastDayOfYear()
 
-        // Calculate the maximum date (5 days ahead)
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calendar.timeInMillis = today
-        calendar.add(Calendar.DAY_OF_MONTH, 5)
-        val maxDate = calendar.timeInMillis
-
-        // Build constraints: start from today, end after 5 days, exclude past dates & Sundays
-        val constraintsBuilder = CalendarConstraints.Builder()
-            .setStart(today) // Start from today (prevents past dates)
-            .setEnd(maxDate) // Allow only the next 5 days
-            .setValidator(DateValidatorNoPastAndNoSundays()) // Custom validator
-
-        // Build MaterialDatePicker
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select Appointment Date")
-            .setSelection(today) // Default to today's date
-            .setCalendarConstraints(constraintsBuilder.build()) // Apply constraints
+        val constraints = CalendarConstraints.Builder()
+            .setValidator(DateValidatorNoPastAndNoSundays())
+            .setStart(today)
+            .setEnd(maxDate)
             .build()
 
-        // Show the picker
-        datePicker.show(parentFragmentManager, "MATERIAL_DATE_PICKER")
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select a Date")
+            .setSelection(today)
+            .setCalendarConstraints(constraints)
+            .build()
 
-        // Handle the selected date
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedDate = Date(selection)
+            val calendar = Calendar.getInstance()
+            calendar.time = selectedDate
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
 
-            // Format for display: "March 29, 2025"
-            val displayFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-            val formattedDisplayDate = displayFormatter.format(selectedDate)
+            if (dayOfWeek == Calendar.SUNDAY) {
+                showSundayAlertDialog()
+            } else {
+                // Format for display
+                val displayFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+                val formattedDisplayDate = displayFormatter.format(selectedDate)
 
-            // Format for backend: "2025-03-29"
-            val backendFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            backendFormattedDate = backendFormatter.format(selectedDate)
+                // Format for backend
+                val backendFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                backendFormattedDate = backendFormatter.format(selectedDate)
 
-            textView.text = formattedDisplayDate // Show user-friendly format in TextView
-            continue_button.visibility = View.VISIBLE // Show continue button
+                textView.text = formattedDisplayDate
+                continue_button.visibility = View.VISIBLE
+            }
         }
-    }
-    override fun onResume() {
-        super.onResume()
-        (activity as? MainActivity)?.setBottomNavVisibility(false) // Hide bottom nav
+
+        datePicker.show(parentFragmentManager, "DATE_PICKER")
     }
 
-    override fun onPause() {
-        super.onPause()
-        (activity as? MainActivity)?.setBottomNavVisibility(true) // Show bottom nav again when leaving
+    private fun showSundayAlertDialog() {
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Closed on Sundays")
+            .setMessage("We are closed on Sundays. Please select another date.")
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .setCancelable(false)
+            .create()
+            .show()
     }
 
+    private fun showErrorToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 
-    // Example: Send the backend format when navigating
+    private fun getLastDayOfYear(): Long {
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val currentYear = cal.get(Calendar.YEAR)
+        cal.set(currentYear, Calendar.DECEMBER, 31, 23, 59, 59)
+        return cal.timeInMillis
+    }
+
     private fun navigateToBookingSelectTimeFragment(serviceType: String) {
-        val selectedDate = backendFormattedDate ?: return // Ensure a date is selected
+        val selectedDate = backendFormattedDate ?: return
 
         val bookingSelectTimeFragment = BookingSelectTimeFragment.newInstance(serviceType, selectedDate)
-
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, bookingSelectTimeFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun navigateBackToPreviousFragment() {
+        parentFragmentManager.popBackStack()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as? MainActivity)?.setBottomNavVisibility(true)
     }
 }

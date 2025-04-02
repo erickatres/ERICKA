@@ -10,17 +10,21 @@ class DateValidatorNoPastAndNoSundays : CalendarConstraints.DateValidator {
 
     override fun isValid(date: Long): Boolean {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
+        val maxDate = getLastDayOfYear()
 
         val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        cal.timeInMillis = today
-        cal.add(Calendar.DAY_OF_MONTH, 10) // Calculate max allowed date (5 days ahead)
-        val maxDate = cal.timeInMillis
-
         cal.timeInMillis = date
         val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)
 
-        // Allow only future dates (today or later), exclude Sundays, and limit to 5 days ahead
+        // Allow only dates from today to Dec 31 of the current year and exclude Sundays
         return date in today..maxDate && dayOfWeek != Calendar.SUNDAY
+    }
+
+    private fun getLastDayOfYear(): Long {
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val currentYear = cal.get(Calendar.YEAR)
+        cal.set(currentYear, Calendar.DECEMBER, 31, 23, 59, 59)
+        return cal.timeInMillis
     }
 
     override fun describeContents(): Int = 0

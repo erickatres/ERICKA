@@ -105,7 +105,12 @@ interface ApiService {
     @GET("getloyaltypoints")
     fun getLoyaltyPoints(@Query("user_id") userId: String): Call<LoyaltyPointsResponse>
 
+    @GET("gettimefullybooked")
+    fun checkDateAvailability(@Query("date") date: String): Call<DateAvailabilityResponse>
 
+    data class DateAvailabilityResponse(
+        @SerializedName("fullyBooked") val fullyBooked: Boolean
+    )
     data class LoyaltyPointsResponse(
         @SerializedName("loyalty_points") val loyaltyPoints: Int
     )

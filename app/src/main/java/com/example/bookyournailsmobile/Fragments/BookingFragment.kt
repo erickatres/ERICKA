@@ -168,7 +168,7 @@ class BookingFragment : Fragment() {
                                         date_formatted = bookingHistory.date_formatted,
                                         time = bookingHistory.time ?: "Not Available",
                                         status = bookingHistory.status,
-                                        is_reviewed = bookingHistory.is_reviewed ?: 0 // Add this line
+                                        is_reviewed = bookingHistory.is_reviewed
                                     )
                                 }
 
