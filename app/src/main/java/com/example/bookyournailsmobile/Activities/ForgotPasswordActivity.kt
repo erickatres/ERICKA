@@ -2,6 +2,7 @@ package com.example.bookyournailsmobile.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        makeFullScreen()
         setContentView(R.layout.activity_forgot_password)
 
         // Initialize UI components
@@ -102,6 +104,12 @@ class ForgotPasswordActivity : AppCompatActivity() {
         }
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         resetButtonState()
+    }
+    private fun makeFullScreen() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
     }
 
     // Reset button state after failure

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -30,6 +31,7 @@ class NewPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        makeFullScreen()
         setContentView(R.layout.activity_new_password)
 
         etNewPassword = findViewById(R.id.etnewpass)
@@ -103,6 +105,12 @@ class NewPasswordActivity : AppCompatActivity() {
                 Log.e("ResetPassword", "Network Failure", t)
             }
         })
+    }
+    private fun makeFullScreen() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
     }
 
     private fun validatePassword(password: String, confirmPassword: String): Boolean {
