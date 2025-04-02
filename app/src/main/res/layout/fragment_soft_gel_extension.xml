@@ -347,18 +347,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/softgelx_review"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/tvNoReviewsYet"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:gravity="center"
-                    android:layout_marginBottom="100dp"
-                    android:layout_marginTop="-300dp"
-                    android:text="No reviews yet"
-                    android:textSize="16sp"
-                    android:textColor="#CCCCCC" />
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="70dp"/>
 
                 <TextView
                     android:id="@+id/softgelx_seeallreviews"
@@ -368,7 +358,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#2F7889"
-                    android:layout_marginBottom="120dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_gravity="start"/>
             </LinearLayout>
         </LinearLayout>

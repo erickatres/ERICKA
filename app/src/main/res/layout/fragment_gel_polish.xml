@@ -350,7 +350,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/gelpolish_review"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="50dp"/>
 
                 <TextView
                     android:id="@+id/gel_polish_seeallreviews"

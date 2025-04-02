@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
 import com.example.bookyournailsmobile.Adapters.ReviewAdapter
 import com.example.bookyournailsmobile.Fragments.AppointmentFragment
+import com.example.bookyournailsmobile.Fragments.SeeAllReviewsFragment
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
@@ -102,6 +103,12 @@ class RemovalFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
+        seeAllReviews.setOnClickListener {
+            navigateToSeeAllReviewsFragment("Removal") // Now correctly passing "Removal"
+        }
+
+
+
         // Book Button Click
         btnBook.setOnClickListener {
             navigateToAppointmentFragment("Removal")
@@ -153,9 +160,9 @@ class RemovalFragment : Fragment() {
 
                             // Click to see all reviews
                             seeAllReviews.setOnClickListener {
-                                removalReviews.adapter = ReviewAdapter(allReviews)
-                                seeAllReviews.visibility = View.GONE
+                                navigateToSeeAllReviewsFragment("Removal")
                             }
+
                         } else {
                             Log.d("RemovalFragment", "No reviews found for $serviceType")
                             seeAllReviews.visibility = View.GONE
@@ -170,6 +177,17 @@ class RemovalFragment : Fragment() {
                 Log.e("RemovalFragment", "Error fetching reviews", t)
             }
         })
+    }
+    private fun navigateToSeeAllReviewsFragment(serviceType: String) {
+        val seeAllReviewsFragment = SeeAllReviewsFragment().apply {
+            arguments = Bundle().apply {
+                putString("SERVICE_TYPE", serviceType)
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, seeAllReviewsFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun updateStarRating(rating: Float) {

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
@@ -264,6 +265,42 @@ class MainActivity : AppCompatActivity() {
         R.id.btn_profile -> R.drawable.profile_vector
         else -> 0
     }
+    fun navigateToBookingFragment() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+
+        // Prevent reloading the same fragment
+        if (currentFragment is BookingFragment) return
+
+        Log.d("Navigation", "Navigating to BookingFragment")
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, BookingFragment())
+            .commit()
+
+        resetNavigationSelection()  // Reset other buttons
+        highlightBookingTab()       // Highlight Booking tab
+    }
+    private fun highlightBookingTab() {
+        resetNavigationSelection()
+
+        findViewById<ImageButton>(R.id.btn_booking).setImageResource(R.drawable.booking_vector)
+
+    }
+
+
+    private fun resetNavigationSelection() {
+        findViewById<ImageButton>(R.id.btn_home).setImageResource(R.drawable.home_without_fill)
+        findViewById<ImageButton>(R.id.btn_pricelist).setImageResource(R.drawable.pricelist_without_fill)
+        findViewById<ImageButton>(R.id.btn_booking).setImageResource(R.drawable.booking_without_fill)
+        findViewById<ImageButton>(R.id.btn_profile).setImageResource(R.drawable.profile_without_fill)
+
+        findViewById<TextView>(R.id.home_txt).setTextColor(resources.getColor(android.R.color.darker_gray))
+        findViewById<TextView>(R.id.pricelist_txt).setTextColor(resources.getColor(android.R.color.darker_gray))
+        findViewById<TextView>(R.id.booking_txt).setTextColor(resources.getColor(android.R.color.darker_gray))
+        findViewById<TextView>(R.id.profile_txt).setTextColor(resources.getColor(android.R.color.darker_gray))
+    }
+
+
 
     // Save the current fragment tag on configuration changes
     override fun onSaveInstanceState(outState: Bundle) {

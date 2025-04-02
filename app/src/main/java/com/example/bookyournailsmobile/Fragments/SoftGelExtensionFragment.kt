@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
 import com.example.bookyournailsmobile.Adapters.ReviewAdapter
 import com.example.bookyournailsmobile.Fragments.AppointmentFragment
+import com.example.bookyournailsmobile.Fragments.SeeAllReviewsFragment
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
@@ -28,7 +29,6 @@ class SoftGelExtensionFragment : Fragment() {
     private lateinit var btnBack: FrameLayout
     private lateinit var btnBook: Button
     private lateinit var reviewList: RecyclerView
-    private lateinit var tvNoReviewsYet: TextView
     private lateinit var seeAllReviews: TextView
     private lateinit var starViews: List<ImageView>
     private lateinit var avrgRating: TextView
@@ -59,7 +59,6 @@ class SoftGelExtensionFragment : Fragment() {
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.book_now)
         reviewList = view.findViewById(R.id.softgelx_review)
-        tvNoReviewsYet = view.findViewById(R.id.tvNoReviewsYet)
         seeAllReviews = view.findViewById(R.id.softgelx_seeallreviews)
         avrgRating = view.findViewById(R.id.tvAverageRating)
 
@@ -70,6 +69,10 @@ class SoftGelExtensionFragment : Fragment() {
             view.findViewById(R.id.star4_softgelx),
             view.findViewById(R.id.star5_softgelx)
         )
+        seeAllReviews.setOnClickListener {
+            navigateToSeeAllReviewsFragment("Soft Gel X")
+        }
+
 
         // Hide bottom navigation
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
@@ -143,24 +146,13 @@ class SoftGelExtensionFragment : Fragment() {
                             val limitedReviews = allReviews.take(3)
                             reviewList.adapter = ReviewAdapter(limitedReviews)
 
-                            // Show "See All Reviews" if more than 3
+                            // Show "See All Reviews" only if more than 3 exist
                             seeAllReviews.visibility = if (allReviews.size > 3) View.VISIBLE else View.GONE
 
                             // Update star rating
                             avrgRating.text = reviewResponse.average_rating
                             updateStarRating(reviewResponse.average_rating.toFloat())
-
-                            // Hide "No Reviews Yet" if reviews exist
-                            tvNoReviewsYet.visibility = View.GONE
-
-                            // Click to see all reviews
-                            seeAllReviews.setOnClickListener {
-                                reviewList.adapter = ReviewAdapter(allReviews)
-                                seeAllReviews.visibility = View.GONE
-                            }
                         } else {
-                            // Show "No Reviews Yet" when there are no reviews
-                            tvNoReviewsYet.visibility = View.VISIBLE
                             seeAllReviews.visibility = View.GONE
                         }
                     }
@@ -175,6 +167,7 @@ class SoftGelExtensionFragment : Fragment() {
         })
     }
 
+
     private fun updateStarRating(rating: Float) {
         val fullStar = R.drawable.star_filled
         val emptyStar = R.drawable.star_empty
@@ -186,6 +179,18 @@ class SoftGelExtensionFragment : Fragment() {
             }
         }
     }
+    private fun navigateToSeeAllReviewsFragment(serviceType: String) {
+        val seeAllReviewsFragment = SeeAllReviewsFragment().apply {
+            arguments = Bundle().apply {
+                putString("SERVICE_TYPE", serviceType)
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, seeAllReviewsFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
 
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {
@@ -193,6 +198,7 @@ class SoftGelExtensionFragment : Fragment() {
                 putString("SERVICE_TYPE", serviceType)
             }
         }
+
 
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, appointmentFragment)

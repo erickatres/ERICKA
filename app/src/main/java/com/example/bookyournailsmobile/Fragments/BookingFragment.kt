@@ -285,7 +285,8 @@ class BookingFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        (activity as? MainActivity)?.setBottomNavVisibility(true)
+        approvedBookingId = null // Reset the approved booking ID
+        fetchAndDisplayBookingHistory()  // Refresh the booking list
     }
 
 

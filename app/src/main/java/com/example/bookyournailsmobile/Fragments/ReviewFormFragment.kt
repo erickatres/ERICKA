@@ -1,10 +1,5 @@
 package com.example.bookyournailsmobile.Fragments
 
-import GelPolishFragment
-import RegularFragment
-import RemovalFragment
-import SoftGelExtensionFragment
-import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
@@ -13,10 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.example.bookyournailsmobile.Activities.MainActivity
@@ -24,8 +17,6 @@ import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
-import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -187,7 +178,7 @@ class ReviewFormFragment : Fragment() {
                         setFragmentResult("reviewSubmission", resultBundle)
 
                         // Show feedback popup first
-                        showFeedbackPopup(service)
+                        showFeedbackPopup()
                         resetForm()
 
                     } catch (e: Exception) {
@@ -215,7 +206,7 @@ class ReviewFormFragment : Fragment() {
         submitButton.setBackgroundResource(R.drawable.button_reviewform_disabled)
     }
 
-    private fun showFeedbackPopup(service: String) {
+    private fun showFeedbackPopup() {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.popup_feedback)
         dialog.setCancelable(false)
@@ -228,15 +219,18 @@ class ReviewFormFragment : Fragment() {
 
         val btnOk = dialog.findViewById<TextView>(R.id.btnOkay)
         btnOk.setOnClickListener {
+            Log.d("FeedbackPopup", "Feedback button clicked")
             dialog.dismiss()
-            // Navigate to BookingFragment instead of service-specific fragments
-            val fragment = BookingFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit()
+
+            val activity = activity as? MainActivity
+            if (activity != null) {
+                Log.d("Navigation", "Returning to BookingFragment")
+                activity.navigateToBookingFragment()
+            } else {
+                Log.e("Navigation", "MainActivity is null")
+            }
         }
 
         dialog.show()
     }
-
 }

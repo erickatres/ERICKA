@@ -84,7 +84,7 @@ class BookingAdapter(
                         val activity = context as? androidx.fragment.app.FragmentActivity
                         activity?.supportFragmentManager?.beginTransaction()
                             ?.replace(R.id.fragment_container, myRatingFragment)
-                            ?.addToBackStack(null)
+                            ?.addToBackStack("MyRatingFragment")  // Add a name for the backstack
                             ?.commit()
                     } else if (booking.status == "Completed") {
                         // Navigate to ReviewFormFragment
@@ -92,6 +92,7 @@ class BookingAdapter(
                     }
                 }
             }
+
         }
             return view
     }
