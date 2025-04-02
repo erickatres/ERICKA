@@ -122,26 +122,31 @@
                         android:textSize="16sp" />
 
                     <ImageView
+                        android:id="@+id/star1_removal"
                         android:layout_width="24dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star2_removal"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star3_removal"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star4_removal"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star5_removal"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />

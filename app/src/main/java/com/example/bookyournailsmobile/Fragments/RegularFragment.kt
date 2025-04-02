@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -30,6 +31,8 @@ class RegularFragment : Fragment() {
     private lateinit var btnBook: Button
     private lateinit var tvImageCount: TextView
     private lateinit var seeallReviews: TextView
+    private lateinit var starViews: List<ImageView>
+    private lateinit var avrgRating: TextView
 
     private val imageList = listOf(
         R.drawable.regularplain1,
@@ -57,6 +60,16 @@ class RegularFragment : Fragment() {
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.btn_book)
         seeallReviews = view.findViewById(R.id.regular_see_all_reviews)
+        avrgRating = view.findViewById(R.id.tvAverageRating)
+
+        // Initialize star image views
+        starViews = listOf(
+            view.findViewById(R.id.star1_regular),
+            view.findViewById(R.id.star2_regular),
+            view.findViewById(R.id.star3_regular),
+            view.findViewById(R.id.star4_regular),
+            view.findViewById(R.id.star5_regular)
+        )
 
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.GONE
@@ -79,8 +92,9 @@ class RegularFragment : Fragment() {
         // Set up RecyclerView
         regularReviews.layoutManager = LinearLayoutManager(requireContext())
 
-        // Fetch reviews for Regular Plain service
+        // Fetch reviews & average rating for "Regular Plain"
         fetchReviews("Regular Plain")
+        fetchAverageRating("Regular Plain")
 
         // Back Button Click
         btnBack.setOnClickListener {
@@ -92,6 +106,7 @@ class RegularFragment : Fragment() {
             navigateToAppointmentFragment("Regular Plain")
         }
     }
+
     override fun onResume() {
         super.onResume()
 
@@ -103,7 +118,6 @@ class RegularFragment : Fragment() {
             }
         )
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -152,6 +166,38 @@ class RegularFragment : Fragment() {
         })
     }
 
+    private fun fetchAverageRating(serviceType: String) {
+        val apiService = RetrofitClient.create(requireContext())
+
+        apiService.getReviewsByService(serviceType).enqueue(object : Callback<ApiService.ReviewResponse> {
+            override fun onResponse(call: Call<ApiService.ReviewResponse>, response: Response<ApiService.ReviewResponse>) {
+                if (response.isSuccessful) {
+                    val averageRating = response.body()?.average_rating?.toFloatOrNull() ?: 0.0f
+                    avrgRating.text = averageRating.toString()
+                    updateStarUI(averageRating)
+                } else {
+                    Log.e("RegularFragment", "Failed to fetch average rating")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiService.ReviewResponse>, t: Throwable) {
+                Log.e("RegularFragment", "Error fetching average rating", t)
+            }
+        })
+    }
+
+    private fun updateStarUI(averageRating: Float) {
+        val filledStar = R.drawable.starwithfill
+        val emptyStar = R.drawable.starwithoutfill
+
+        for (i in starViews.indices) {
+            if (i < averageRating) {
+                starViews[i].setImageResource(filledStar) // Fill star
+            } else {
+                starViews[i].setImageResource(emptyStar)  // Empty star
+            }
+        }
+    }
 
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {

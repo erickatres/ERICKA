@@ -5,7 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +30,17 @@ class GelPolishFragment : Fragment() {
     private lateinit var btnBook: Button
     private lateinit var gelPolishReviews: RecyclerView
     private lateinit var ratingTestimonials: TextView
-    private lateinit var seeallReviews: TextView
+    private lateinit var seeAllReviews: TextView
+    private lateinit var starViews: List<ImageView>
+    private lateinit var avrgRating: TextView
+
+    private val imageList = listOf(
+        R.drawable.gelpolish1,
+        R.drawable.gelpolish2,
+        R.drawable.gelpolish3,
+        R.drawable.gelpolish4,
+        R.drawable.gelpolish5
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,33 +54,36 @@ class GelPolishFragment : Fragment() {
 
         Log.d("GelPolishFragment", "Fragment created successfully")
 
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
-        bottomNav?.visibility = View.GONE
-
-        // Initialize views
+        // Initialize Views
         viewPager = view.findViewById(R.id.viewPagerGelPolish)
         tvImageCount = view.findViewById(R.id.tvImageCountGelPolish)
         btnBack = view.findViewById(R.id.btnBack)
         btnBook = view.findViewById(R.id.btn_book)
         gelPolishReviews = view.findViewById(R.id.gelpolish_review)
         ratingTestimonials = view.findViewById(R.id.gelpolish_rating_testimonials)
-        seeallReviews = view.findViewById(R.id.gel_polish_seeallreviews)
+        seeAllReviews = view.findViewById(R.id.gel_polish_seeallreviews)
+        avrgRating = view.findViewById(R.id.tvAverageRating)
 
-        btnBack.visibility = View.VISIBLE
-
-        val imageList = listOf(
-            R.drawable.gelpolish1,
-            R.drawable.gelpolish2,
-            R.drawable.gelpolish3,
-            R.drawable.gelpolish4,
-            R.drawable.gelpolish5
+        starViews = listOf(
+            view.findViewById(R.id.star1_gelpolish),
+            view.findViewById(R.id.star2_gelpolish),
+            view.findViewById(R.id.star3_gelpolish),
+            view.findViewById(R.id.star4_gelpolish),
+            view.findViewById(R.id.star5_gelpolish)
         )
 
+        // Hide bottom navigation
+        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
+        bottomNav?.visibility = View.GONE
+
+        // Setup Image Slider
         val adapter = ImageSliderAdapter(imageList)
         viewPager.adapter = adapter
 
+        // Update image count display
         tvImageCount.text = "1/${imageList.size}"
 
+        // Handle Page Change (Manual Sliding Only)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -76,20 +91,40 @@ class GelPolishFragment : Fragment() {
             }
         })
 
+        // Set up RecyclerView for reviews
         gelPolishReviews.layoutManager = LinearLayoutManager(requireContext())
 
         // Fetch reviews for Gel Polish service
         fetchReviews("Gel Polish")
 
+        // Back Button Click
         btnBack.setOnClickListener {
-            Log.d("GelPolishFragment", "Back button clicked")
             parentFragmentManager.popBackStack()
         }
 
+        // Book Button Click
         btnBook.setOnClickListener {
-            Log.d("GelPolishFragment", "Book button clicked")
             navigateToAppointmentFragment("Gel Polish")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Do nothing to disable back press
+                }
+            }
+        )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        // Show bottom navigation when leaving this fragment
+        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
+        bottomNav?.visibility = View.VISIBLE
     }
 
     private fun fetchReviews(serviceType: String) {
@@ -106,24 +141,24 @@ class GelPolishFragment : Fragment() {
                     response.body()?.let { reviewResponse ->
                         val allReviews = reviewResponse.reviews
                         if (allReviews.isNotEmpty()) {
-                            val limitedReviews = allReviews.take(3) // Show only 3 reviews initially
+                            val limitedReviews = allReviews.take(3)
                             gelPolishReviews.adapter = ReviewAdapter(limitedReviews)
 
                             // Show "See All Reviews" if there are more than 3 reviews
-                            if (allReviews.size > 3) {
-                                seeallReviews.visibility = View.VISIBLE
-                            } else {
-                                seeallReviews.visibility = View.GONE
-                            }
+                            seeAllReviews.visibility = if (allReviews.size > 3) View.VISIBLE else View.GONE
 
-                            // Expand reviews when "See All Reviews" is clicked
-                            seeallReviews.setOnClickListener {
-                                gelPolishReviews.adapter = ReviewAdapter(allReviews) // Show all reviews
-                                seeallReviews.visibility = View.GONE // Hide button after expanding
+                            // Display average rating and update stars
+                            avrgRating.text = reviewResponse.average_rating
+                            updateStarRating(reviewResponse.average_rating.toFloat())
+
+                            // Click to see all reviews
+                            seeAllReviews.setOnClickListener {
+                                gelPolishReviews.adapter = ReviewAdapter(allReviews)
+                                seeAllReviews.visibility = View.GONE
                             }
                         } else {
                             Log.d("GelPolishFragment", "No reviews found for $serviceType")
-                            seeallReviews.visibility = View.GONE
+                            seeAllReviews.visibility = View.GONE
                         }
                     }
                 } else {
@@ -137,10 +172,23 @@ class GelPolishFragment : Fragment() {
         })
     }
 
+    private fun updateStarRating(rating: Float) {
+        val fullStar = R.drawable.star_filled
+        val emptyStar = R.drawable.star_empty
+
+
+        for (i in starViews.indices) {
+            when {
+                rating >= i + 1 -> starViews[i].setImageResource(fullStar) // Full star
+                else -> starViews[i].setImageResource(emptyStar) // Empty star
+            }
+        }
+    }
+
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {
             arguments = Bundle().apply {
-                putString("SERVICE_TYPE", serviceType) // Pass the service type to AppointmentFragment
+                putString("SERVICE_TYPE", serviceType)
             }
         }
 
@@ -148,12 +196,5 @@ class GelPolishFragment : Fragment() {
             .replace(R.id.fragment_container, appointmentFragment)
             .addToBackStack(null)
             .commit()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Show bottom navigation when leaving this fragment
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
-        bottomNav?.visibility = View.VISIBLE
     }
 }

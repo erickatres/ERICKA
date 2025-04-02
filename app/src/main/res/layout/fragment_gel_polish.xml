@@ -122,30 +122,36 @@
                         android:textSize="16sp" />
 
                     <ImageView
+                        android:id="@+id/star1_gelpolish"
                         android:layout_width="24dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star2_gelpolish"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star3_gelpolish"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star4_gelpolish"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star5_gelpolish"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
                 </LinearLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"

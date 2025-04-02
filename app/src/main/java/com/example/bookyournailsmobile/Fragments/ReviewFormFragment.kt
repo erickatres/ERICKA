@@ -41,6 +41,7 @@ class ReviewFormFragment : Fragment() {
     private var serviceType: String = "Unknown"
     private lateinit var EditTextCounter: TextView
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

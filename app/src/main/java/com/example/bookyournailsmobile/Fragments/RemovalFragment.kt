@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -14,7 +15,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.bookyournailsmobile.Adapters.ImageSliderAdapter
 import com.example.bookyournailsmobile.Adapters.ReviewAdapter
 import com.example.bookyournailsmobile.Fragments.AppointmentFragment
-import com.example.bookyournailsmobile.Fragments.HomeFragment
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
 import com.example.bookyournailsmobile.R
@@ -31,6 +31,8 @@ class RemovalFragment : Fragment() {
     private lateinit var removalReviews: RecyclerView
     private lateinit var ratingTestimonials: TextView
     private lateinit var seeAllReviews: TextView
+    private lateinit var starViews: List<ImageView>
+    private lateinit var avrgRating: TextView
 
     private val imageList = listOf(
         R.drawable.removal1,
@@ -52,6 +54,7 @@ class RemovalFragment : Fragment() {
 
         Log.d("RemovalFragment", "Fragment created successfully")
 
+        // Initialize Views
         viewPager = view.findViewById(R.id.viewPagerRemoval)
         tvImageCount = view.findViewById(R.id.tvImageCountRemoval)
         btnBack = view.findViewById(R.id.btnBack)
@@ -59,14 +62,28 @@ class RemovalFragment : Fragment() {
         removalReviews = view.findViewById(R.id.removal_review)
         ratingTestimonials = view.findViewById(R.id.removal_rating_testimonials)
         seeAllReviews = view.findViewById(R.id.removal_see_all_reviews)
+        avrgRating = view.findViewById(R.id.tvAverageRating)
 
+        starViews = listOf(
+            view.findViewById(R.id.star1_removal),
+            view.findViewById(R.id.star2_removal),
+            view.findViewById(R.id.star3_removal),
+            view.findViewById(R.id.star4_removal),
+            view.findViewById(R.id.star5_removal)
+        )
+
+        // Hide bottom navigation
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.GONE
 
+        // Setup Image Slider
         val adapter = ImageSliderAdapter(imageList)
         viewPager.adapter = adapter
+
+        // Update image count display
         tvImageCount.text = "1/${imageList.size}"
 
+        // Handle Page Change (Manual Sliding Only)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -74,28 +91,25 @@ class RemovalFragment : Fragment() {
             }
         })
 
+        // Set up RecyclerView for reviews
         removalReviews.layoutManager = LinearLayoutManager(requireContext())
 
+        // Fetch reviews for Removal service
         fetchReviews("Removal")
 
+        // Back Button Click
         btnBack.setOnClickListener {
-            Log.d("RemovalFragment", "Back button clicked")
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment()) // Replace with HomeFragment
-                .commit()
+            parentFragmentManager.popBackStack()
         }
 
-
+        // Book Button Click
         btnBook.setOnClickListener {
-            Log.d("RemovalFragment", "Book button clicked")
             navigateToAppointmentFragment("Removal")
         }
     }
 
     override fun onResume() {
         super.onResume()
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -105,9 +119,10 @@ class RemovalFragment : Fragment() {
         )
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
+
+        // Show bottom navigation when leaving this fragment
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation_container)
         bottomNav?.visibility = View.VISIBLE
     }
@@ -129,12 +144,14 @@ class RemovalFragment : Fragment() {
                             val limitedReviews = allReviews.take(3)
                             removalReviews.adapter = ReviewAdapter(limitedReviews)
 
-                            if (allReviews.size > 3) {
-                                seeAllReviews.visibility = View.VISIBLE
-                            } else {
-                                seeAllReviews.visibility = View.GONE
-                            }
+                            // Show "See All Reviews" if there are more than 3 reviews
+                            seeAllReviews.visibility = if (allReviews.size > 3) View.VISIBLE else View.GONE
 
+                            // Display average rating and update stars
+                            avrgRating.text = reviewResponse.average_rating
+                            updateStarRating(reviewResponse.average_rating.toFloat())
+
+                            // Click to see all reviews
                             seeAllReviews.setOnClickListener {
                                 removalReviews.adapter = ReviewAdapter(allReviews)
                                 seeAllReviews.visibility = View.GONE
@@ -155,6 +172,17 @@ class RemovalFragment : Fragment() {
         })
     }
 
+    private fun updateStarRating(rating: Float) {
+        val fullStar = R.drawable.star_filled
+        val emptyStar = R.drawable.star_empty
+
+        for (i in starViews.indices) {
+            when {
+                rating >= i + 1 -> starViews[i].setImageResource(fullStar) // Full star
+                else -> starViews[i].setImageResource(emptyStar) // Empty star
+            }
+        }
+    }
 
     private fun navigateToAppointmentFragment(serviceType: String) {
         val appointmentFragment = AppointmentFragment().apply {

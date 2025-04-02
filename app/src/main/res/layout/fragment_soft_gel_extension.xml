@@ -122,26 +122,31 @@
                         android:textSize="16sp" />
 
                     <ImageView
+                        android:id="@+id/star1_softgelx"
                         android:layout_width="24dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star2_softgelx"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star3_softgelx"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star4_softgelx"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
 
                     <ImageView
+                        android:id="@+id/star5_softgelx"
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/starwithoutfill" />
@@ -337,22 +342,26 @@
                         android:textColor="#2F7889"
                         android:layout_weight="1"/>
 
-                    <ImageView
-                        android:id="@+id/moreRatings"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/morebutton"/>
                 </LinearLayout>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/softgelx_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
                 <TextView
+                    android:id="@+id/tvNoReviewsYet"
                     android:layout_width="match_parent"
                     android:layout_height="500dp"
                     android:gravity="center"
+                    android:layout_marginBottom="100dp"
+                    android:layout_marginTop="-300dp"
                     android:text="No reviews yet"
                     android:textSize="16sp"
                     android:textColor="#CCCCCC" />
 
                 <TextView
+                    android:id="@+id/softgelx_seeallreviews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="See all reviews"
