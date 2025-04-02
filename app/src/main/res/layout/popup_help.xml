@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="333dp"
-    android:layout_height="290dp"
+    android:layout_width="match_parent"
+    android:layout_height="390dp"
     android:orientation="vertical"
     android:padding="24dp"
     android:background="@drawable/dialog_background"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:text="How to schedule an appointment?"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#2F7889"
         android:layout_gravity="center"
@@ -25,14 +25,14 @@
         android:paddingBottom="4dp"
         android:text="Step 1: Go to homepage"
         android:textColor="#000000"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:text="Step 2: Choose a service under 'Services'"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textColor="#000000"
         android:paddingBottom="4dp"/>
 
@@ -41,6 +41,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:text="Step 3: After making a decision, click 'schedule appointment' button at the bottom right"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textColor="#000000"/>
 </LinearLayout>

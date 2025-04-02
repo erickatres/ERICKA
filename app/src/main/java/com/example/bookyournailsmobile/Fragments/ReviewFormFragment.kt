@@ -120,11 +120,14 @@ class ReviewFormFragment : Fragment() {
         (activity as? MainActivity)?.setBottomNavVisibility(false)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) { // 'true' means enabled
+            object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // Navigate directly to HomeFragment when back is pressed
+                    // Restore bottom navigation bar visibility
+                    (activity as? MainActivity)?.setBottomNavVisibility(true)
+
+                    // Navigate back to BookingFragment
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, HomeFragment())
+                        .replace(R.id.fragment_container, BookingFragment())
                         .commit()
                 }
             }

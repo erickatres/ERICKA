@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Activities.ForgotPasswordActivity
 import com.example.bookyournailsmobile.Activities.LoginActivity
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
@@ -32,6 +33,7 @@ class ChangePasswordFragment : Fragment() {
     private lateinit var newPasswordLayout: TextInputLayout
     private lateinit var confirmPasswordLayout: TextInputLayout
     private lateinit var errorTextView: TextView
+    private lateinit var forgotPassword: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +53,17 @@ class ChangePasswordFragment : Fragment() {
         oldPasswordLayout = view.findViewById(R.id.textInputLayout)
         newPasswordLayout = view.findViewById(R.id.textInputLayout2)
         confirmPasswordLayout = view.findViewById(R.id.textInputLayout3)
+        forgotPassword = view.findViewById(R.id.TVForgotPassword)
+
+
+        forgotPassword.setOnClickListener {
+            // Create an Intent to navigate to ForgotPasswordActivity
+            val intent = Intent(requireContext(), ForgotPasswordActivity::class.java)
+
+            // Start the ForgotPasswordActivity
+            startActivity(intent)
+        }
+
 
         // Initialize SessionManagement & Retrofit API service
         sessionManagement = SessionManagement(requireContext())

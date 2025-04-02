@@ -33,7 +33,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_forgot_password)
-        makeFullScreen()
+
 
         // Initialize all views
         btnBack = findViewById(R.id.btnBack)
@@ -64,14 +64,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 sendOtpToEmail(email)
             }
         }
-    }
-
-    private fun makeFullScreen() {
-        // Set the window to full screen
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
     }
 
     private fun isValidEmail(email: String): Boolean {

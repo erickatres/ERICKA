@@ -7,12 +7,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.Adapters.BookingAdapter
 import com.example.bookyournailsmobile.Managers.SessionManagement
 import com.example.bookyournailsmobile.Models.Booking
@@ -41,6 +45,7 @@ class BookingFragment : Fragment() {
     private lateinit var textView2: TextView
     private lateinit var tvActiveTime: TextView
     private lateinit var tvActiveDate: TextView
+    private lateinit var btnHelp: ImageView
 
     private var approvedBookingId: Int? = null
 
@@ -70,6 +75,7 @@ class BookingFragment : Fragment() {
 
 
         // Initialize views
+        btnHelp = view.findViewById(R.id.help_button)
         bookingHistoryList = view.findViewById(R.id.booking_history_list)
         bookingActive = view.findViewById(R.id.activeBooking)
         tvActiveService = view.findViewById(R.id.tvActiveService)
@@ -81,6 +87,34 @@ class BookingFragment : Fragment() {
         textView2 = view.findViewById(R.id.textView2)
         tvActiveTime = view.findViewById(R.id.tvActiveTime)
         tvActiveDate = view.findViewById(R.id.tvActiveDate)
+
+        btnHelp.setOnClickListener {
+            // Create an AlertDialog.Builder
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+
+            // Inflate the popup_help.xml layout
+            val dialogView = layoutInflater.inflate(R.layout.popup_help, null)
+
+            // Set the view of the dialog
+            dialogBuilder.setView(dialogView)
+
+            // Set dialog properties (optional)
+            dialogBuilder.setCancelable(true) // Allow the dialog to be dismissed when clicking outside
+
+            // Create the dialog
+            val alertDialog = dialogBuilder.create()
+
+            // Adjust the height and width
+            alertDialog.window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, // Set width to match parent (or any specific value)
+                900 // Set height (you can adjust this value)
+            )
+
+            // Show the dialog
+            alertDialog.show()
+        }
+
+
 
         cancelButton.setOnClickListener {
             Log.d("BookingFragment", "Cancel button clicked. Booking ID: $approvedBookingId")
@@ -249,6 +283,11 @@ class BookingFragment : Fragment() {
             }
         }
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(true)
+    }
+
 
     private fun formatTimeTo12Hour(time: String?): String {
         return try {
