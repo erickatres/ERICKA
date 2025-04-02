@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -61,7 +62,13 @@ class BookingFragment : Fragment() {
                 Toast.makeText(requireContext(), "Review for $serviceType submitted!", Toast.LENGTH_SHORT).show()
             }
         }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            // Prevent back navigation by not calling super.onBackPressed() here
+            Log.d("BookingFragment", "Back navigation disabled.")
+        }
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -113,7 +120,15 @@ class BookingFragment : Fragment() {
             // Show the dialog
             alertDialog.show()
         }
+        parentFragmentManager.setFragmentResultListener("reviewSubmission", this) { _, bundle ->
+            val success = bundle.getBoolean("success")
+            val serviceType = bundle.getString("service_type")
 
+            if (success) {
+                Toast.makeText(requireContext(), "Review for $serviceType submitted!", Toast.LENGTH_SHORT).show()
+                fetchAndDisplayBookingHistory()  // Reload bookings when a review is submitted
+            }
+        }
 
 
         cancelButton.setOnClickListener {
@@ -137,14 +152,14 @@ class BookingFragment : Fragment() {
     }
 
     private fun cancelBooking(bookingId: Int) {
-        val userId = getCurrentUserId().toIntOrNull()
+        if (!isAdded) return  // Prevent context-related crashes
 
+        val userId = getCurrentUserId().toIntOrNull()
         if (userId == null) {
-            Toast.makeText(requireContext(), "Invalid User ID", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Invalid User ID", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Log the request before sending
         Log.d("BookingFragment", "Sending Cancel Request - booking_id: $bookingId, user_id: $userId")
 
         val request = ApiService.CancelBookingRequest(bookingId, userId)
@@ -152,21 +167,24 @@ class BookingFragment : Fragment() {
 
         apiService.cancelBooking(request).enqueue(object : Callback<ApiService.CancelBookingResponse> {
             override fun onResponse(call: Call<ApiService.CancelBookingResponse>, response: Response<ApiService.CancelBookingResponse>) {
+                if (!isAdded) return  // Prevent crash if fragment is detached
+
                 if (response.isSuccessful) {
                     val cancelResponse = response.body()
                     if (cancelResponse?.success == true) {
-                        Toast.makeText(requireContext(), "Booking Cancelled", Toast.LENGTH_SHORT).show()
-                        fetchAndDisplayBookingHistory() // Refresh bookings
+                        Toast.makeText(context, "Booking Cancelled", Toast.LENGTH_SHORT).show()
+                        fetchAndDisplayBookingHistory()
                     } else {
-                        Toast.makeText(requireContext(), "Failed: ${cancelResponse?.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Failed: ${cancelResponse?.message}", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ApiService.CancelBookingResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "API Call Failed", Toast.LENGTH_SHORT).show()
+                if (!isAdded) return
+                Toast.makeText(context, "API Call Failed", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -285,8 +303,10 @@ class BookingFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        approvedBookingId = null // Reset the approved booking ID
-        fetchAndDisplayBookingHistory()  // Refresh the booking list
+        (activity as? MainActivity)?.setBottomNavVisibility(true)
+
+        // Fetch latest data again when returning
+        fetchAndDisplayBookingHistory()
     }
 
 

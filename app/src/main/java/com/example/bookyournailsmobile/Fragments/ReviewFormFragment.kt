@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.example.bookyournailsmobile.Activities.MainActivity
@@ -31,7 +30,6 @@ class ReviewFormFragment : Fragment() {
     private lateinit var stars: List<ImageView>
     private var serviceType: String = "Unknown"
     private lateinit var EditTextCounter: TextView
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +64,7 @@ class ReviewFormFragment : Fragment() {
 
         // Disable submit button initially
         submitButton.isEnabled = false
-        submitButton.setBackgroundResource(R.drawable.button_reviewform_disabled) // Set initial disabled state
+        submitButton.setBackgroundResource(R.drawable.button_reviewform_disabled)
 
         // Handle star rating selection
         for (i in stars.indices) {
@@ -81,7 +79,7 @@ class ReviewFormFragment : Fragment() {
         reviewInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 checkSubmitButtonState()
-                EditTextCounter.text = "${s?.length ?: 0}/100" // Assuming max 500 characters
+                EditTextCounter.text = "${s?.length ?: 0}/100"
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -89,11 +87,10 @@ class ReviewFormFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-
         // Handle submit button click
         submitButton.setOnClickListener {
             val userId = sessionManagement.getUserId()
-            val authToken = sessionManagement.getSessionToken() // Get token for Authorization header
+            val authToken = sessionManagement.getSessionToken()
             val reviewText = reviewInput.text.toString().trim()
 
             if (userId != null && authToken != null) {
@@ -109,20 +106,6 @@ class ReviewFormFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as? MainActivity)?.setBottomNavVisibility(false)
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    // Restore bottom navigation bar visibility
-                    (activity as? MainActivity)?.setBottomNavVisibility(true)
-
-                    // Navigate back to BookingFragment
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, BookingFragment())
-                        .commit()
-                }
-            }
-        )
     }
 
     override fun onPause() {
@@ -142,7 +125,6 @@ class ReviewFormFragment : Fragment() {
 
         submitButton.isEnabled = isReviewNotEmpty && isRatingSelected
 
-        // Update button background based on state
         if (submitButton.isEnabled) {
             submitButton.setBackgroundResource(R.drawable.button_reviewform)
         } else {
@@ -151,33 +133,28 @@ class ReviewFormFragment : Fragment() {
     }
 
     private fun submitReview(userId: String, service: String, rating: Int, reviewText: String, authToken: String, bookingId: Int) {
-        // Construct the ReviewRequest object with all necessary fields
         val reviewRequest = ApiService.ReviewRequest(
             user_id = userId,
             service = service,
             rating = rating,
             review_text = reviewText,
-            booking_id = bookingId // Include bookingId
+            booking_id = bookingId
         )
 
         val headers = mapOf("Authorization" to authToken)
 
-        // Make the API call
         apiService.submitReview(headers, reviewRequest).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     try {
-                        // You can handle a successful response here, even if there's no body
                         Toast.makeText(requireContext(), "Review submitted successfully", Toast.LENGTH_SHORT).show()
 
-                        // Send result back
                         val resultBundle = Bundle().apply {
                             putBoolean("success", true)
                             putString("service_type", service)
                         }
                         setFragmentResult("reviewSubmission", resultBundle)
 
-                        // Show feedback popup first
                         showFeedbackPopup()
                         resetForm()
 
@@ -219,16 +196,8 @@ class ReviewFormFragment : Fragment() {
 
         val btnOk = dialog.findViewById<TextView>(R.id.btnOkay)
         btnOk.setOnClickListener {
-            Log.d("FeedbackPopup", "Feedback button clicked")
             dialog.dismiss()
-
-            val activity = activity as? MainActivity
-            if (activity != null) {
-                Log.d("Navigation", "Returning to BookingFragment")
-                activity.navigateToBookingFragment()
-            } else {
-                Log.e("Navigation", "MainActivity is null")
-            }
+            parentFragmentManager.popBackStack()
         }
 
         dialog.show()

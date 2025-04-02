@@ -2,117 +2,111 @@ package com.example.bookyournailsmobile.Activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bookyournailsmobile.NetUtils.ApiService
-import com.example.bookyournailsmobile.R
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
-import com.google.android.material.textfield.TextInputLayout
+import com.example.bookyournailsmobile.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
-    // Declare variables for all views
+    // Declare UI components
     private lateinit var btnBack: FrameLayout
-    private lateinit var tvForgotPassword: TextView
-    private lateinit var tvEnterEmail: TextView
-    private lateinit var tvEmailDescription: TextView
-    private lateinit var textInputLayoutEmail: TextInputLayout
     private lateinit var etEmail: TextInputEditText
+    private lateinit var textInputLayoutEmail: TextInputLayout
     private lateinit var btnContinue: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_forgot_password)
 
-
-        // Initialize all views
+        // Initialize UI components
         btnBack = findViewById(R.id.btnBack)
-        tvForgotPassword = findViewById(R.id.tvForgotPassword)
-        tvEnterEmail = findViewById(R.id.tvEnterEmail)
-        tvEmailDescription = findViewById(R.id.tvEmailDescription)
-        textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail)
         etEmail = findViewById(R.id.etEmail)
+        textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail)
         btnContinue = findViewById(R.id.btn_Continue)
 
         // Back button listener
-        btnBack.setOnClickListener {
-            onBackPressed() // Go back to the previous activity
-        }
+        btnBack.setOnClickListener { onBackPressed() }
 
-        // Continue button listener
+        // Continue button listener with OTP request control
         btnContinue.setOnClickListener {
             val email = etEmail.text.toString().trim()
+
             if (email.isEmpty()) {
                 textInputLayoutEmail.error = "Email is required"
             } else if (!isValidEmail(email)) {
                 textInputLayoutEmail.error = "Please enter a valid email"
             } else {
-                // Clear any previous errors
-                textInputLayoutEmail.error = null
+                textInputLayoutEmail.error = null // Clear any previous errors
 
-                // Send OTP to the email using Retrofit
-                sendOtpToEmail(email)
+                if (btnContinue.isEnabled) {
+                    btnContinue.isEnabled = false
+                    btnContinue.alpha = 0.5f // Indicate the button is disabled
+
+                    sendOtpToEmail(email)
+                } else {
+                    Toast.makeText(this, "OTP is still sending, please wait.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
+    // Email validation function
     private fun isValidEmail(email: String): Boolean {
-        // Simple email validation regex
         val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
         return email.matches(emailPattern.toRegex())
     }
 
+    // Function to send OTP
     private fun sendOtpToEmail(email: String) {
-        // Create the request body
+        val apiService = RetrofitClient.create(this)
         val forgotPasswordRequest = ApiService.ForgotPasswordRequest(email)
 
-        // Get the Retrofit instance
-        val apiService = RetrofitClient.create(this)
-
-        // Make the API call
         apiService.forgotPassword(forgotPasswordRequest).enqueue(object : Callback<ApiService.ForgotPasswordResponse> {
             override fun onResponse(call: Call<ApiService.ForgotPasswordResponse>, response: Response<ApiService.ForgotPasswordResponse>) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful && response.body() != null) {
                     val forgotPasswordResponse = response.body()
-                    if (forgotPasswordResponse != null) {
-                        // Handle success
-                        Toast.makeText(this@ForgotPasswordActivity, forgotPasswordResponse.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ForgotPasswordActivity, forgotPasswordResponse?.message ?: "OTP sent successfully", Toast.LENGTH_SHORT).show()
 
-                        // Navigate to the next activity (e.g., ForgotPassword2Activity)
-                        val intent = Intent(this@ForgotPasswordActivity, ForgotPassword2Activity::class.java)
-                        intent.putExtra("EMAIL", email)
-                        intent.putExtra("PASSWORD_RESET_TOKEN", forgotPasswordResponse.password_reset_token) // Pass the token to the next activity
-                        startActivity(intent)
-                    } else {
-                        // Handle failure
-                        Toast.makeText(this@ForgotPasswordActivity, "Failed to send OTP: Invalid response", Toast.LENGTH_SHORT).show()
-                    }
+                    // Navigate to the next activity
+                    val intent = Intent(this@ForgotPasswordActivity, ForgotPassword2Activity::class.java)
+                    intent.putExtra("EMAIL", email)
+                    intent.putExtra("PASSWORD_RESET_TOKEN", forgotPasswordResponse?.password_reset_token)
+                    startActivity(intent)
                 } else {
-                    // Handle HTTP error
-                    val errorMessage = when (response.code()) {
-                        400 -> "Email is required."
-                        404 -> "Email not found."
-                        500 -> "Failed to send email. Please try again later."
-                        else -> "Failed to send OTP: ${response.message()}"
-                    }
-                    Toast.makeText(this@ForgotPasswordActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                    handleFailure(response.code(), response.message())
                 }
             }
 
             override fun onFailure(call: Call<ApiService.ForgotPasswordResponse>, t: Throwable) {
-                // Handle network failure
                 Toast.makeText(this@ForgotPasswordActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                resetButtonState()
             }
         })
+    }
+
+    // Handle API response errors
+    private fun handleFailure(code: Int, message: String) {
+        val errorMessage = when (code) {
+            400 -> "Email is required."
+            404 -> "Email not found."
+            500 -> "Failed to send email. Please try again later."
+            else -> "Failed to send OTP: $message"
+        }
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        resetButtonState()
+    }
+
+    // Reset button state after failure
+    private fun resetButtonState() {
+        btnContinue.isEnabled = true
+        btnContinue.alpha = 1.0f
     }
 }

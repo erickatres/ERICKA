@@ -2,7 +2,6 @@ package com.example.bookyournailsmobile.Adapters
 
 import android.content.Context
 import android.os.Bundle
-import android.provider.Settings.Global.putString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,36 +31,28 @@ class BookingAdapter(
             serviceType.text = it.service_type
             serviceDate.text = it.date_formatted
 
-            // First check if the booking has been reviewed
+            // Reset button state to default
+            rateButton.isEnabled = true
+            rateButton.setBackgroundResource(android.R.color.transparent)
+
+            // Update button state based on booking's review and status
             if (it.is_reviewed == 1) {
-                rateButton.background = ContextCompat.getDrawable(
-                    context,
-                    R.drawable.myrating_button
-                ) // Optional: Change text to "My Rating"
+                rateButton.background = ContextCompat.getDrawable(context, R.drawable.myrating_button)
                 rateButton.isEnabled = true
             } else {
-                // If not reviewed, then check the status
                 when (it.status) {
                     "Cancelled" -> {
-                        rateButton.background =
-                            ContextCompat.getDrawable(context, R.drawable.cancelled_button)
+                        rateButton.background = ContextCompat.getDrawable(context, R.drawable.cancelled_button)
                         rateButton.isEnabled = false
                     }
-
                     "Rejected" -> {
-                        rateButton.background =
-                            ContextCompat.getDrawable(context, R.drawable.rejected_button)
+                        rateButton.background = ContextCompat.getDrawable(context, R.drawable.rejected_button)
                         rateButton.isEnabled = false
                     }
-
                     "Completed" -> {
-                        rateButton.background = ContextCompat.getDrawable(
-                            context,
-                            R.drawable.rate_button
-                        ) // Ensure text is "Rate"
+                        rateButton.background = ContextCompat.getDrawable(context, R.drawable.rate_button)
                         rateButton.isEnabled = true
                     }
-
                     else -> {
                         rateButton.setBackgroundResource(android.R.color.transparent)
                         rateButton.isEnabled = false
@@ -69,7 +60,7 @@ class BookingAdapter(
                 }
             }
 
-            // Set click listener only if the button is enabled and booking is completed but not reviewed
+            // Set click listener to navigate based on button state
             rateButton.setOnClickListener {
                 if (rateButton.isEnabled) {
                     if (booking.is_reviewed == 1) {
@@ -80,11 +71,10 @@ class BookingAdapter(
                                 putString("service_type", booking.service_type)
                             }
                         }
-
                         val activity = context as? androidx.fragment.app.FragmentActivity
                         activity?.supportFragmentManager?.beginTransaction()
                             ?.replace(R.id.fragment_container, myRatingFragment)
-                            ?.addToBackStack("MyRatingFragment")  // Add a name for the backstack
+                            ?.addToBackStack(null)
                             ?.commit()
                     } else if (booking.status == "Completed") {
                         // Navigate to ReviewFormFragment
@@ -92,11 +82,12 @@ class BookingAdapter(
                     }
                 }
             }
-
         }
-            return view
+        return view
     }
 
+
+    // Ensure to get item from the bookings list
     override fun getItem(position: Int): Booking? {
         return bookings.getOrNull(position)
     }

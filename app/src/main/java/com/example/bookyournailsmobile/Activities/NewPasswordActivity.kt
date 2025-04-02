@@ -54,7 +54,9 @@ class NewPasswordActivity : AppCompatActivity() {
         }
 
         btnBack.setOnClickListener {
-            onBackPressed()
+            val intent = Intent(this, ForgotPassword2Activity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

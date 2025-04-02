@@ -98,26 +98,31 @@ class HomeFragment : Fragment() {
     private fun fetchLoyaltyPoints(userId: String) {
         apiService.getLoyaltyPoints(userId).enqueue(object : Callback<ApiService.LoyaltyPointsResponse> {
             override fun onResponse(call: Call<ApiService.LoyaltyPointsResponse>, response: Response<ApiService.LoyaltyPointsResponse>) {
+                if (!isAdded) return // Ensure fragment is attached before updating UI
+
                 if (response.isSuccessful) {
                     val rawResponse = response.body()
                     val points = rawResponse?.loyaltyPoints ?: 0
-                    Home_points_text.text = "$points points"
 
-                    // Save to SharedPreferences
-                    val sharedPreferences = requireContext().getSharedPreferences("UserPref", Context.MODE_PRIVATE)
+                    Home_points_text?.text = "$points points"
+
+                    // Safe context access
+                    val context = context ?: return
+                    val sharedPreferences = context.getSharedPreferences("UserPref", Context.MODE_PRIVATE)
                     sharedPreferences.edit().putInt("loyalty_points", points).apply()
                 } else {
-                    Home_points_text.text = "0 points"
+                    Home_points_text?.text = "0 points"
                 }
             }
 
             override fun onFailure(call: Call<ApiService.LoyaltyPointsResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Failed to fetch points", Toast.LENGTH_SHORT).show()
-                Home_points_text.text = "0 points"
+                if (!isAdded) return // Prevent crash if the fragment is detached
+
+                Toast.makeText(context, "Failed to fetch points", Toast.LENGTH_SHORT).show()
+                Home_points_text?.text = "0 points"
             }
         })
     }
-
 
     private fun makeFullScreen() {
         activity?.window?.let { window ->

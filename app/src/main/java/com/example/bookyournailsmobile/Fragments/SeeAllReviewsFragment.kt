@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookyournailsmobile.Activities.MainActivity
 import com.example.bookyournailsmobile.Adapters.ReviewAdapter
 import com.example.bookyournailsmobile.NetUtils.ApiService
 import com.example.bookyournailsmobile.NetUtils.RetrofitClient
@@ -52,6 +53,15 @@ class SeeAllReviewsFragment : Fragment() {
 
         return view
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setBottomNavVisibility(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as? MainActivity)?.setBottomNavVisibility(true)
+    }
 
     private fun fetchAllReviews(serviceType: String) {
         val apiService = RetrofitClient.create(requireContext())
@@ -60,6 +70,7 @@ class SeeAllReviewsFragment : Fragment() {
             Log.e("SeeAllReviewsFragment", "RetrofitClient.create() returned null")
             return
         }
+
 
         apiService.getReviewsByService(serviceType).enqueue(object : Callback<ApiService.ReviewResponse> {
             override fun onResponse(call: Call<ApiService.ReviewResponse>, response: Response<ApiService.ReviewResponse>) {

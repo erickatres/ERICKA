@@ -408,9 +408,6 @@ class SummaryRegularPlainFragment : Fragment() {
         }
     }
 
-
-
-
     companion object {
         @JvmStatic
         fun newInstance(

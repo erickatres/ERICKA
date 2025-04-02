@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun setBottomNavVisibility(isVisible: Boolean) {
-        val bottomNav = findViewById<LinearLayout>(R.id.bottom_navigation_container) // Replace with actual bottom nav ID
+        val bottomNav = findViewById<LinearLayout>(R.id.bottom_navigation_container)
         bottomNav.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
@@ -265,21 +265,8 @@ class MainActivity : AppCompatActivity() {
         R.id.btn_profile -> R.drawable.profile_vector
         else -> 0
     }
-    fun navigateToBookingFragment() {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
-        // Prevent reloading the same fragment
-        if (currentFragment is BookingFragment) return
 
-        Log.d("Navigation", "Navigating to BookingFragment")
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, BookingFragment())
-            .commit()
-
-        resetNavigationSelection()  // Reset other buttons
-        highlightBookingTab()       // Highlight Booking tab
-    }
     private fun highlightBookingTab() {
         resetNavigationSelection()
 
@@ -288,7 +275,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun resetNavigationSelection() {
+    fun resetNavigationSelection() {
         findViewById<ImageButton>(R.id.btn_home).setImageResource(R.drawable.home_without_fill)
         findViewById<ImageButton>(R.id.btn_pricelist).setImageResource(R.drawable.pricelist_without_fill)
         findViewById<ImageButton>(R.id.btn_booking).setImageResource(R.drawable.booking_without_fill)
